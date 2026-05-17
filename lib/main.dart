@@ -1,16 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const _BootstrapPlaceholder());
-}
+import 'app/app.dart';
+import 'app/bootstrap.dart';
 
-class _BootstrapPlaceholder extends StatelessWidget {
-  const _BootstrapPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: SizedBox.shrink()),
-    );
-  }
+Future<void> main() async {
+  await bootstrap();
+  runApp(const ProviderScope(child: MoodTrackerApp()));
 }
