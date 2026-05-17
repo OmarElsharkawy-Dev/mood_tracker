@@ -2121,13 +2121,13 @@ git commit -m "feat(theme): add AppTheme builder and ThemeNotifier"
 - [ ] **Step 2: Generate localizations**
 
 Run: `flutter gen-l10n`
-Expected: writes `.dart_tool/flutter_gen/gen_l10n/app_localizations.dart` (auto-generated).
+Expected: writes `lib/l10n/app_localizations.dart` and `lib/l10n/app_localizations_en.dart` (auto-generated). These files are gitignored — never commit them. The generated `AppLocalizations` class is importable as `package:mood_tracker/l10n/app_localizations.dart`.
 
 - [ ] **Step 3: Implement `context_l10n_extension.dart`**
 
 ```dart
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 
 extension L10nX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
@@ -2863,7 +2863,7 @@ class EmptyStateView extends StatelessWidget {
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 
 import '../error/failure.dart';
 import '../l10n/context_l10n_extension.dart';
@@ -3364,7 +3364,7 @@ git commit -m "feat(mood_entry): add LogEntryController async notifier with crea
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 
 import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -3456,7 +3456,7 @@ class IntensitySlider extends StatelessWidget {
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 
 import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -3682,7 +3682,7 @@ class LogEntrySheet extends ConsumerWidget {
 ```dart
 // test/features/mood_entry/presentation/log_entry_sheet_test.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -3987,7 +3987,7 @@ class EntryDetailScreen extends ConsumerWidget {
 ```dart
 // test/features/history/history_screen_test.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -4190,7 +4190,7 @@ class TodayScreen extends ConsumerWidget {
 ```dart
 // lib/features/today/presentation/widgets/quick_log_row.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 
 import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -4239,7 +4239,7 @@ class QuickLogRow extends StatelessWidget {
 ```dart
 // test/features/today/today_screen_test.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -4321,7 +4321,7 @@ Future<void> bootstrap() async {
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -4400,7 +4400,7 @@ git commit -m "feat(app): wire bootstrap, ProviderScope, ScreenUtil, theme, loca
 ```dart
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mood_tracker/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mood_tracker/core/db/app_database.dart';
