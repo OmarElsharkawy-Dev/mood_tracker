@@ -19,6 +19,7 @@ class FilterSheet extends ConsumerStatefulWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      backgroundColor: context.appColors.surface,
       shape: const RoundedRectangleBorder(borderRadius: AppRadius.sheetBR),
       builder: (_) => const FilterSheet(),
     );
@@ -70,49 +71,78 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
       builder: (context, scrollController) => SafeArea(
         child: ListView(
           controller: scrollController,
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           children: [
             const SizedBox(height: AppSpacing.sm),
             Center(
               child: Container(
-                width: 36,
+                width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: colors.surfaceVariant,
-                  borderRadius: BorderRadius.circular(2),
+                  color: colors.outline,
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
                 ),
               ),
             ),
             const SizedBox(height: AppSpacing.md),
-            Text(l10n.filterTitle, style: AppTextStyles.title),
+            Text(
+              l10n.filterTitle,
+              style:
+                  AppTextStyles.headline.copyWith(color: colors.onSurface),
+            ),
             const SizedBox(height: AppSpacing.lg),
             TextField(
               controller: _textController,
+              style: AppTextStyles.body.copyWith(color: colors.onSurface),
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: colors.surfaceVariant,
                 hintText: l10n.filterTextHint,
+                hintStyle: AppTextStyles.body
+                    .copyWith(color: colors.onSurfaceVariant),
+                prefixIcon:
+                    Icon(Icons.search, color: colors.onSurfaceVariant),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  borderSide: BorderSide(color: colors.outline),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  borderSide: BorderSide(color: colors.outline),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  borderSide:
+                      BorderSide(color: colors.primary, width: 1.5),
+                ),
               ),
-              onChanged: (v) => setState(
-                  () => _draft = _draft.copyWith(text: v.isEmpty ? null : v)),
+              onChanged: (v) => setState(() =>
+                  _draft = _draft.copyWith(text: v.isEmpty ? null : v)),
             ),
             const SizedBox(height: AppSpacing.lg),
-            Text(l10n.filterMoodRange, style: AppTextStyles.label),
+            _SectionLabel(text: l10n.filterMoodRange),
             const SizedBox(height: AppSpacing.xs),
             MoodRangeSlider(
               range: _draft.moodRange,
-              onChanged: (v) =>
-                  setState(() => _draft = _draft.copyWith(moodRange: v)),
+              onChanged: (v) => setState(
+                () => _draft = _draft.copyWith(moodRange: v),
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
-            Text(l10n.filterDateRange, style: AppTextStyles.label),
+            _SectionLabel(text: l10n.filterDateRange),
             const SizedBox(height: AppSpacing.xs),
             DateRangeField(
               range: _draft.dateRange,
-              onChanged: (v) =>
-                  setState(() => _draft = _draft.copyWith(dateRange: v)),
+              onChanged: (v) => setState(
+                () => _draft = _draft.copyWith(dateRange: v),
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
-            Text(l10n.filterTags, style: AppTextStyles.label),
+            _SectionLabel(text: l10n.filterTags),
             const SizedBox(height: AppSpacing.xs),
             TagFilterChips(
               selectedIds: _draft.tagIds,
@@ -120,23 +150,58 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
                   setState(() => _draft = _draft.copyWith(tagIds: v)),
             ),
             const SizedBox(height: AppSpacing.xl),
-            Row(
-              children: [
-                TextButton(
-                  onPressed: _clear,
-                  child: Text(l10n.filterClear),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: colors.primary,
+                  foregroundColor: colors.onPrimary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
+                  ),
                 ),
-                const Spacer(),
-                FilledButton(
-                  onPressed: _apply,
-                  child: Text(l10n.filterApply),
+                onPressed: _apply,
+                child: Text(
+                  l10n.filterApply,
+                  style: AppTextStyles.label
+                      .copyWith(color: colors.onPrimary),
                 ),
-              ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: _clear,
+                style:
+                    TextButton.styleFrom(foregroundColor: colors.error),
+                child: Text(
+                  l10n.filterClear,
+                  style:
+                      AppTextStyles.label.copyWith(color: colors.error),
+                ),
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    return Text(
+      text,
+      style: AppTextStyles.label.copyWith(color: colors.onSurface),
     );
   }
 }

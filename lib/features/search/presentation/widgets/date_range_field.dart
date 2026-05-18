@@ -23,33 +23,48 @@ class DateRangeField extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final l10n = context.l10n;
-    final fmt = DateFormat.yMMMd(Localizations.localeOf(context).languageCode);
-    final label = range == null
-        ? l10n.filterDateAny
-        : '${fmt.format(range!.start)} – ${fmt.format(range!.end)}';
+    final fmt =
+        DateFormat.yMMMd(Localizations.localeOf(context).languageCode);
+    final hasRange = range != null;
+    final label = hasRange
+        ? '${fmt.format(range!.start)} – ${fmt.format(range!.end)}'
+        : l10n.filterDateAny;
 
     return InkWell(
-      borderRadius: AppRadius.cardBR,
+      borderRadius: BorderRadius.circular(AppRadius.md),
       onTap: () => _pick(context),
-      onLongPress: () => onChanged(null),
+      onLongPress: hasRange ? () => onChanged(null) : null,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
           vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
+          color: colors.surfaceVariant,
           border: Border.all(color: colors.outline),
-          borderRadius: AppRadius.cardBR,
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         child: Row(
           children: [
-            Icon(Icons.date_range, color: colors.onSurfaceVariant, size: 22),
+            Icon(Icons.date_range,
+                color: colors.onSurfaceVariant, size: 22),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
-              child: Text(label, style: AppTextStyles.body),
+              child: Text(
+                label,
+                style: AppTextStyles.body.copyWith(
+                  color: hasRange
+                      ? colors.onSurface
+                      : colors.onSurfaceVariant,
+                ),
+              ),
             ),
-            if (range != null)
-              Icon(Icons.clear, color: colors.onSurfaceVariant, size: 20),
+            if (hasRange)
+              GestureDetector(
+                onTap: () => onChanged(null),
+                child: Icon(Icons.close,
+                    color: colors.onSurfaceVariant, size: 20),
+              ),
           ],
         ),
       ),
