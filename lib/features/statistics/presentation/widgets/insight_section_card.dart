@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../providers/insights_entries_provider.dart';
 
 class InsightSectionCard<T> extends ConsumerWidget {
   const InsightSectionCard({
@@ -53,12 +55,20 @@ class InsightSectionCard<T> extends ConsumerWidget {
                   ),
                 ),
               ),
-              error: (err, _) => SizedBox(
-                height: 80,
+              error: (err, st) => SizedBox(
+                height: 100,
                 child: Center(
-                  child: Icon(
-                    Icons.error_outline,
-                    color: colors.onMuted,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.error_outline, color: colors.onMuted),
+                      const SizedBox(height: 4),
+                      TextButton(
+                        onPressed: () =>
+                            ref.invalidate(insightsEntriesProvider),
+                        child: Text(context.l10n.errorRetry),
+                      ),
+                    ],
                   ),
                 ),
               ),

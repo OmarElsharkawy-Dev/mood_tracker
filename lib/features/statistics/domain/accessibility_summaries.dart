@@ -37,7 +37,7 @@ String trendSummary(MoodTrendSeries series, AppLocalizations l) {
   final avg = series.overallAverage ?? 0;
   final min = series.minDay ?? 0;
   final max = series.maxDay ?? 0;
-  return l.a11yTrendSummary(series.points.length, _fmt(avg), _fmt(min), _fmt(max));
+  return l.a11yTrendSummary(series.daysWithData, _fmt(avg), _fmt(min), _fmt(max));
 }
 
 String distributionSummary(MoodDistribution d, AppLocalizations l) {

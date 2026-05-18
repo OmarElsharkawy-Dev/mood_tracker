@@ -26,7 +26,7 @@ class InsightsScreen extends ConsumerWidget {
         title: Text(l10n.insightsTitle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.tune),
             tooltip: l10n.insightsFilterTooltip,
             onPressed: () => FilterSheet.show(context),
           ),

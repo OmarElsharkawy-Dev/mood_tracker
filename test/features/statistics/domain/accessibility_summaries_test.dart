@@ -31,7 +31,7 @@ void main() {
         MoodTrendPoint(day: DateTime(2026, 5, 18), averageMood: null, entryCount: 0),
       ],
     );
-    expect(trendSummary(series, l), 'Mood trend over 7 days. Average 4.0. Range 3.0 to 5.0.');
+    expect(trendSummary(series, l), 'Mood trend over 2 days. Average 4.0. Range 3.0 to 5.0.');
   });
 
   test('distribution summary EN', () async {
