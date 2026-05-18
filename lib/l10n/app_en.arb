@@ -198,6 +198,8 @@
   "@calendarNextMonth": {},
   "calendarJumpToToday": "Jump to today",
   "@calendarJumpToToday": {},
+  "calendarTodayButton": "Today",
+  "@calendarTodayButton": {},
   "calendarDayEmpty": "No entries on this day.",
   "@calendarDayEmpty": {},
 

@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/date_helpers.dart';
-import '../../domain/year_month.dart';
 import '../../../mood_entry/domain/entities/mood_entry.dart';
+import '../../domain/year_month.dart';
 import '../../providers/calendar_entries_provider.dart';
 import '../../providers/day_summaries_provider.dart';
 import 'calendar_day_cell.dart';
 import 'calendar_day_sheet.dart';
+
+/// Monday-aligned anchor used to render narrow weekday labels (M T W T F S S).
+/// Jan 1, 2024 was a Monday.
+final _mondayAnchor = DateTime(2024, 1, 1);
 
 class CalendarMonth extends ConsumerWidget {
   const CalendarMonth({super.key, required this.month});
@@ -17,6 +24,7 @@ class CalendarMonth extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = context.appColors;
     final summaries = ref.watch(daySummariesProvider);
     final asyncEntries = ref.watch(calendarEntriesProvider);
     final entries = asyncEntries.maybeWhen(
@@ -26,13 +34,14 @@ class CalendarMonth extends ConsumerWidget {
 
     final firstDayOfMonth = month.firstDay;
     final daysInMonth = month.lastDay.day;
-    final weekdayOfFirst = firstDayOfMonth.weekday % 7; // Sun = 0
+    // Monday-first column index of the 1st of the month.
+    final weekdayOfFirst = (firstDayOfMonth.weekday - 1) % 7;
     final today = startOfDay(DateTime.now());
-    final locale = Localizations.localeOf(context).languageCode;
-    final weekdayLabels = _weekdayLabels(locale);
+    final localeTag = Localizations.localeOf(context).toLanguageTag();
+    final weekdayLabels = _narrowWeekdayLabels(localeTag);
 
     final cells = <Widget>[];
-    const totalCells = 42; // 6 rows × 7 cols
+    const totalCells = 42;
     for (var i = 0; i < totalCells; i++) {
       final dayOffset = i - weekdayOfFirst;
       final cellDate = firstDayOfMonth.add(Duration(days: dayOffset));
@@ -53,8 +62,11 @@ class CalendarMonth extends ConsumerWidget {
             final dayEntries = entries
                 .where((e) => startOfDay(e.occurredAt) == key)
                 .toList();
-            CalendarDaySheet.show(context,
-                date: cellDate, entries: dayEntries);
+            CalendarDaySheet.show(
+              context,
+              date: cellDate,
+              entries: dayEntries,
+            );
           },
         ),
       );
@@ -62,20 +74,29 @@ class CalendarMonth extends ConsumerWidget {
 
     return Column(
       children: [
-        Row(
-          children: weekdayLabels
-              .map((label) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text(label, textAlign: TextAlign.center),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+          child: Row(
+            children: [
+              for (final label in weekdayLabels)
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      label,
+                      style: AppTextStyles.label
+                          .copyWith(color: colors.onSurfaceVariant),
                     ),
-                  ))
-              .toList(),
+                  ),
+                ),
+            ],
+          ),
         ),
         Expanded(
           child: GridView.count(
             crossAxisCount: 7,
             childAspectRatio: 1,
+            mainAxisSpacing: AppSpacing.xxs,
+            crossAxisSpacing: AppSpacing.xxs,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: cells,
@@ -85,9 +106,11 @@ class CalendarMonth extends ConsumerWidget {
     );
   }
 
-  List<String> _weekdayLabels(String localeTag) {
-    final fmt = DateFormat.E(localeTag);
-    final sunday = DateTime(2024, 1, 7); // Jan 7 2024 was a Sunday.
-    return List.generate(7, (i) => fmt.format(sunday.add(Duration(days: i))));
+  List<String> _narrowWeekdayLabels(String localeTag) {
+    final fmt = DateFormat('EEEEE', localeTag);
+    return List.generate(
+      7,
+      (i) => fmt.format(_mondayAnchor.add(Duration(days: i))),
+    );
   }
 }

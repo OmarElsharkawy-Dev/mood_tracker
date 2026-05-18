@@ -198,6 +198,8 @@
   "@calendarNextMonth": {},
   "calendarJumpToToday": "Ir a hoy",
   "@calendarJumpToToday": {},
+  "calendarTodayButton": "Hoy",
+  "@calendarTodayButton": {},
   "calendarDayEmpty": "Sin entradas en este día.",
   "@calendarDayEmpty": {},
 
