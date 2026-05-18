@@ -59,14 +59,17 @@ class _MoodCardState extends State<MoodCard> {
             duration: AppMotion.base,
             curve: Curves.easeOut,
             width: widget.size,
-            height: widget.size + 22,
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxs),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xxs,
+              vertical: AppSpacing.xs,
+            ),
             decoration: BoxDecoration(
               color: bg,
               borderRadius: AppRadius.cardBR,
               border: Border.all(color: border, width: 1.5),
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MoodFace(mood: widget.mood, color: fg, size: widget.size * 0.6),
