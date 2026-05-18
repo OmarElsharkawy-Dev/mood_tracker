@@ -4,6 +4,7 @@ import 'package:timezone/data/latest.dart' as tzdata;
 
 import '../core/di/service_locator.dart';
 import '../core/prefs/app_prefs.dart';
+import '../features/backup/data/backup_service_provider.dart';
 import '../features/reminders/data/notification_service.dart';
 import '../features/reminders/domain/reminder_schedule.dart';
 
@@ -11,6 +12,7 @@ Future<void> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
   tzdata.initializeTimeZones();
   await registerServices();
+  await primeAppVersion();
   await GetIt.I<NotificationService>().init();
 
   // Re-arm any persisted reminder schedule.
