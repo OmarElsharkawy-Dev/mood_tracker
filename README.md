@@ -6,7 +6,7 @@ Built as a learning playground that exercises a full Feature-First Clean Archite
 
 ## Status
 
-Phases 1–4 are complete. The app supports English and Spanish, a first-run onboarding redirect, a cross-tab filter (date range, mood range, tag chips, free-text), a month-grid calendar with day-detail sheets, and a full Insights tab (mood trend, mood distribution, top tags, sleep correlation, energy correlation — all range-selectable and filter-aware). Remaining phase: reminders + JSON backup (Phase 5).
+All 5 phases are complete. The app supports English and Spanish, a first-run onboarding redirect, a cross-tab filter, a month-grid calendar, a full Insights tab, daily local reminders (with permission flow), and JSON export/import (merge or replace). 228 tests passing; `flutter analyze` reports 0 issues.
 
 - Master spec: [`docs/superpowers/specs/2026-05-17-mood-tracker-design.md`](docs/superpowers/specs/2026-05-17-mood-tracker-design.md)
 - Phase 2 design: [`docs/superpowers/specs/2026-05-18-phase-2-design.md`](docs/superpowers/specs/2026-05-18-phase-2-design.md)
@@ -15,6 +15,7 @@ Phases 1–4 are complete. The app supports English and Spanish, a first-run onb
 - Phase 2 plan: [`docs/superpowers/plans/2026-05-18-mood-tracker-phase-2.md`](docs/superpowers/plans/2026-05-18-mood-tracker-phase-2.md)
 - Phase 3 plan: [`docs/superpowers/plans/2026-05-18-mood-tracker-phase-3.md`](docs/superpowers/plans/2026-05-18-mood-tracker-phase-3.md)
 - Phase 4 plan: [`docs/superpowers/plans/2026-05-18-mood-tracker-phase-4.md`](docs/superpowers/plans/2026-05-18-mood-tracker-phase-4.md)
+- Phase 5 plan: [`docs/superpowers/plans/2026-05-18-mood-tracker-phase-5.md`](docs/superpowers/plans/2026-05-18-mood-tracker-phase-5.md)
 - Project context for AI assistants: [`MEMORY.md`](MEMORY.md)
 
 ## Tech stack
@@ -80,6 +81,6 @@ Generated files (Drift's `app_database.g.dart`, l10n's `app_localizations*.dart`
 2. **Phase 2 — Settings, onboarding, Spanish translations** *(complete 2026-05-18)* — `settings` (theme/language/reminders-stub/about + modal pickers), `onboarding` (3-page first-run flow + GoRouter redirect), full `app_es.arb`, `package_info_plus`.
 3. **Phase 3 — Calendar view + cross-tab filter** *(complete 2026-05-18)* — `calendar` (month grid + colored mood dots + ×N badges + day-detail sheet + prev/next/jump-to-today), `search` (shared `EntryFilterController`, modal `FilterSheet` with text/mood-range/date-range/tag-chips, History search icon + active-filter banner + no-matches state), repository `EntryQuery` filtering wired up.
 4. **Phase 4 — Statistics & charts (`fl_chart`)** *(complete 2026-05-18)* — `statistics` (InsightsRange enum, 5 pure aggregators, accessibility summaries, SelectedRangeController, insightsEntriesProvider merging filter ∩ range, 5 derived chart providers, InsightsScreen + 5 chart widgets + RangeSelector + InsightSectionCard), `fl_chart ^1.2.0` dep, 29 EN+ES ARB key pairs.
-5. **Phase 5 — Local reminders, JSON export/import.**
+5. **Phase 5 — Local reminders, JSON export/import** *(complete 2026-05-18)* — `features/reminders/` (NotificationService, ReminderController, RemindersScreen with enable switch + time picker + denied-card), `features/backup/` (BackupCodec with versioned envelope, BackupService, BackupController, BackupScreen + ImportModeDialog), new `/settings/reminders` and `/settings/backup` routes.
 
 Each phase ships against the same spec and gets its own implementation plan under `docs/superpowers/plans/`.

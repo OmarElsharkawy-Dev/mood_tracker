@@ -6,6 +6,16 @@ Context bundle for human collaborators and AI assistants picking up this repo co
 
 ## Session log
 
+### 2026-05-18 — Phase 5 ship
+
+- Phase 5 (Reminders + JSON export/import) landed in 20 commits on `main`. New tests: +47. Test suite at **228/228 passing**, `flutter analyze` clean.
+- Shipped: `features/reminders/` (NotificationService wrapping flutter_local_notifications, ReminderController + permission status provider, RemindersScreen with enable switch + time picker + denied-card, bootstrap re-arm on app start), `features/backup/` (BackupCodec with versioned envelope + migration shim, BackupService with file IO via path_provider + share_plus + file_picker, BackupController sealed state machine, BackupScreen + ImportModeDialog with merge/replace + replace double-confirm).
+- New deps: `flutter_local_notifications ^21.0.0`, `timezone ^0.11.0`, `share_plus ^12.0.2`, `file_picker ^11.0.2`, `permission_handler ^12.0.1`.
+- Native config: Android manifest permissions (POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, SCHEDULE_EXACT_ALARM, USE_EXACT_ALARM) + flutter_local_notifications receivers; iOS AppDelegate UNUserNotificationCenter delegate.
+- Two new `/settings/` child routes (`reminders`, `backup`) replace the Phase 2 stub tile and add a new Data tile. Settings shows reminder status as subtitle ("Off" / "Daily at HH:MM").
+- Notable API adaptations forced by newer plugin versions: `flutter_local_notifications` 21.x uses all-named parameters for `zonedSchedule` and a `settings:` named param for `initialize`; `file_picker` 11.x replaced `FilePicker.platform.pickFiles` with the static `FilePicker.pickFiles`; project `Failure` types use `ValidationFailure({Map fieldErrors})` and `IOFailure({String debugMessage})` rather than `messageKey`/`message`.
+- **Closes out the 5-phase plan.** No further phases planned.
+
 ### 2026-05-18 — Phase 4 ship
 
 - Phase 4 (Insights tab) landed in 23 commits on `main`. New tests: +59. Test suite now at **181/181 passing**, `flutter analyze` clean.
@@ -43,22 +53,24 @@ No accounts. No cloud. English + Spanish (both LTR).
 
 ## Current status
 
-Phases 1–4 shipped (Phase 1 on 2026-05-17, Phases 2–4 on 2026-05-18). What works today:
+All 5 phases shipped (Phase 1 on 2026-05-17, Phases 2–5 on 2026-05-18). What works today:
 
 - `core/` infrastructure — theme tokens, l10n pipeline (EN + ES), GoRouter shell with first-run redirect, Drift schema, Failure/Result, prefs, GetIt+Riverpod DI.
 - `features/mood_entry/` — log + edit journal-style entries (mood, intensity, note, tags, sleep hours, energy).
 - `features/history/` — list + entry detail + delete + skeleton loader + empty state, search icon, active-filter banner, no-matches state.
 - `features/today/` — greeting + quick-log row + recent entries + FAB.
-- `features/settings/` — Appearance (theme picker), Language (en/es picker), Reminders (disabled stub), About (version + `showLicensePage`).
+- `features/settings/` — Appearance (theme picker), Language (en/es picker), Reminders tile (tappable, shows "Off" / "Daily at HH:MM" subtitle), Data tile (backup/restore), About (version + `showLicensePage`).
 - `features/onboarding/` — 3-page first-run flow with `CustomPainter` illustrations and GoRouter `redirect:` gated on `AppPrefs.onboardingCompleted`.
 - `features/search/` — shared `EntryFilterController` (Notifier<EntryFilter>), `allTagsProvider` derived from entries, modal `FilterSheet` with draft-state-then-Apply UX, subcomponents (`MoodRangeSlider`, `DateRangeField`, `TagFilterChips`).
 - `features/calendar/` — `YearMonth` + `DayMoodSummary` value objects, `SelectedMonthController`, derived `calendarEntriesProvider` + `daySummariesProvider`, 6×7 `CalendarMonth` grid + `CalendarDayCell` (with ×N badge + today highlight) + `CalendarDaySheet`, `CalendarScreen` with prev/next/jump-to-today nav. Filter from `features/search/` shapes the dots too — cross-tab.
 - `features/statistics/` — `InsightsRange` enum (7d/30d/90d/all) with `toDateRange()`, 5 pure aggregators (`computeMoodTrend`, `computeDistribution`, `computeTopTags`, `computeSleepCorrelation`, `computeEnergyCorrelation`), accessibility summary helpers, `SelectedRangeController`, `insightsEntriesProvider` merging filter ∩ range, 5 derived chart providers, `InsightsScreen` composing `RangeSelector` + `InsightSectionCard` + 5 chart widgets (`MoodTrendChart`, `MoodDistributionChart`, `TopTagsChart`, plus sleep + energy correlation charts). Cross-tab filter banner reused from Phase 3.
-- Full Spanish translations across all phases (~102 keys mirrored).
+- `features/reminders/` — `NotificationService` interface + `FlutterLocalNotificationsService` impl, `ReminderSchedule` value class with prefs codec, `ReminderController` (enable/disable + time mutation), permission status provider, `PermissionDeniedCard`, `ReminderTimePickerSheet`, `RemindersScreen` with enable switch + time picker + denied-card, bootstrap re-arm. Android + iOS native config complete.
+- `features/backup/` — `BackupEnvelope` + `ImportMode` domain types, `BackupCodec` with versioned JSON envelope (v1) + forward-migration shim, `BackupService` with export (share sheet) + import (merge-or-replace via file picker), `BackupController` sealed state machine, `ImportModeDialog` with replace double-confirm, `BackupScreen` with export/import buttons + status bar.
+- Full Spanish translations across all phases (~130+ keys mirrored).
 
-`flutter analyze` reports 0 issues; `flutter test` passes 181/181 (including 5 `MoodFace` goldens).
+`flutter analyze` reports 0 issues; `flutter test` passes 228/228 (including 5 `MoodFace` goldens).
 
-Phase 5 (Reminders + JSON export/import) is designed in the master spec but not yet planned in detail.
+**No further phases planned.** The 5-phase plan is complete.
 
 ## Hard rules to honor
 
@@ -110,9 +122,9 @@ Each phase ships against the master spec and gets its own plan in `docs/superpow
 2. **Phase 2 — Settings, onboarding, Spanish translations** *(complete 2026-05-18)* — settings tab + onboarding flow + first-run redirect + `app_es.arb`.
 3. **Phase 3 — Calendar view + cross-tab filter** *(complete 2026-05-18)* — `features/search/` (EntryFilter + FilterSheet + allTagsProvider), `features/calendar/` (month grid + day-detail sheet + nav), repository `EntryQuery` filtering, History search icon + active-filter banner + no-matches state.
 4. **Phase 4 — Statistics & charts (`fl_chart`)** *(complete 2026-05-18)* — `features/statistics/` (InsightsRange, 5 aggregators, 5 chart providers, InsightsScreen + 5 chart widgets + RangeSelector + InsightSectionCard), `fl_chart` dep, 29 EN+ES ARB key pairs.
-5. **Phase 5 — Local reminders, JSON export/import.**
+5. **Phase 5 — Local reminders, JSON export/import** *(complete 2026-05-18)* — `features/reminders/` (NotificationService, ReminderController, RemindersScreen), `features/backup/` (BackupCodec, BackupService, BackupController, BackupScreen + ImportModeDialog), new `/settings/reminders` and `/settings/backup` routes.
 
-## File map (Phases 1 + 2 + 3 + 4)
+## File map (Phases 1 + 2 + 3 + 4 + 5)
 
 ```
 lib/
@@ -160,6 +172,15 @@ lib/
       domain/{insights_range, aggregators/{mood_trend, distribution, top_tags, sleep_correlation, energy_correlation}, accessibility_summaries}
       providers/{selected_range_controller, insights_entries_provider, chart_providers}
       presentation/{screens/insights_screen, widgets/{range_selector, insight_section_card, mood_trend_chart, mood_distribution_chart, top_tags_chart, sleep_correlation_chart, energy_correlation_chart}}
+    reminders/                                    # Daily local notifications (Phase 5)
+      domain/{notification_service, reminder_schedule}
+      data/flutter_local_notifications_service
+      providers/{reminder_controller, permission_status_provider}
+      presentation/{screens/reminders_screen, widgets/{permission_denied_card, reminder_time_picker_sheet}}
+    backup/                                       # JSON export/import (Phase 5)
+      domain/{backup_envelope, import_mode, backup_codec, backup_service}
+      providers/backup_controller
+      presentation/{screens/backup_screen, widgets/import_mode_dialog}
   l10n/
     app_en.arb                                    # EN ARB source (102 keys)
     app_es.arb                                    # ES ARB source (mirrors EN key-for-key)

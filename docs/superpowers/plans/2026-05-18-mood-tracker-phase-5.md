@@ -1,6 +1,8 @@
 # Mood Tracker — Phase 5 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Status: ✅ Complete (2026-05-18).** All 22 tasks landed across 20 commits. `flutter analyze` reports 0 issues; `flutter test` passes 228/228 (+47 new Phase 5 tests on top of 181 prior). Manual on-device smoke pass (notifications fire, share sheet opens, file picker imports) deferred to the developer.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Ship daily reminders (`flutter_local_notifications` + permission flow) and JSON export/import (`share_plus` + `file_picker`, versioned envelope, merge-or-replace import). Closes out the 5-phase plan.
 
@@ -41,7 +43,7 @@
 **Files:**
 - Modify: `pubspec.yaml`
 
-- [ ] **Step 1: Add the 5 new dependencies**
+- [x] **Step 1: Add the 5 new dependencies**
 
 Run:
 ```
@@ -50,7 +52,7 @@ flutter pub add flutter_local_notifications timezone share_plus file_picker perm
 
 This appends 5 entries to `dependencies:` and resolves the lock file.
 
-- [ ] **Step 2: Group + alphabetize**
+- [x] **Step 2: Group + alphabetize**
 
 Open `pubspec.yaml`. Reorganize the new lines into two existing comment groups (or create a `# Reminders` and `# Backup` group). Example layout:
 
@@ -67,11 +69,11 @@ Open `pubspec.yaml`. Reorganize the new lines into two existing comment groups (
 
 Use whatever versions `flutter pub add` resolved (keep the `^` form). Alphabetize within each group.
 
-- [ ] **Step 3: Verify build**
+- [x] **Step 3: Verify build**
 
 Run: `flutter pub get` (no-op now); `flutter analyze` → expect "No issues found!".
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add pubspec.yaml pubspec.lock
@@ -88,7 +90,7 @@ No `Co-Authored-By`. No `git add -A`.
 - Modify: `android/app/src/main/AndroidManifest.xml`
 - Modify: `ios/Runner/AppDelegate.swift`
 
-- [ ] **Step 1: Edit `AndroidManifest.xml`**
+- [x] **Step 1: Edit `AndroidManifest.xml`**
 
 Open the file. At the top (above the `<application>` tag), add:
 
@@ -113,7 +115,7 @@ Inside the `<application>` tag, just before the closing `</application>`, add th
         </receiver>
 ```
 
-- [ ] **Step 2: Edit `AppDelegate.swift`**
+- [x] **Step 2: Edit `AppDelegate.swift`**
 
 Replace the file contents with:
 
@@ -142,13 +144,13 @@ import UserNotifications
 
 Setting `UNUserNotificationCenter.current().delegate` lets local notifications display while the app is in the foreground (otherwise iOS silently drops them).
 
-- [ ] **Step 3: Verify build**
+- [x] **Step 3: Verify build**
 
 Run: `flutter analyze` → 0 issues. (Native config doesn't affect Dart analyze, but confirm nothing leaked into Dart code.)
 
 Optionally: `flutter build apk --debug` and `flutter build ios --no-codesign` to confirm both targets still compile. These are slow; if the automated env has the SDKs, run; if not, defer to manual smoke in Task 22.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add android/app/src/main/AndroidManifest.xml ios/Runner/AppDelegate.swift
@@ -165,7 +167,7 @@ git commit -m "chore(native): add notification permissions + receivers for Phase
 - Modify: `lib/l10n/app_en.arb`
 - Modify: `lib/l10n/app_es.arb`
 
-- [ ] **Step 1: Append EN keys before the closing `}` of `app_en.arb`**
+- [x] **Step 1: Append EN keys before the closing `}` of `app_en.arb`**
 
 (Add a trailing comma to the preceding entry if needed.)
 
@@ -242,7 +244,7 @@ git commit -m "chore(native): add notification permissions + receivers for Phase
   "@backupErrorPickCanceled": {}
 ```
 
-- [ ] **Step 2: Append ES mirrors to `app_es.arb`**
+- [x] **Step 2: Append ES mirrors to `app_es.arb`**
 
 ```json
   "settingsRemindersOff": "Desactivado",
@@ -317,15 +319,15 @@ git commit -m "chore(native): add notification permissions + receivers for Phase
   "@backupErrorPickCanceled": {}
 ```
 
-- [ ] **Step 3: Regenerate `AppLocalizations`**
+- [x] **Step 3: Regenerate `AppLocalizations`**
 
 Run: `flutter gen-l10n`. Generated files in `lib/l10n/app_localizations*.dart` are gitignored.
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run: `flutter analyze && flutter test` → 0 issues; 181 tests still pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/l10n/app_en.arb lib/l10n/app_es.arb
@@ -340,11 +342,11 @@ git commit -m "feat(l10n): add Phase 5 reminders + backup ARB keys"
 - Modify: `lib/core/prefs/app_prefs.dart`
 - Test: `test/core/prefs/app_prefs_test.dart` (create if missing; otherwise extend)
 
-- [ ] **Step 1: Check whether `app_prefs_test.dart` exists**
+- [x] **Step 1: Check whether `app_prefs_test.dart` exists**
 
 Run: `ls test/core/prefs/`. If `app_prefs_test.dart` exists, append to it. If not, create it.
 
-- [ ] **Step 2: Write/extend the failing test**
+- [x] **Step 2: Write/extend the failing test**
 
 If creating fresh, full file:
 
@@ -399,12 +401,12 @@ void main() {
 
 If extending an existing test file, just add the `group('AppPrefs reminder accessors', () { ... });` block.
 
-- [ ] **Step 3: Run, verify FAIL**
+- [x] **Step 3: Run, verify FAIL**
 
 Run: `flutter test test/core/prefs/app_prefs_test.dart`
 Expected: 5 reminder-accessor tests FAIL (methods undefined).
 
-- [ ] **Step 4: Implement in `app_prefs.dart`**
+- [x] **Step 4: Implement in `app_prefs.dart`**
 
 Add new private key constants near the top of the class:
 
@@ -432,12 +434,12 @@ Add new accessors at the bottom of the class (after `setOnboardingCompleted`):
   }
 ```
 
-- [ ] **Step 5: Run, verify PASS, then full suite + analyze**
+- [x] **Step 5: Run, verify PASS, then full suite + analyze**
 
 Run: `flutter analyze && flutter test`
 Expected: 0 issues; **186 tests pass** (181 + 5).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add lib/core/prefs/app_prefs.dart test/core/prefs/app_prefs_test.dart
@@ -452,7 +454,7 @@ git commit -m "feat(prefs): add reminderEnabled + reminderTime accessors"
 - Create: `lib/features/reminders/domain/reminder_schedule.dart`
 - Test: `test/features/reminders/domain/reminder_schedule_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/reminders/domain/reminder_schedule_test.dart
@@ -499,12 +501,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/reminders/domain/reminder_schedule_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `reminder_schedule.dart`**
+- [x] **Step 3: Implement `reminder_schedule.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -559,16 +561,16 @@ class ReminderSchedule {
 }
 ```
 
-- [ ] **Step 4: Run, verify PASS**
+- [x] **Step 4: Run, verify PASS**
 
 Run: `flutter test test/features/reminders/domain/reminder_schedule_test.dart` → 5 pass.
 
-- [ ] **Step 5: Full suite + analyze**
+- [x] **Step 5: Full suite + analyze**
 
 Run: `flutter analyze && flutter test`
 Expected: 0 issues; **191 tests pass** (186 + 5).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add lib/features/reminders/domain/reminder_schedule.dart test/features/reminders/domain/reminder_schedule_test.dart
@@ -585,7 +587,7 @@ git commit -m "feat(reminders): add ReminderSchedule value class with HH:mm pref
 
 This task establishes the contract. The concrete plugin-backed implementation is in Task 7, scaffolded behind a `NotificationService` interface so tests can fake it.
 
-- [ ] **Step 1: Create `notification_service.dart` with the interface**
+- [x] **Step 1: Create `notification_service.dart` with the interface**
 
 ```dart
 abstract class NotificationService {
@@ -614,7 +616,7 @@ abstract class NotificationService {
 enum NotificationPermissionStatus { granted, denied, permanentlyDenied }
 ```
 
-- [ ] **Step 2: Create the Riverpod provider**
+- [x] **Step 2: Create the Riverpod provider**
 
 ```dart
 // lib/features/reminders/data/notification_service_provider.dart
@@ -627,11 +629,11 @@ final notificationServiceProvider = Provider<NotificationService>(
     (_) => getIt<NotificationService>());
 ```
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `flutter analyze` → expect "No issues found!" (no test yet — the abstract class has no behavior to test directly).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add lib/features/reminders/data/notification_service.dart lib/features/reminders/data/notification_service_provider.dart
@@ -650,11 +652,11 @@ git commit -m "feat(reminders): add NotificationService interface + Riverpod pro
 
 The test uses a hand-rolled fake of the plugin to avoid hitting platform channels.
 
-- [ ] **Step 1: Inspect existing `service_locator.dart`**
+- [x] **Step 1: Inspect existing `service_locator.dart`**
 
 Run `cat lib/core/di/service_locator.dart`. Observe the pattern (`getIt.registerSingleton<...>(...)` calls inside `registerServices`).
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 ```dart
 // test/features/reminders/data/notification_service_test.dart
@@ -774,12 +776,12 @@ class _ZonedScheduleCall {
 
 **Note:** if the `flutter_local_notifications` 19.x API differs from this signature (the package has had API churn), adjust the `_FakePlugin` `@override` annotations and `zonedSchedule` parameter list to match the installed version. Use `dart pub deps` or read `.dart_tool/pub-cache/...` if needed.
 
-- [ ] **Step 3: Run, verify FAIL**
+- [x] **Step 3: Run, verify FAIL**
 
 Run: `flutter test test/features/reminders/data/notification_service_test.dart`
 Expected: compile error (concrete `FlutterLocalNotificationsService` undefined).
 
-- [ ] **Step 4: Append concrete impl to `notification_service.dart`**
+- [x] **Step 4: Append concrete impl to `notification_service.dart`**
 
 Add at the bottom of the file (after the abstract class):
 
@@ -881,7 +883,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 ```
 
-- [ ] **Step 5: Register in `service_locator.dart`**
+- [x] **Step 5: Register in `service_locator.dart`**
 
 Add the registration. Likely it looks something like:
 
@@ -897,7 +899,7 @@ getIt.registerSingleton<NotificationService>(
 
 Place the registration in the same style as existing registrations (alphabetical, grouped).
 
-- [ ] **Step 6: Initialize in `bootstrap.dart`**
+- [x] **Step 6: Initialize in `bootstrap.dart`**
 
 Replace `bootstrap.dart` with:
 
@@ -919,19 +921,19 @@ Future<void> bootstrap() async {
 
 (Adjust the `package:get_it/get_it.dart` import path if your project uses a different alias.)
 
-- [ ] **Step 7: Run, verify PASS**
+- [x] **Step 7: Run, verify PASS**
 
 Run: `flutter test test/features/reminders/data/notification_service_test.dart`
 Expected: 3 tests pass.
 
-- [ ] **Step 8: Full suite + analyze**
+- [x] **Step 8: Full suite + analyze**
 
 Run: `flutter analyze && flutter test`
 Expected: 0 issues; **194 tests pass** (191 + 3).
 
 If any existing tests start failing because bootstrap now requires `NotificationService` from GetIt, they may need `GetIt.I.reset()` or a fake registration. Investigate — most tests use `ProviderContainer` overrides, not GetIt directly, so this should be OK.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add lib/features/reminders/data/notification_service.dart lib/core/di/service_locator.dart lib/app/bootstrap.dart test/features/reminders/data/notification_service_test.dart
@@ -947,7 +949,7 @@ git commit -m "feat(reminders): add FlutterLocalNotificationsService + bootstrap
 - Create: `lib/features/reminders/providers/permission_status_provider.dart`
 - Test: `test/features/reminders/providers/reminder_controller_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/reminders/providers/reminder_controller_test.dart
@@ -1087,12 +1089,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/reminders/providers/reminder_controller_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `permission_status_provider.dart`**
+- [x] **Step 3: Implement `permission_status_provider.dart`**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1107,7 +1109,7 @@ final permissionStatusProvider =
 });
 ```
 
-- [ ] **Step 4: Implement `reminder_controller.dart`**
+- [x] **Step 4: Implement `reminder_controller.dart`**
 
 The notification title/body are passed in from the screen (which has `context.l10n`), not from the controller. To keep the controller pure, accept them as parameters. For the test (which doesn't pass them), we'll wire a static helper to avoid forcing every caller to pass them.
 
@@ -1187,17 +1189,17 @@ final reminderControllerProvider =
         ReminderController.new);
 ```
 
-- [ ] **Step 5: Run, verify PASS**
+- [x] **Step 5: Run, verify PASS**
 
 Run: `flutter test test/features/reminders/providers/reminder_controller_test.dart`
 Expected: 5 tests pass.
 
-- [ ] **Step 6: Full suite + analyze**
+- [x] **Step 6: Full suite + analyze**
 
 Run: `flutter analyze && flutter test`
 Expected: 0 issues; **199 tests pass** (194 + 5).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add lib/features/reminders/providers/reminder_controller.dart lib/features/reminders/providers/permission_status_provider.dart test/features/reminders/providers/reminder_controller_test.dart
@@ -1213,7 +1215,7 @@ If the user has `reminderEnabled == true` from a previous run, ensure the daily 
 **Files:**
 - Modify: `lib/app/bootstrap.dart`
 
-- [ ] **Step 1: Edit `bootstrap.dart`**
+- [x] **Step 1: Edit `bootstrap.dart`**
 
 After `await GetIt.I<NotificationService>().init();`, add:
 
@@ -1246,11 +1248,11 @@ import '../features/reminders/domain/reminder_schedule.dart';
 
 **Note:** the bootstrap uses raw English strings here, not localized. That's a known limitation — the OS locale at install time determines what the notification says on launch, but localization here would require initializing the `AppLocalizations` delegate before bootstrap finishes (chicken/egg). Acceptable for Phase 5; future polish can localize this at first-screen-load instead.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `flutter analyze && flutter test` → 0 issues; 199 tests still pass.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add lib/app/bootstrap.dart
@@ -1266,7 +1268,7 @@ git commit -m "feat(reminders): re-arm daily reminder on bootstrap if permission
 - Create: `lib/features/reminders/presentation/widgets/reminder_time_picker_sheet.dart`
 - Test: `test/features/reminders/presentation/widgets_test.dart` (combined)
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```dart
 // test/features/reminders/presentation/widgets_test.dart
@@ -1313,12 +1315,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/reminders/presentation/widgets_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `permission_denied_card.dart`**
+- [x] **Step 3: Implement `permission_denied_card.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1367,7 +1369,7 @@ class PermissionDeniedCard extends StatelessWidget {
 }
 ```
 
-- [ ] **Step 4: Implement `reminder_time_picker_sheet.dart`**
+- [x] **Step 4: Implement `reminder_time_picker_sheet.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1390,16 +1392,16 @@ class ReminderTimePickerSheet {
 }
 ```
 
-- [ ] **Step 5: Run, verify PASS**
+- [x] **Step 5: Run, verify PASS**
 
 Run: `flutter test test/features/reminders/presentation/widgets_test.dart` → 2 pass.
 
-- [ ] **Step 6: Full suite + analyze**
+- [x] **Step 6: Full suite + analyze**
 
 Run: `flutter analyze && flutter test`
 Expected: 0 issues; **201 tests pass** (199 + 2).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add lib/features/reminders/presentation/widgets/permission_denied_card.dart lib/features/reminders/presentation/widgets/reminder_time_picker_sheet.dart test/features/reminders/presentation/widgets_test.dart
@@ -1414,7 +1416,7 @@ git commit -m "feat(reminders): add PermissionDeniedCard + ReminderTimePickerShe
 - Create: `lib/features/reminders/presentation/screens/reminders_screen.dart`
 - Test: `test/features/reminders/presentation/reminders_screen_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/reminders/presentation/reminders_screen_test.dart
@@ -1503,12 +1505,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/reminders/presentation/reminders_screen_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `reminders_screen.dart`**
+- [x] **Step 3: Implement `reminders_screen.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1606,17 +1608,17 @@ Note the import of `SettingsTile` from the existing settings feature. If the tes
 
 Also: `l10n.errorRetry` is used as the error fallback. If it doesn't exist in the ARB, fall back to a literal `'Try again'` or add the key — but I expect Phase 4's retry button already added it.
 
-- [ ] **Step 4: Run, verify PASS**
+- [x] **Step 4: Run, verify PASS**
 
 Run: `flutter test test/features/reminders/presentation/reminders_screen_test.dart`
 Expected: 2 tests pass.
 
-- [ ] **Step 5: Full suite + analyze**
+- [x] **Step 5: Full suite + analyze**
 
 Run: `flutter analyze && flutter test`
 Expected: 0 issues; **203 tests pass** (201 + 2).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add lib/features/reminders/presentation/screens/reminders_screen.dart test/features/reminders/presentation/reminders_screen_test.dart
@@ -1632,7 +1634,7 @@ git commit -m "feat(reminders): add RemindersScreen with enable switch + time pi
 - Modify: `lib/core/navigation/app_router.dart`
 - Modify: `lib/features/settings/presentation/screens/settings_screen.dart`
 
-- [ ] **Step 1: Add route constant**
+- [x] **Step 1: Add route constant**
 
 In `lib/core/navigation/app_routes.dart`, add:
 
@@ -1642,7 +1644,7 @@ In `lib/core/navigation/app_routes.dart`, add:
 
 (Place it alphabetically among existing constants — after `settings`.)
 
-- [ ] **Step 2: Add nested route in router**
+- [x] **Step 2: Add nested route in router**
 
 In `lib/core/navigation/app_router.dart`, find the Settings branch's `GoRoute` and add a child route:
 
@@ -1669,7 +1671,7 @@ Add the import for `RemindersScreen` at the top (alphabetical position):
 import '../../features/reminders/presentation/screens/reminders_screen.dart';
 ```
 
-- [ ] **Step 3: Update the Settings screen Reminders tile**
+- [x] **Step 3: Update the Settings screen Reminders tile**
 
 In `lib/features/settings/presentation/screens/settings_screen.dart`, replace the disabled Reminders tile with:
 
@@ -1734,11 +1736,11 @@ Add the import:
 import '../../../reminders/providers/reminder_controller.dart';
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run: `flutter analyze && flutter test` → 0 issues; 203 tests still pass. If a Settings screen widget test exists and breaks because the new `Consumer` requires `notificationServiceProvider` / `reminderControllerProvider` to be overridable, extend the test's overrides accordingly.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/core/navigation/app_routes.dart lib/core/navigation/app_router.dart lib/features/settings/presentation/screens/settings_screen.dart
@@ -1754,7 +1756,7 @@ git commit -m "feat(navigation): wire /settings/reminders route and tappable Rem
 - Create: `lib/features/backup/domain/import_mode.dart`
 - Test: `test/features/backup/domain/backup_envelope_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/backup/domain/backup_envelope_test.dart
@@ -1789,18 +1791,18 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/backup/domain/backup_envelope_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `import_mode.dart`**
+- [x] **Step 3: Implement `import_mode.dart`**
 
 ```dart
 enum ImportMode { merge, replace }
 ```
 
-- [ ] **Step 4: Implement `backup_envelope.dart`**
+- [x] **Step 4: Implement `backup_envelope.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1838,7 +1840,7 @@ class BackupEnvelope {
 }
 ```
 
-- [ ] **Step 5: Run, verify PASS, commit**
+- [x] **Step 5: Run, verify PASS, commit**
 
 ```bash
 flutter test test/features/backup/domain/backup_envelope_test.dart
@@ -1857,7 +1859,7 @@ Expected: 206 tests pass (203 + 3).
 - Create: `lib/features/backup/data/backup_codec.dart`
 - Test: `test/features/backup/data/backup_codec_test.dart`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```dart
 // test/features/backup/data/backup_codec_test.dart
@@ -1984,12 +1986,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/backup/data/backup_codec_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `backup_codec.dart`**
+- [x] **Step 3: Implement `backup_codec.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart' show visibleForTesting;
@@ -2107,7 +2109,7 @@ String _titleCase(String slug) {
 }
 ```
 
-- [ ] **Step 4: Run, verify PASS, commit**
+- [x] **Step 4: Run, verify PASS, commit**
 
 ```bash
 flutter test test/features/backup/data/backup_codec_test.dart
@@ -2129,7 +2131,7 @@ Expected: 212 tests pass (206 + 6).
 
 `BackupService` is the only file in the entire phase that touches `share_plus` and `file_picker`. Both are wrapped behind plain function abstractions injected at construction so tests can replace them.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/backup/data/backup_service_test.dart
@@ -2330,12 +2332,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/backup/data/backup_service_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `backup_service.dart`**
+- [x] **Step 3: Implement `backup_service.dart`**
 
 ```dart
 import 'dart:async';
@@ -2446,7 +2448,7 @@ class BackupServiceImpl implements BackupService {
 
 Check `lib/core/error/failure.dart` for the actual `Failure` subtypes and their constructors. If `ValidationFailure` doesn't take `messageKey`, adapt the constructor call to whatever shape exists (it might use `cause` or `code`). Similarly for `IOFailure`. Read the file before writing the impl.
 
-- [ ] **Step 4: Implement `backup_service_provider.dart`**
+- [x] **Step 4: Implement `backup_service_provider.dart`**
 
 ```dart
 import 'dart:io';
@@ -2494,7 +2496,7 @@ Future<void> primeAppVersion() async {
 
 If your `share_plus` major version exposes `Share.shareXFiles(...)` instead of the `SharePlus.instance.share(...)` form, swap to whatever the installed version exposes.
 
-- [ ] **Step 5: Prime `_appVersionCache` in bootstrap**
+- [x] **Step 5: Prime `_appVersionCache` in bootstrap**
 
 In `lib/app/bootstrap.dart`, after `await registerServices()`:
 
@@ -2505,7 +2507,7 @@ import '../features/backup/data/backup_service_provider.dart';
 await primeAppVersion();
 ```
 
-- [ ] **Step 6: Run, verify PASS, commit**
+- [x] **Step 6: Run, verify PASS, commit**
 
 ```bash
 flutter test test/features/backup/data/backup_service_test.dart
@@ -2524,7 +2526,7 @@ Expected: 217 tests pass (212 + 5).
 - Create: `lib/features/backup/providers/backup_controller.dart`
 - Test: `test/features/backup/providers/backup_controller_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/backup/providers/backup_controller_test.dart
@@ -2595,12 +2597,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/backup/providers/backup_controller_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `backup_controller.dart`**
+- [x] **Step 3: Implement `backup_controller.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -2688,7 +2690,7 @@ final backupControllerProvider =
     NotifierProvider<BackupController, BackupState>(BackupController.new);
 ```
 
-- [ ] **Step 4: Run, verify PASS, commit**
+- [x] **Step 4: Run, verify PASS, commit**
 
 ```bash
 flutter test test/features/backup/providers/backup_controller_test.dart
@@ -2707,7 +2709,7 @@ Expected: 221 tests pass (217 + 4).
 - Create: `lib/features/backup/presentation/widgets/import_mode_dialog.dart`
 - Test: `test/features/backup/presentation/import_mode_dialog_test.dart`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```dart
 // test/features/backup/presentation/import_mode_dialog_test.dart
@@ -2784,12 +2786,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/backup/presentation/import_mode_dialog_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `import_mode_dialog.dart`**
+- [x] **Step 3: Implement `import_mode_dialog.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -2873,7 +2875,7 @@ class ImportModeDialog {
 }
 ```
 
-- [ ] **Step 4: Run, verify PASS, commit**
+- [x] **Step 4: Run, verify PASS, commit**
 
 ```bash
 flutter test test/features/backup/presentation/import_mode_dialog_test.dart
@@ -2892,7 +2894,7 @@ Expected: 224 tests pass (221 + 3).
 - Create: `lib/features/backup/presentation/screens/backup_screen.dart`
 - Test: `test/features/backup/presentation/backup_screen_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/backup/presentation/backup_screen_test.dart
@@ -2961,12 +2963,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/backup/presentation/backup_screen_test.dart`
 Expected: compile error.
 
-- [ ] **Step 3: Implement `backup_screen.dart`**
+- [x] **Step 3: Implement `backup_screen.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -3050,17 +3052,17 @@ class _StatusBanner extends StatelessWidget {
 
 If `AppSpacing.lg` doesn't exist, substitute with whatever larger spacing token exists (e.g., `AppSpacing.md * 2` or `AppSpacing.xl`). Read the file first if unsure.
 
-- [ ] **Step 4: Run, verify PASS**
+- [x] **Step 4: Run, verify PASS**
 
 Run: `flutter test test/features/backup/presentation/backup_screen_test.dart`
 Expected: 2 tests pass.
 
-- [ ] **Step 5: Full suite + analyze**
+- [x] **Step 5: Full suite + analyze**
 
 Run: `flutter analyze && flutter test`
 Expected: 0 issues; **226 tests pass** (224 + 2).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add lib/features/backup/presentation/screens/backup_screen.dart test/features/backup/presentation/backup_screen_test.dart
@@ -3076,7 +3078,7 @@ git commit -m "feat(backup): add BackupScreen with export/import buttons + statu
 - Modify: `lib/core/navigation/app_router.dart`
 - Modify: `lib/features/settings/presentation/screens/settings_screen.dart`
 
-- [ ] **Step 1: Add route constant**
+- [x] **Step 1: Add route constant**
 
 In `lib/core/navigation/app_routes.dart`:
 
@@ -3086,7 +3088,7 @@ In `lib/core/navigation/app_routes.dart`:
 
 (Alphabetical position.)
 
-- [ ] **Step 2: Add nested route**
+- [x] **Step 2: Add nested route**
 
 In `lib/core/navigation/app_router.dart`, find the Settings branch's children list. After the `reminders` child added in Task 12, add:
 
@@ -3103,7 +3105,7 @@ Import at the top:
 import '../../features/backup/presentation/screens/backup_screen.dart';
 ```
 
-- [ ] **Step 3: Add Data tile to Settings screen**
+- [x] **Step 3: Add Data tile to Settings screen**
 
 In `lib/features/settings/presentation/screens/settings_screen.dart`, between the Reminders section and the About section, insert:
 
@@ -3122,11 +3124,11 @@ In `lib/features/settings/presentation/screens/settings_screen.dart`, between th
             ),
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run: `flutter analyze && flutter test` → 0 issues; 226 tests still pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/core/navigation/app_routes.dart lib/core/navigation/app_router.dart lib/features/settings/presentation/screens/settings_screen.dart
@@ -3140,11 +3142,11 @@ git commit -m "feat(navigation): wire /settings/backup route and Settings Data t
 **Files:**
 - Modify: `test/widget_test.dart`
 
-- [ ] **Step 1: Read existing scaffold**
+- [x] **Step 1: Read existing scaffold**
 
 Run: `cat test/widget_test.dart | head -60`. Reuse `_EmptyRepo` and `AppColors` setup.
 
-- [ ] **Step 2: Append two smoke tests at the end of `main()`**
+- [x] **Step 2: Append two smoke tests at the end of `main()`**
 
 ```dart
   testWidgets('Reminders screen renders against empty prefs', (tester) async {
@@ -3229,7 +3231,7 @@ import 'package:mood_tracker/features/reminders/presentation/screens/reminders_s
 import 'package:shared_preferences/shared_preferences.dart';
 ```
 
-- [ ] **Step 3: Run, verify PASS, commit**
+- [x] **Step 3: Run, verify PASS, commit**
 
 ```bash
 flutter test test/widget_test.dart
@@ -3249,11 +3251,11 @@ After Tasks 12 + 19, the Settings screen has Theme / Language / Reminders / Data
 **Files:**
 - (Possibly modify) `test/features/settings/presentation/screens/settings_screen_test.dart`
 
-- [ ] **Step 1: Identify existing settings test**
+- [x] **Step 1: Identify existing settings test**
 
 Run: `find test/features/settings -name '*.dart'`.
 
-- [ ] **Step 2: Run only that test**
+- [x] **Step 2: Run only that test**
 
 Run: `flutter test test/features/settings/presentation/screens/settings_screen_test.dart`.
 If it passes, no action needed. If it fails because the new sections require additional provider overrides:
@@ -3261,14 +3263,14 @@ If it passes, no action needed. If it fails because the new sections require add
 - Add `appPrefsProvider`, `notificationServiceProvider`, and possibly `backupServiceProvider` to the test's `ProviderScope(overrides: ...)`.
 - Provide minimal fakes for any new dependencies.
 
-- [ ] **Step 3: If you had to fix the test, commit**
+- [x] **Step 3: If you had to fix the test, commit**
 
 ```bash
 git add test/features/settings/presentation/screens/settings_screen_test.dart
 git commit -m "test(settings): extend overrides for Reminders + Data tiles"
 ```
 
-- [ ] **Step 4: Full suite + analyze**
+- [x] **Step 4: Full suite + analyze**
 
 Run: `flutter analyze && flutter test`
 Expected: 0 issues; **228 tests pass** (or +1 if you added one).
@@ -3282,7 +3284,7 @@ Expected: 0 issues; **228 tests pass** (or +1 if you added one).
 - Modify: `memory.md`
 - Modify: `docs/superpowers/plans/2026-05-18-mood-tracker-phase-5.md` (tick checkboxes + add status header)
 
-- [ ] **Step 1: Skim README**
+- [x] **Step 1: Skim README**
 
 Run: `cat README.md | head -100`. If it has a phase-status section, append:
 
@@ -3290,7 +3292,7 @@ Run: `cat README.md | head -100`. If it has a phase-status section, append:
 - Phase 5 — Reminders + JSON export/import (complete 2026-05-18)
 ```
 
-- [ ] **Step 2: Update `memory.md`**
+- [x] **Step 2: Update `memory.md`**
 
 Add a new session-log entry at the top of the `## Session log` section:
 
@@ -3309,7 +3311,7 @@ Replace `N commits` with the actual count from `git log af20408..HEAD --oneline 
 
 If `memory.md` has a `## Current status` section, update it. If a `## Phase roadmap` section exists, mark Phase 5 as complete.
 
-- [ ] **Step 3: Tick plan checkboxes**
+- [x] **Step 3: Tick plan checkboxes**
 
 Add a status header at the top of this plan file (after the existing header):
 
@@ -3317,20 +3319,20 @@ Add a status header at the top of this plan file (after the existing header):
 > **Status: ✅ Complete (2026-05-18).** All 22 tasks landed across N commits. `flutter analyze` reports 0 issues; `flutter test` passes 228/228. Manual on-device smoke pass (notifications fire, share sheet opens, file picker imports) deferred to the developer.
 ```
 
-Replace all `- [ ]` with `- [x]`:
+Replace all `- [x]` with `- [x]`:
 
 ```bash
 sed -i '' 's/- \[ \]/- [x]/g' docs/superpowers/plans/2026-05-18-mood-tracker-phase-5.md
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add README.md memory.md docs/superpowers/plans/2026-05-18-mood-tracker-phase-5.md
 git commit -m "docs: mark Phase 5 plan complete; update memory.md session log"
 ```
 
-- [ ] **Step 5: Final verification**
+- [x] **Step 5: Final verification**
 
 ```
 flutter analyze
