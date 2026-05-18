@@ -193,5 +193,110 @@
   "calendarJumpToToday": "Ir a hoy",
   "@calendarJumpToToday": {},
   "calendarDayEmpty": "Sin entradas en este día.",
-  "@calendarDayEmpty": {}
+  "@calendarDayEmpty": {},
+
+  "insightsTitle": "Estadísticas",
+  "@insightsTitle": {},
+  "insightsRange7d": "7d",
+  "@insightsRange7d": {},
+  "insightsRange30d": "30d",
+  "@insightsRange30d": {},
+  "insightsRange90d": "90d",
+  "@insightsRange90d": {},
+  "insightsRangeAll": "Todo",
+  "@insightsRangeAll": {},
+  "insightsFilterTooltip": "Filtrar",
+  "@insightsFilterTooltip": {},
+  "insightsMoodTrend": "Tendencia del ánimo",
+  "@insightsMoodTrend": {},
+  "insightsDistribution": "Distribución del ánimo",
+  "@insightsDistribution": {},
+  "insightsTopTags": "Etiquetas principales",
+  "@insightsTopTags": {},
+  "insightsSleepVsMood": "Sueño vs. ánimo",
+  "@insightsSleepVsMood": {},
+  "insightsEnergyVsMood": "Energía vs. ánimo",
+  "@insightsEnergyVsMood": {},
+  "insightsTrendEmpty": "Registra al menos 2 días para ver una tendencia.",
+  "@insightsTrendEmpty": {},
+  "insightsDistributionEmpty": "Aún no hay entradas en este rango.",
+  "@insightsDistributionEmpty": {},
+  "insightsTopTagsEmpty": "Etiqueta algunas entradas para ver tus etiquetas principales.",
+  "@insightsTopTagsEmpty": {},
+  "insightsSleepEmpty": "Añade horas de sueño al registrar para ver esto.",
+  "@insightsSleepEmpty": {},
+  "insightsEnergyEmpty": "Registra algunas entradas para ver patrones de energía.",
+  "@insightsEnergyEmpty": {},
+  "insightsTooltipDay": "{date} — prom. {avg}\n{count, plural, =1{1 entrada} other{{count} entradas}}",
+  "@insightsTooltipDay": {
+    "placeholders": {
+      "date": {"type": "String"},
+      "avg": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "insightsTooltipMood": "{label} — {count, plural, =1{1 entrada} other{{count} entradas}} ({percent}%)",
+  "@insightsTooltipMood": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "count": {"type": "int"},
+      "percent": {"type": "int"}
+    }
+  },
+  "insightsTooltipTag": "{label} — {count, plural, =1{1 entrada} other{{count} entradas}}",
+  "@insightsTooltipTag": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "insightsTooltipBucket": "{label} — prom. {avg} (n={count})",
+  "@insightsTooltipBucket": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "avg": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "insightsSleepBucketUnder6": "<6h",
+  "@insightsSleepBucketUnder6": {},
+  "insightsSleepBucket6to7": "6–7h",
+  "@insightsSleepBucket6to7": {},
+  "insightsSleepBucket7to8": "7–8h",
+  "@insightsSleepBucket7to8": {},
+  "insightsSleepBucket8to9": "8–9h",
+  "@insightsSleepBucket8to9": {},
+  "insightsSleepBucket9plus": "≥9h",
+  "@insightsSleepBucket9plus": {},
+  "a11yTrendSummary": "Tendencia del ánimo durante {days} días. Promedio {avg}. Rango de {min} a {max}.",
+  "@a11yTrendSummary": {
+    "placeholders": {
+      "days": {"type": "int"},
+      "avg": {"type": "String"},
+      "min": {"type": "String"},
+      "max": {"type": "String"}
+    }
+  },
+  "a11yDistributionSummary": "{great} excelente, {good} bien, {okay} regular, {bad} mal, {awful} terrible.",
+  "@a11yDistributionSummary": {
+    "placeholders": {
+      "great": {"type": "int"},
+      "good": {"type": "int"},
+      "okay": {"type": "int"},
+      "bad": {"type": "int"},
+      "awful": {"type": "int"}
+    }
+  },
+  "a11yTopTagsSummary": "Etiquetas principales: {summary}.",
+  "@a11yTopTagsSummary": {
+    "placeholders": {"summary": {"type": "String"}}
+  },
+  "a11ySleepSummary": "Sueño vs. ánimo: {summary}.",
+  "@a11ySleepSummary": {
+    "placeholders": {"summary": {"type": "String"}}
+  },
+  "a11yEnergySummary": "Energía vs. ánimo: {summary}.",
+  "@a11yEnergySummary": {
+    "placeholders": {"summary": {"type": "String"}}
+  }
 }

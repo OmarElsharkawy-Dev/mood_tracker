@@ -193,5 +193,110 @@
   "calendarJumpToToday": "Jump to today",
   "@calendarJumpToToday": {},
   "calendarDayEmpty": "No entries on this day.",
-  "@calendarDayEmpty": {}
+  "@calendarDayEmpty": {},
+
+  "insightsTitle": "Insights",
+  "@insightsTitle": {},
+  "insightsRange7d": "7d",
+  "@insightsRange7d": {},
+  "insightsRange30d": "30d",
+  "@insightsRange30d": {},
+  "insightsRange90d": "90d",
+  "@insightsRange90d": {},
+  "insightsRangeAll": "All",
+  "@insightsRangeAll": {},
+  "insightsFilterTooltip": "Filter",
+  "@insightsFilterTooltip": {},
+  "insightsMoodTrend": "Mood trend",
+  "@insightsMoodTrend": {},
+  "insightsDistribution": "Mood distribution",
+  "@insightsDistribution": {},
+  "insightsTopTags": "Top tags",
+  "@insightsTopTags": {},
+  "insightsSleepVsMood": "Sleep vs. mood",
+  "@insightsSleepVsMood": {},
+  "insightsEnergyVsMood": "Energy vs. mood",
+  "@insightsEnergyVsMood": {},
+  "insightsTrendEmpty": "Log at least 2 days to see a trend.",
+  "@insightsTrendEmpty": {},
+  "insightsDistributionEmpty": "No entries in this range yet.",
+  "@insightsDistributionEmpty": {},
+  "insightsTopTagsEmpty": "Tag some entries to see your top tags.",
+  "@insightsTopTagsEmpty": {},
+  "insightsSleepEmpty": "Add sleep hours when logging to see this.",
+  "@insightsSleepEmpty": {},
+  "insightsEnergyEmpty": "Log a few entries to see energy patterns.",
+  "@insightsEnergyEmpty": {},
+  "insightsTooltipDay": "{date} — avg {avg}\n{count, plural, =1{1 entry} other{{count} entries}}",
+  "@insightsTooltipDay": {
+    "placeholders": {
+      "date": {"type": "String"},
+      "avg": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "insightsTooltipMood": "{label} — {count, plural, =1{1 entry} other{{count} entries}} ({percent}%)",
+  "@insightsTooltipMood": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "count": {"type": "int"},
+      "percent": {"type": "int"}
+    }
+  },
+  "insightsTooltipTag": "{label} — {count, plural, =1{1 entry} other{{count} entries}}",
+  "@insightsTooltipTag": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "insightsTooltipBucket": "{label} — avg {avg} (n={count})",
+  "@insightsTooltipBucket": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "avg": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "insightsSleepBucketUnder6": "<6h",
+  "@insightsSleepBucketUnder6": {},
+  "insightsSleepBucket6to7": "6–7h",
+  "@insightsSleepBucket6to7": {},
+  "insightsSleepBucket7to8": "7–8h",
+  "@insightsSleepBucket7to8": {},
+  "insightsSleepBucket8to9": "8–9h",
+  "@insightsSleepBucket8to9": {},
+  "insightsSleepBucket9plus": "≥9h",
+  "@insightsSleepBucket9plus": {},
+  "a11yTrendSummary": "Mood trend over {days} days. Average {avg}. Range {min} to {max}.",
+  "@a11yTrendSummary": {
+    "placeholders": {
+      "days": {"type": "int"},
+      "avg": {"type": "String"},
+      "min": {"type": "String"},
+      "max": {"type": "String"}
+    }
+  },
+  "a11yDistributionSummary": "{great} great, {good} good, {okay} okay, {bad} bad, {awful} awful.",
+  "@a11yDistributionSummary": {
+    "placeholders": {
+      "great": {"type": "int"},
+      "good": {"type": "int"},
+      "okay": {"type": "int"},
+      "bad": {"type": "int"},
+      "awful": {"type": "int"}
+    }
+  },
+  "a11yTopTagsSummary": "Top tags: {summary}.",
+  "@a11yTopTagsSummary": {
+    "placeholders": {"summary": {"type": "String"}}
+  },
+  "a11ySleepSummary": "Sleep vs. mood: {summary}.",
+  "@a11ySleepSummary": {
+    "placeholders": {"summary": {"type": "String"}}
+  },
+  "a11yEnergySummary": "Energy vs. mood: {summary}.",
+  "@a11yEnergySummary": {
+    "placeholders": {"summary": {"type": "String"}}
+  }
 }
