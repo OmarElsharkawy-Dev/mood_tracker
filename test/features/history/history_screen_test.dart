@@ -9,6 +9,7 @@ import 'package:mood_tracker/features/mood_entry/data/mood_entry_repository_prov
 import 'package:mood_tracker/features/mood_entry/domain/entities/mood_entry.dart';
 import 'package:mood_tracker/features/mood_entry/domain/repositories/entry_query.dart';
 import 'package:mood_tracker/features/mood_entry/domain/repositories/mood_entry_repository.dart';
+import 'package:mood_tracker/features/search/providers/entry_filter_controller.dart';
 import 'package:mood_tracker/l10n/app_localizations.dart';
 
 class _EmptyRepo implements MoodEntryRepository {
@@ -43,5 +44,29 @@ void main() {
     ));
     await tester.pumpAndSettle();
     expect(find.text('Nothing logged yet.'), findsOneWidget);
+  });
+
+  testWidgets('shows no-matches empty state when filter is active and list is empty',
+      (tester) async {
+    final container = ProviderContainer(overrides: [
+      moodEntryRepositoryProvider.overrideWithValue(_EmptyRepo()),
+    ]);
+    container.read(entryFilterProvider.notifier).setText('nonexistent');
+    addTearDown(container.dispose);
+
+    await tester.pumpWidget(UncontrolledProviderScope(
+      container: container,
+      child: MaterialApp(
+        theme: ThemeData(extensions: const [AppColors.light]),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const HistoryScreen(),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No matches'), findsOneWidget);
+    expect(find.text('Nothing matches the current filter.'), findsOneWidget);
+    expect(find.text('Clear'), findsWidgets); // banner + empty-state action
   });
 }
