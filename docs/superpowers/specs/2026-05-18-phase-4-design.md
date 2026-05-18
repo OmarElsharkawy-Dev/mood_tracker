@@ -262,9 +262,9 @@ Per-chart empty rules:
 ### 6.2 Chart widget contracts
 
 - **`MoodTrendChart`** — `fl_chart` `LineChart`. Single line in `appColors.primary`, 20%-opacity area fill below. Bottom axis labels at `[start, mid, end]` only. Y axis 1..5 with integer labels. Null `averageMood` points produce line gaps. `LineTouchData` returns `insightsTooltipDay` with date / avg (1-decimal) / count.
-- **`MoodDistributionChart`** — vertical `BarChart`, 5 bars (awful → great). Each bar tinted via the existing mood color scale on `context.appColors`. Bars with `count == 0` rendered as a faint ghost at min height. `BarTouchData` returns `insightsTooltipMood` with label / count / integer percent.
+- **`MoodDistributionChart`** — vertical `BarChart`, 5 bars (awful → great). Each bar tinted via the existing mood color scale on `context.appColors`. Bars with `count == 0` rendered as a faint ghost outline at the axis baseline so all 5 categories remain visible. `BarTouchData` returns `insightsTooltipMood` with label / count / integer percent.
 - **`TopTagsChart`** — horizontal `BarChart` (rotated). Up to 10 bars; labels show tag label, value is count. Tooltip `insightsTooltipTag`.
-- **`SleepCorrelationChart` / `EnergyCorrelationChart`** — vertical `BarChart`, exactly 5 bars. Empty buckets render at height 0 with axis label still visible. Tooltip `insightsTooltipBucket` with bucket label / 1-decimal avg / sample size.
+- **`SleepCorrelationChart` / `EnergyCorrelationChart`** — vertical `BarChart`, exactly 5 bars. Empty buckets render the same way as distribution (faint ghost outline at the axis baseline) so all 5 buckets remain visible. Tooltip `insightsTooltipBucket` with bucket label / 1-decimal avg / sample size.
 
 All five charts: `swapAnimationDuration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : AppMotion.base`.
 
