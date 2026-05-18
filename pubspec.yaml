@@ -81,6 +81,32 @@ dev_dependencies:
   riverpod_lint: ^2.3.13
   custom_lint: ^0.7.6
 
+  # App icon generation
+  flutter_launcher_icons: ^0.14.3
+
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/
+
+flutter_launcher_icons:
+  image_path: "assets/positive-thinking.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#0F1021"
+  adaptive_icon_background: "#0F1021"
+  adaptive_icon_foreground: "assets/positive-thinking.png"
+  web:
+    generate: true
+    image_path: "assets/positive-thinking.png"
+    background_color: "#0F1021"
+    theme_color: "#7C6FCD"
+  macos:
+    generate: true
+    image_path: "assets/positive-thinking.png"
+  windows:
+    generate: true
+    image_path: "assets/positive-thinking.png"
+    icon_size: 48
