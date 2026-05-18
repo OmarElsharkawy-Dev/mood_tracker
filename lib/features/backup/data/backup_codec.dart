@@ -53,10 +53,8 @@ BackupEnvelope envelopeFromJson(Map<String, dynamic> raw) {
 @visibleForTesting
 Map<String, dynamic> migrate(Map<String, dynamic> raw) {
   final schema = raw['schema'] as int? ?? 0;
-  if (schema < BackupEnvelope.currentSchema) {
-    raw['schema'] = BackupEnvelope.currentSchema;
-  }
-  return raw;
+  if (schema >= BackupEnvelope.currentSchema) return raw;
+  return {...raw, 'schema': BackupEnvelope.currentSchema};
 }
 
 Map<String, dynamic> _entryToJson(MoodEntry e) {

@@ -68,4 +68,58 @@ void main() {
     await tester.pumpAndSettle();
     expect(captured, ImportMode.merge);
   });
+
+  testWidgets('Replace + confirm yields replace mode', (tester) async {
+    ImportMode? captured;
+    await tester.pumpWidget(MaterialApp(
+      theme: ThemeData(extensions: const [AppColors.light]),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Builder(builder: (context) {
+        return Scaffold(body: TextButton(
+          onPressed: () async {
+            captured = await ImportModeDialog.show(context);
+          },
+          child: const Text('open'),
+        ));
+      }),
+    ));
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Replace'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+    // First Continue dismisses mode dialog, now the secondary confirm appears.
+    expect(find.text('Replace all entries?'), findsOneWidget);
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+    expect(captured, ImportMode.replace);
+  });
+
+  testWidgets('Replace + cancel on secondary confirm returns null', (tester) async {
+    ImportMode? captured;
+    await tester.pumpWidget(MaterialApp(
+      theme: ThemeData(extensions: const [AppColors.light]),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Builder(builder: (context) {
+        return Scaffold(body: TextButton(
+          onPressed: () async {
+            captured = await ImportModeDialog.show(context);
+          },
+          child: const Text('open'),
+        ));
+      }),
+    ));
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Replace'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(captured, isNull);
+  });
 }

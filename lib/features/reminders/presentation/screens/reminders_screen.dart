@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../settings/presentation/widgets/settings_tile.dart';
@@ -22,7 +23,23 @@ class RemindersScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.remindersTitle)),
       body: async.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Skeletonizer(
+          child: ListView(
+            children: [
+              SettingsTile(
+                leading: const Icon(Icons.notifications_outlined),
+                title: l10n.remindersEnabledTitle,
+                trailing: const Switch(value: false, onChanged: null),
+              ),
+              SettingsTile(
+                leading: const Icon(Icons.schedule),
+                title: l10n.remindersTimeTitle,
+                subtitle: '21:00',
+                trailing: const Icon(Icons.chevron_right),
+              ),
+            ],
+          ),
+        ),
         // ignore: avoid_types_on_closure_parameters
         error: (e, _) => Center(child: Text(l10n.errorRetry)),
         data: (schedule) => ListView(

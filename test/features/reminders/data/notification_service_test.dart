@@ -11,7 +11,7 @@ void main() {
     final svc = FlutterLocalNotificationsService(plugin);
     await svc.init();
     await svc.init();
-    expect(plugin.initializeCallCount, lessThanOrEqualTo(2));
+    expect(plugin.initializeCallCount, equals(1));
   });
 
   test(
