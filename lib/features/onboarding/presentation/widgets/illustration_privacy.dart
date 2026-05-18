@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/widgets/mood_face.dart';
 import '../../../mood_entry/domain/enums/mood.dart';
 
@@ -65,7 +66,7 @@ class _PhoneAndLockPainter extends CustomPainter {
     final lockBodyRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(size.width * 0.42, size.height * 0.06,
           size.width * 0.16, size.height * 0.1),
-      const Radius.circular(4),
+      const Radius.circular(AppRadius.xs),
     );
     canvas.drawRRect(lockBodyRect, stroke);
 
@@ -74,7 +75,7 @@ class _PhoneAndLockPainter extends CustomPainter {
       ..moveTo(size.width * 0.44, size.height * 0.06)
       ..arcToPoint(
         Offset(size.width * 0.56, size.height * 0.06),
-        radius: const Radius.circular(8),
+        radius: const Radius.circular(AppRadius.sm),
         clockwise: true,
       )
       ..lineTo(size.width * 0.56, size.height * 0.06);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../mood_entry/domain/enums/mood.dart';
 import '../../domain/mood_trend.dart';
@@ -109,7 +110,7 @@ class MoodTrendChart extends StatelessWidget {
             enabled: true,
             touchTooltipData: LineTouchTooltipData(
               getTooltipColor: (_) => colors.surfaceVariant,
-              tooltipBorderRadius: BorderRadius.circular(8),
+              tooltipBorderRadius: BorderRadius.circular(AppRadius.sm),
               getTooltipItems: (spots) => spots
                   .map((s) => LineTooltipItem(
                         s.y.toStringAsFixed(1),

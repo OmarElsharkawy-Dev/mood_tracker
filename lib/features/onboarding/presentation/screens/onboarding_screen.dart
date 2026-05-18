@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/navigation/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../providers/onboarding_controller.dart';
 import '../widgets/illustration_how.dart';
@@ -101,7 +102,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       margin: const EdgeInsets.only(right: 6),
                       decoration: BoxDecoration(
                         color: i == page ? colors.primary : colors.surfaceVariant,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(AppRadius.xs),
                       ),
                     ),
                   const Spacer(),
