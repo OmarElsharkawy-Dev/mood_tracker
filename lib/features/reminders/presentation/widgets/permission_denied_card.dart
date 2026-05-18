@@ -27,7 +27,7 @@ class PermissionDeniedCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.xs),
             Text(
               l10n.remindersPermissionDeniedBody,
-              style: AppTextStyles.body.copyWith(color: colors.onMuted),
+              style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
             ),
             const SizedBox(height: AppSpacing.sm),
             Align(

@@ -22,8 +22,8 @@ class AppChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final bg = selected ? colors.primary : colors.muted;
-    final fg = selected ? colors.onPrimary : colors.onMuted;
+    final bg = selected ? colors.primary : colors.surfaceVariant;
+    final fg = selected ? colors.onPrimary : colors.onSurfaceVariant;
     return InkWell(
       borderRadius: AppRadius.pillBR,
       onTap: onTap,

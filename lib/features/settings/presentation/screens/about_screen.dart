@@ -62,12 +62,12 @@ class AboutScreen extends ConsumerWidget {
                   Text(
                     '${l10n.aboutVersion} ${vm.appVersion}',
                     style:
-                        AppTextStyles.bodySmall.copyWith(color: colors.onMuted),
+                        AppTextStyles.bodySmall.copyWith(color: colors.onSurfaceVariant),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Text(
                     l10n.aboutDescription,
-                    style: AppTextStyles.body.copyWith(color: colors.onMuted),
+                    style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
                     textAlign: TextAlign.center,
                   ),
                 ],

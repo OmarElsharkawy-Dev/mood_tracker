@@ -62,13 +62,13 @@ class CalendarDayCell extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                     decoration: BoxDecoration(
-                      color: colors.muted,
+                      color: colors.surfaceVariant,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       '×${summary!.entryCount}',
                       style: AppTextStyles.caption.copyWith(
-                        color: colors.onMuted,
+                        color: colors.onSurfaceVariant,
                         fontSize: 10,
                       ),
                     ),

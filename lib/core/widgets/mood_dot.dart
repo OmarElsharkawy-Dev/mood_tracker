@@ -16,7 +16,7 @@ class MoodDot extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: context.appColors.forMood(mood),
+        color: context.appColors.moodColor(mood),
       ),
     );
   }

@@ -23,7 +23,7 @@ class HistoryRow extends StatelessWidget {
         entry.note ?? '',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.bodySmall.copyWith(color: colors.onMuted),
+        style: AppTextStyles.bodySmall.copyWith(color: colors.onSurfaceVariant),
       ),
       onTap: onTap,
     );

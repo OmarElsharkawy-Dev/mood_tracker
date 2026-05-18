@@ -56,7 +56,7 @@ class CalendarDaySheet extends StatelessWidget {
                 padding: const EdgeInsets.all(AppSpacing.md),
                 child: Text(
                   l10n.calendarDayEmpty,
-                  style: AppTextStyles.body.copyWith(color: colors.onMuted),
+                  style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
                 ),
               )
             else

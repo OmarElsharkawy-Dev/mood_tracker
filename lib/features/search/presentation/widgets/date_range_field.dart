@@ -38,18 +38,18 @@ class DateRangeField extends StatelessWidget {
           vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
-          border: Border.all(color: colors.border),
+          border: Border.all(color: colors.outline),
           borderRadius: AppRadius.cardBR,
         ),
         child: Row(
           children: [
-            Icon(Icons.date_range, color: colors.onMuted, size: 22),
+            Icon(Icons.date_range, color: colors.onSurfaceVariant, size: 22),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(label, style: AppTextStyles.body),
             ),
             if (range != null)
-              Icon(Icons.clear, color: colors.onMuted, size: 20),
+              Icon(Icons.clear, color: colors.onSurfaceVariant, size: 20),
           ],
         ),
       ),

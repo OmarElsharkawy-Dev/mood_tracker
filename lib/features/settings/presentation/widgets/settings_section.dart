@@ -26,7 +26,7 @@ class SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text(
             title.toUpperCase(),
-            style: AppTextStyles.label.copyWith(color: colors.onMuted),
+            style: AppTextStyles.label.copyWith(color: colors.onSurfaceVariant),
           ),
         ),
         const SizedBox(height: AppSpacing.xs),

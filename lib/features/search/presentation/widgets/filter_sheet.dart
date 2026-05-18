@@ -78,7 +78,7 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
                 width: 36,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: colors.muted,
+                  color: colors.surfaceVariant,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),

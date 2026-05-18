@@ -22,13 +22,13 @@ class ErrorView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, color: colors.destructive, size: 36),
+          Icon(Icons.error_outline, color: colors.error, size: 36),
           const SizedBox(height: AppSpacing.xs),
           Text(l10n.errorTitle,
               style: AppTextStyles.title.copyWith(color: colors.onSurface)),
           const SizedBox(height: AppSpacing.xs),
           Text(_describe(l10n, failure),
-              style: AppTextStyles.body.copyWith(color: colors.onMuted),
+              style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
               textAlign: TextAlign.center),
           if (onRetry != null) ...[
             const SizedBox(height: AppSpacing.md),

@@ -100,7 +100,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       height: 8,
                       margin: const EdgeInsets.only(right: 6),
                       decoration: BoxDecoration(
-                        color: i == page ? colors.primary : colors.muted,
+                        color: i == page ? colors.primary : colors.surfaceVariant,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),

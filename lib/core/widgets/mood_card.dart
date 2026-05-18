@@ -34,11 +34,11 @@ class _MoodCardState extends State<MoodCard> {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final moodColor = colors.forMood(widget.mood);
+    final moodColor = colors.moodColor(widget.mood);
     final selected = widget.isSelected;
     final bg = selected ? moodColor : colors.surface;
     final fg = selected ? colors.onPrimary : colors.onSurface;
-    final border = selected ? moodColor : colors.border;
+    final border = selected ? moodColor : colors.outline;
 
     final scale = _pressed ? 0.96 : (selected ? 1.05 : 1.0);
 

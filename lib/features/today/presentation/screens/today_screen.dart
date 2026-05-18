@@ -95,7 +95,7 @@ class TodayScreen extends ConsumerWidget {
         e.note ?? '',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.bodySmall.copyWith(color: context.appColors.onMuted),
+        style: AppTextStyles.bodySmall.copyWith(color: context.appColors.onSurfaceVariant),
       ),
       onTap: () => context.push(AppRoutes.entryDetailFor(e.id)),
     );

@@ -29,7 +29,7 @@ class EmptyStateView extends StatelessWidget {
               textAlign: TextAlign.center),
           const SizedBox(height: AppSpacing.xs),
           Text(message,
-              style: AppTextStyles.body.copyWith(color: colors.onMuted),
+              style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
               textAlign: TextAlign.center),
           if (action != null) ...[
             const SizedBox(height: AppSpacing.md),

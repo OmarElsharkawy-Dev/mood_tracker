@@ -21,7 +21,7 @@ class IntensitySlider extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(context.l10n.logEntryFieldIntensity,
-                style: AppTextStyles.label.copyWith(color: colors.onMuted)),
+                style: AppTextStyles.label.copyWith(color: colors.onSurfaceVariant)),
             Text('$value',
                 style: AppTextStyles.title.copyWith(color: colors.onSurface)),
           ],

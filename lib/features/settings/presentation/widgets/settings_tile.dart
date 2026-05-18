@@ -44,7 +44,7 @@ class SettingsTile extends StatelessWidget {
               children: [
                 if (leading != null) ...[
                   IconTheme.merge(
-                    data: IconThemeData(color: colors.onMuted, size: 22),
+                    data: IconThemeData(color: colors.onSurfaceVariant, size: 22),
                     child: leading!,
                   ),
                   const SizedBox(width: AppSpacing.md),
@@ -60,7 +60,7 @@ class SettingsTile extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(subtitle!,
                             style: AppTextStyles.bodySmall
-                                .copyWith(color: colors.onMuted)),
+                                .copyWith(color: colors.onSurfaceVariant)),
                       ],
                     ],
                   ),

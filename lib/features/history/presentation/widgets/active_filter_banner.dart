@@ -20,19 +20,19 @@ class ActiveFilterBanner extends ConsumerWidget {
 
     return Container(
       key: const ValueKey('active_filter_banner'),
-      color: colors.muted,
+      color: colors.surfaceVariant,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.xs,
       ),
       child: Row(
         children: [
-          Icon(Icons.filter_alt_outlined, size: 18, color: colors.onMuted),
+          Icon(Icons.filter_alt_outlined, size: 18, color: colors.onSurfaceVariant),
           const SizedBox(width: AppSpacing.xs),
           Expanded(
             child: Text(
               l10n.filterActiveCount(filter.activeCount),
-              style: AppTextStyles.bodySmall.copyWith(color: colors.onMuted),
+              style: AppTextStyles.bodySmall.copyWith(color: colors.onSurfaceVariant),
             ),
           ),
           TextButton(

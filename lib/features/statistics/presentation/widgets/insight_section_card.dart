@@ -48,7 +48,7 @@ class InsightSectionCard<T> extends ConsumerWidget {
                 child: Container(
                   height: 160,
                   decoration: BoxDecoration(
-                    color: colors.muted,
+                    color: colors.surfaceVariant,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(AppRadius.sm),
                     ),
@@ -61,7 +61,7 @@ class InsightSectionCard<T> extends ConsumerWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.error_outline, color: colors.onMuted),
+                      Icon(Icons.error_outline, color: colors.onSurfaceVariant),
                       const SizedBox(height: 4),
                       TextButton(
                         onPressed: () =>
@@ -79,7 +79,7 @@ class InsightSectionCard<T> extends ConsumerWidget {
                         const EdgeInsets.symmetric(vertical: AppSpacing.md),
                     child: Text(
                       emptyMessage,
-                      style: AppTextStyles.body.copyWith(color: colors.onMuted),
+                      style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
                     ),
                   );
                 }

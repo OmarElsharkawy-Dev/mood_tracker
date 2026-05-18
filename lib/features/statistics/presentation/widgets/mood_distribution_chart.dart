@@ -19,10 +19,7 @@ class MoodDistributionChart extends StatelessWidget {
         data.counts.values.fold<int>(0, (a, b) => a > b ? a : b);
     final maxY = (maxCount == 0 ? 1 : maxCount).toDouble();
 
-    Color barColor(Mood m) {
-      final t = m.index / (Mood.values.length - 1);
-      return Color.lerp(colors.primary, colors.accent, t)!;
-    }
+    Color barColor(Mood m) => colors.moodColor(m);
 
     return SizedBox(
       height: 200,
@@ -59,7 +56,7 @@ class MoodDistributionChart extends StatelessWidget {
                 BarChartRodData(
                   toY: (data.counts[Mood.values[i]] ?? 0).toDouble(),
                   color: data.counts[Mood.values[i]] == 0
-                      ? colors.muted
+                      ? colors.surfaceVariant
                       : barColor(Mood.values[i]),
                   width: 18,
                   borderRadius: const BorderRadius.vertical(

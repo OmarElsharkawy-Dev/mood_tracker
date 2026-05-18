@@ -34,7 +34,7 @@ class OnboardingPage extends StatelessWidget {
           const SizedBox(height: AppSpacing.xs),
           Text(
             body,
-            style: AppTextStyles.body.copyWith(color: colors.onMuted),
+            style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
             textAlign: TextAlign.center,
           ),
         ],

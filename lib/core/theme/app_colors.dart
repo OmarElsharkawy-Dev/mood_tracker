@@ -56,21 +56,6 @@ class AppColors extends ThemeExtension<AppColors> {
         Mood.great => moodGreat,
       };
 
-  // Backward-compat shims — kept so widgets still compile until they migrate.
-  // Why: this redesign renamed `muted/onMuted/border/destructive/onDestructive`
-  // and dropped `accent`. Removing them outright would break ~28 widget files.
-  // How to apply: prefer the canonical fields in new code; these getters will
-  // be removed once the widget layer is migrated to the new names.
-  Color get muted => surfaceVariant;
-  Color get onMuted => onSurfaceVariant;
-  Color get border => outline;
-  Color get accent => secondary;
-  Color get destructive => error;
-  Color get onDestructive => onError;
-
-  /// Deprecated: use [moodColor]. Kept so existing widgets compile.
-  Color forMood(Mood mood) => moodColor(mood);
-
   static const _moodAwful = Color(0xFFFF6B6B);
   static const _moodBad = Color(0xFFFFA26B);
   static const _moodOkay = Color(0xFFFFD93D);

@@ -69,7 +69,7 @@ class EntryDetailScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(fmt.format(entry.occurredAt),
-                    style: AppTextStyles.bodySmall.copyWith(color: colors.onMuted)),
+                    style: AppTextStyles.bodySmall.copyWith(color: colors.onSurfaceVariant)),
                 const SizedBox(height: AppSpacing.lg),
                 if ((entry.note ?? '').isNotEmpty)
                   Text(entry.note!, style: AppTextStyles.body),

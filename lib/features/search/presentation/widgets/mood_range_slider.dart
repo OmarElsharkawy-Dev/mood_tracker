@@ -37,7 +37,7 @@ class MoodRangeSlider extends StatelessWidget {
               MoodFace(mood: effective.min, color: colors.onSurface, size: 28),
               Text(
                 _label(effective),
-                style: AppTextStyles.label.copyWith(color: colors.onMuted),
+                style: AppTextStyles.label.copyWith(color: colors.onSurfaceVariant),
               ),
               MoodFace(mood: effective.max, color: colors.onSurface, size: 28),
             ],

@@ -6,6 +6,6 @@ class AppDivider extends StatelessWidget {
   const AppDivider({super.key});
   @override
   Widget build(BuildContext context) {
-    return Container(height: 1, color: context.appColors.border);
+    return Container(height: 1, color: context.appColors.outline);
   }
 }

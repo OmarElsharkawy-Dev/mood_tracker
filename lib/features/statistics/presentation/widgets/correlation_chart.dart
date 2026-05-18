@@ -63,7 +63,7 @@ class CorrelationChart extends StatelessWidget {
                 BarChartRodData(
                   toY: data.buckets[i].averageMood ?? 0,
                   color: data.buckets[i].sampleSize == 0
-                      ? colors.muted
+                      ? colors.surfaceVariant
                       : colors.primary,
                   width: 18,
                   borderRadius: const BorderRadius.vertical(

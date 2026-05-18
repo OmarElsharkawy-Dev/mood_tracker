@@ -16,12 +16,12 @@ void main() {
     expect(readBack.primary, AppColors.light.primary);
   });
 
-  test('forMood resolves all five enum cases', () {
+  test('moodColor resolves all five enum cases', () {
     final c = AppColors.light;
-    expect(c.forMood(Mood.awful), c.moodAwful);
-    expect(c.forMood(Mood.bad), c.moodBad);
-    expect(c.forMood(Mood.okay), c.moodOkay);
-    expect(c.forMood(Mood.good), c.moodGood);
-    expect(c.forMood(Mood.great), c.moodGreat);
+    expect(c.moodColor(Mood.awful), c.moodAwful);
+    expect(c.moodColor(Mood.bad), c.moodBad);
+    expect(c.moodColor(Mood.okay), c.moodOkay);
+    expect(c.moodColor(Mood.good), c.moodGood);
+    expect(c.moodColor(Mood.great), c.moodGreat);
   });
 }
