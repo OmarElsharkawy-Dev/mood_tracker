@@ -1,6 +1,7 @@
 import '../../mood_entry/domain/entities/mood_entry.dart';
 import '../../mood_entry/domain/entities/tag.dart';
 import '../../mood_entry/domain/enums/mood.dart';
+import 'correlation.dart';
 import 'insights_range.dart';
 import 'mood_distribution.dart';
 import 'mood_trend.dart';
@@ -106,5 +107,28 @@ TopTagsView computeTopTags(List<MoodEntry> entries, {int limit = 10}) {
         ),
     ],
     totalTaggedEntries: tagged,
+  );
+}
+
+CorrelationView computeSleepCorrelation(List<MoodEntry> entries) {
+  final buckets = <SleepBucket, List<int>>{
+    for (final b in SleepBucket.values) b: <int>[],
+  };
+  for (final e in entries) {
+    final h = e.sleepHours;
+    if (h == null) continue;
+    buckets[sleepBucketFor(h)]!.add(e.mood.score);
+  }
+  return CorrelationView(
+    buckets: [
+      for (final b in SleepBucket.values)
+        CorrelationBucket(
+          bucketLabelKey: b.labelKey,
+          sampleSize: buckets[b]!.length,
+          averageMood: buckets[b]!.isEmpty
+              ? null
+              : buckets[b]!.reduce((a, c) => a + c) / buckets[b]!.length,
+        ),
+    ],
   );
 }
