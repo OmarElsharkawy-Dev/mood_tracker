@@ -1,11 +1,27 @@
 import '../../mood_entry/domain/entities/mood_entry.dart';
 import '../../mood_entry/domain/entities/tag.dart';
+import '../../mood_entry/domain/enums/energy_level.dart';
 import '../../mood_entry/domain/enums/mood.dart';
 import 'correlation.dart';
 import 'insights_range.dart';
 import 'mood_distribution.dart';
 import 'mood_trend.dart';
 import 'top_tags_view.dart';
+
+String _energyLabelKey(EnergyLevel level) {
+  switch (level) {
+    case EnergyLevel.veryLow:
+      return 'energyVeryLow';
+    case EnergyLevel.low:
+      return 'energyLow';
+    case EnergyLevel.medium:
+      return 'energyMedium';
+    case EnergyLevel.high:
+      return 'energyHigh';
+    case EnergyLevel.veryHigh:
+      return 'energyVeryHigh';
+  }
+}
 
 DateTime _startOfDay(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
 
@@ -107,6 +123,27 @@ TopTagsView computeTopTags(List<MoodEntry> entries, {int limit = 10}) {
         ),
     ],
     totalTaggedEntries: tagged,
+  );
+}
+
+CorrelationView computeEnergyCorrelation(List<MoodEntry> entries) {
+  final buckets = <EnergyLevel, List<int>>{
+    for (final l in EnergyLevel.values) l: <int>[],
+  };
+  for (final e in entries) {
+    buckets[e.energy]!.add(e.mood.score);
+  }
+  return CorrelationView(
+    buckets: [
+      for (final l in EnergyLevel.values)
+        CorrelationBucket(
+          bucketLabelKey: _energyLabelKey(l),
+          sampleSize: buckets[l]!.length,
+          averageMood: buckets[l]!.isEmpty
+              ? null
+              : buckets[l]!.reduce((a, c) => a + c) / buckets[l]!.length,
+        ),
+    ],
   );
 }
 
