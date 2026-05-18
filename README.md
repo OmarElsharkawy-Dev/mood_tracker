@@ -6,10 +6,12 @@ Built as a learning playground that exercises a full Feature-First Clean Archite
 
 ## Status
 
-Phase 1 is complete: `core/` infrastructure + `mood_entry`/`history`/`today` features + app wiring. Subsequent phases (settings + onboarding + Spanish, calendar + search, statistics + charts, reminders + JSON backup) are planned but not yet built.
+Phases 1 and 2 are complete: `core/` infrastructure + `mood_entry` / `history` / `today` / `settings` / `onboarding` features + app wiring, with full English and Spanish translations and a first-run onboarding redirect. Subsequent phases (calendar + search, statistics + charts, reminders + JSON backup) are planned but not yet built.
 
-- Spec: [`docs/superpowers/specs/2026-05-17-mood-tracker-design.md`](docs/superpowers/specs/2026-05-17-mood-tracker-design.md)
+- Master spec: [`docs/superpowers/specs/2026-05-17-mood-tracker-design.md`](docs/superpowers/specs/2026-05-17-mood-tracker-design.md)
+- Phase 2 design: [`docs/superpowers/specs/2026-05-18-phase-2-design.md`](docs/superpowers/specs/2026-05-18-phase-2-design.md)
 - Phase 1 plan: [`docs/superpowers/plans/2026-05-17-mood-tracker-phase-1.md`](docs/superpowers/plans/2026-05-17-mood-tracker-phase-1.md)
+- Phase 2 plan: [`docs/superpowers/plans/2026-05-18-mood-tracker-phase-2.md`](docs/superpowers/plans/2026-05-18-mood-tracker-phase-2.md)
 - Project context for AI assistants: [`MEMORY.md`](MEMORY.md)
 
 ## Tech stack
@@ -18,12 +20,13 @@ Phase 1 is complete: `core/` infrastructure + `mood_entry`/`history`/`today` fea
 |---|---|
 | State management | `flutter_riverpod` |
 | Local persistence | `drift` + `sqlite3_flutter_libs` (normalized `entries` / `tags` / `entry_tags`) |
-| Routing | `go_router` with a 5-tab `StatefulShellRoute.indexedStack` |
+| Routing | `go_router` with a 5-tab `StatefulShellRoute.indexedStack` + first-run redirect |
 | DI | `get_it` (infra singletons) + Riverpod (app state) |
 | Prefs | `shared_preferences` |
-| Localization | ARB-based `flutter_localizations` (English; Spanish planned in Phase 2) |
+| Localization | ARB-based `flutter_localizations` (English + Spanish, ~73 keys each) |
+| Package info | `package_info_plus` (About screen version display) |
 | Typography | `google_fonts` (Lora for headings, Raleway for body) |
-| Icons | `lucide_icons_flutter` (mood faces are programmatic `CustomPainter`s) |
+| Icons | `lucide_icons_flutter` (mood faces and onboarding illustrations are programmatic `CustomPainter`s) |
 | Loading states | `skeletonizer` |
 | Responsive sizing | `flutter_screenutil` |
 | IDs | `uuid` v4 |
@@ -70,8 +73,8 @@ Generated files (Drift's `app_database.g.dart`, l10n's `app_localizations*.dart`
 
 ## Phase roadmap
 
-1. **Phase 1 — Foundation + first vertical slice** *(complete)* — `core/`, `mood_entry`, `history`, `today`.
-2. **Phase 2 — Settings, onboarding, Spanish translations.**
+1. **Phase 1 — Foundation + first vertical slice** *(complete 2026-05-17)* — `core/`, `mood_entry`, `history`, `today`.
+2. **Phase 2 — Settings, onboarding, Spanish translations** *(complete 2026-05-18)* — `settings` (theme/language/reminders-stub/about + modal pickers), `onboarding` (3-page first-run flow + GoRouter redirect), full `app_es.arb`, `package_info_plus`.
 3. **Phase 3 — Calendar view, search/filter.**
 4. **Phase 4 — Statistics & charts (`fl_chart`).**
 5. **Phase 5 — Local reminders, JSON export/import.**

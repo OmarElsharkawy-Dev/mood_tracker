@@ -1,5 +1,7 @@
 # Mood Tracker — Phase 2 Implementation Plan
 
+> **Status: ✅ Complete (2026-05-18).** All 15 tasks landed across 14 implementation commits + 1 post-review polish (commit `800886d`). `flutter analyze` reports 0 issues; `flutter test` passes 75/75. The only unchecked items are Task 15's manual on-device smoke run + the no-op follow-up commit step — deferred to the developer since the automated environment had no simulator.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Ship the Settings tab, first-run Onboarding flow, and full Spanish translations on top of Phase 1's foundation.
@@ -32,7 +34,7 @@
 - Modify: `pubspec.yaml`
 - Modify: `lib/core/navigation/app_routes.dart`
 
-- [ ] **Step 1: Add the failing test for `onboardingCompleted`**
+- [x] **Step 1: Add the failing test for `onboardingCompleted`**
 
 In `test/core/prefs/app_prefs_test.dart`, add two new test cases at the end of `main()` (inside the existing test group — preserve all current tests):
 
@@ -49,12 +51,12 @@ In `test/core/prefs/app_prefs_test.dart`, add two new test cases at the end of `
   });
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/core/prefs/app_prefs_test.dart`
 Expected: 2 new tests FAIL — `onboardingCompleted` is undefined.
 
-- [ ] **Step 3: Extend `lib/core/prefs/app_prefs.dart`**
+- [x] **Step 3: Extend `lib/core/prefs/app_prefs.dart`**
 
 Add the new key constant and the getter/setter pair. The full file becomes:
 
@@ -102,7 +104,7 @@ class AppPrefs {
 }
 ```
 
-- [ ] **Step 4: Add `package_info_plus` to `pubspec.yaml`**
+- [x] **Step 4: Add `package_info_plus` to `pubspec.yaml`**
 
 In the `dependencies:` block, add the entry under the existing `# Utils` section:
 
@@ -116,7 +118,7 @@ In the `dependencies:` block, add the entry under the existing `# Utils` section
 Run: `flutter pub get`
 Expected: no errors; lockfile updates.
 
-- [ ] **Step 5: Add the two new `AppRoutes` constants**
+- [x] **Step 5: Add the two new `AppRoutes` constants**
 
 In `lib/core/navigation/app_routes.dart`, add the two constants. Keep the existing ones; the final file is:
 
@@ -140,13 +142,13 @@ abstract final class AppRoutes {
 }
 ```
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 - `flutter test test/core/prefs/app_prefs_test.dart` → 6 tests pass (4 existing + 2 new)
 - `flutter analyze` → 0 issues
 - `flutter test` (full suite) → all pass (was 54; still 54 plus the 2 new pref tests = 56)
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add pubspec.yaml pubspec.lock lib/core/prefs/app_prefs.dart lib/core/navigation/app_routes.dart test/core/prefs/app_prefs_test.dart
@@ -163,7 +165,7 @@ No `Co-Authored-By` trailer.
 - Create: `lib/core/l10n/native_name.dart`
 - Create: `test/core/l10n/native_name_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `test/core/l10n/native_name_test.dart`:
 
@@ -188,12 +190,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: FAIL**
+- [x] **Step 2: FAIL**
 
 Run: `flutter test test/core/l10n/native_name_test.dart`
 Expected: FAIL — symbol undefined.
 
-- [ ] **Step 3: Implement `lib/core/l10n/native_name.dart`**
+- [x] **Step 3: Implement `lib/core/l10n/native_name.dart`**
 
 ```dart
 import 'dart:ui' show Locale;
@@ -205,7 +207,7 @@ String nativeNameFor(Locale locale) => switch (locale.languageCode) {
     };
 ```
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter test test/core/l10n/native_name_test.dart` → 3 tests pass
 - `flutter analyze` → 0 issues
@@ -222,7 +224,7 @@ git commit -m "feat(l10n): add nativeNameFor helper for language picker labels"
 **Files:**
 - Modify: `lib/l10n/app_en.arb`
 
-- [ ] **Step 1: Replace the contents of `lib/l10n/app_en.arb` with the merged set (Phase 1 keys + Phase 2 keys)**
+- [x] **Step 1: Replace the contents of `lib/l10n/app_en.arb` with the merged set (Phase 1 keys + Phase 2 keys)**
 
 The full file is:
 
@@ -389,12 +391,12 @@ The full file is:
 }
 ```
 
-- [ ] **Step 2: Regenerate l10n**
+- [x] **Step 2: Regenerate l10n**
 
 Run: `flutter gen-l10n`
 Expected: `lib/l10n/app_localizations.dart` and `lib/l10n/app_localizations_en.dart` regenerate. They stay gitignored.
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter analyze` → 0 issues
 - `flutter test` → all 56 tests still pass (no consumer of the new keys yet)
@@ -412,7 +414,7 @@ git commit -m "feat(l10n): add Phase 2 ARB keys (settings, onboarding, about, th
 **Files:**
 - Create: `lib/l10n/app_es.arb`
 
-- [ ] **Step 1: Create `lib/l10n/app_es.arb`**
+- [x] **Step 1: Create `lib/l10n/app_es.arb`**
 
 The full file mirrors every English key:
 
@@ -579,12 +581,12 @@ The full file mirrors every English key:
 }
 ```
 
-- [ ] **Step 2: Regenerate l10n**
+- [x] **Step 2: Regenerate l10n**
 
 Run: `flutter gen-l10n`
 Expected: `lib/l10n/app_localizations_es.dart` appears (gitignored, not staged). `AppLocalizations.supportedLocales` now contains both `Locale('en')` and `Locale('es')`.
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter analyze` → 0 issues
 - `flutter test` → all 56 tests pass
@@ -603,7 +605,7 @@ git commit -m "feat(l10n): add Spanish translations for all Phase 1 and Phase 2 
 - Create: `lib/features/settings/presentation/widgets/settings_tile.dart`
 - Create: `test/features/settings/presentation/widgets/settings_tile_test.dart`
 
-- [ ] **Step 1: Implement `settings_tile.dart`**
+- [x] **Step 1: Implement `settings_tile.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -687,7 +689,7 @@ class SettingsTile extends StatelessWidget {
 }
 ```
 
-- [ ] **Step 2: Implement `settings_section.dart`**
+- [x] **Step 2: Implement `settings_section.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -732,7 +734,7 @@ class SettingsSection extends StatelessWidget {
 }
 ```
 
-- [ ] **Step 3: Write widget test for `SettingsTile`**
+- [x] **Step 3: Write widget test for `SettingsTile`**
 
 ```dart
 // test/features/settings/presentation/widgets/settings_tile_test.dart
@@ -793,7 +795,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter test test/features/settings/presentation/widgets/settings_tile_test.dart` → 3 tests pass
 - `flutter analyze` → 0 issues
@@ -812,7 +814,7 @@ git commit -m "feat(settings): add SettingsSection and SettingsTile widgets"
 - Create: `lib/features/settings/presentation/widgets/theme_picker_sheet.dart`
 - Create: `lib/features/settings/presentation/widgets/language_picker_sheet.dart`
 
-- [ ] **Step 1: Implement `theme_picker_sheet.dart`**
+- [x] **Step 1: Implement `theme_picker_sheet.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -876,7 +878,7 @@ class ThemePickerSheet extends ConsumerWidget {
 }
 ```
 
-- [ ] **Step 2: Implement `language_picker_sheet.dart`**
+- [x] **Step 2: Implement `language_picker_sheet.dart`**
 
 ```dart
 import 'dart:ui' show Locale;
@@ -932,7 +934,7 @@ class LanguagePickerSheet extends ConsumerWidget {
 }
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter analyze` → 0 issues
 - `flutter test` → all 59 tests pass (no new tests in this task; both sheets are exercised in the SettingsScreen widget test in Task 8)
@@ -950,7 +952,7 @@ git commit -m "feat(settings): add theme and language picker bottom sheets"
 - Create: `lib/features/settings/providers/settings_controller.dart`
 - Create: `test/features/settings/providers/settings_controller_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/settings/providers/settings_controller_test.dart
@@ -1013,12 +1015,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: FAIL**
+- [x] **Step 2: FAIL**
 
 Run: `flutter test test/features/settings/providers/settings_controller_test.dart`
 Expected: FAIL — symbols undefined.
 
-- [ ] **Step 3: Implement `lib/features/settings/providers/settings_controller.dart`**
+- [x] **Step 3: Implement `lib/features/settings/providers/settings_controller.dart`**
 
 ```dart
 import 'dart:ui' show Locale;
@@ -1070,7 +1072,7 @@ final settingsControllerProvider =
 );
 ```
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter test test/features/settings/providers/settings_controller_test.dart` → 3 tests pass
 - `flutter analyze` → 0 issues
@@ -1089,7 +1091,7 @@ git commit -m "feat(settings): add SettingsController with view-model exposing t
 - Replace: `lib/features/settings/presentation/screens/settings_screen.dart` (does not yet exist as a file — the router currently uses an inline `_PlaceholderScreen('Settings')`; this task adds a real screen and Task 14 wires the router to use it)
 - Create: `test/features/settings/presentation/settings_screen_test.dart`
 
-- [ ] **Step 1: Implement `settings_screen.dart`**
+- [x] **Step 1: Implement `settings_screen.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1186,7 +1188,7 @@ class SettingsScreen extends ConsumerWidget {
 }
 ```
 
-- [ ] **Step 2: Write the widget test**
+- [x] **Step 2: Write the widget test**
 
 ```dart
 // test/features/settings/presentation/settings_screen_test.dart
@@ -1243,7 +1245,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter test test/features/settings/presentation/settings_screen_test.dart` → 1 test passes
 - `flutter analyze` → 0 issues
@@ -1262,7 +1264,7 @@ git commit -m "feat(settings): implement SettingsScreen with appearance, languag
 - Create: `lib/features/settings/presentation/screens/about_screen.dart`
 - Create: `test/features/settings/presentation/about_screen_test.dart`
 
-- [ ] **Step 1: Implement `about_screen.dart`**
+- [x] **Step 1: Implement `about_screen.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1339,7 +1341,7 @@ class AboutScreen extends ConsumerWidget {
 }
 ```
 
-- [ ] **Step 2: Write the widget test**
+- [x] **Step 2: Write the widget test**
 
 ```dart
 // test/features/settings/presentation/about_screen_test.dart
@@ -1392,7 +1394,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter test test/features/settings/presentation/about_screen_test.dart` → 1 test passes
 - `flutter analyze` → 0 issues
@@ -1411,7 +1413,7 @@ git commit -m "feat(settings): add AboutScreen with version, description, and li
 - Create: `lib/features/onboarding/providers/onboarding_controller.dart`
 - Create: `test/features/onboarding/providers/onboarding_controller_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 // test/features/onboarding/providers/onboarding_controller_test.dart
@@ -1457,12 +1459,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: FAIL**
+- [x] **Step 2: FAIL**
 
 Run: `flutter test test/features/onboarding/providers/onboarding_controller_test.dart`
 Expected: FAIL — symbols undefined.
 
-- [ ] **Step 3: Implement `lib/features/onboarding/providers/onboarding_controller.dart`**
+- [x] **Step 3: Implement `lib/features/onboarding/providers/onboarding_controller.dart`**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1488,7 +1490,7 @@ final onboardingControllerProvider =
     NotifierProvider<OnboardingController, int>(OnboardingController.new);
 ```
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter test test/features/onboarding/providers/onboarding_controller_test.dart` → 3 tests pass
 - `flutter analyze` → 0 issues
@@ -1509,7 +1511,7 @@ git commit -m "feat(onboarding): add OnboardingController with page index and co
 - Create: `lib/features/onboarding/presentation/widgets/illustration_privacy.dart`
 - Create: `test/features/onboarding/presentation/widgets/illustrations_test.dart`
 
-- [ ] **Step 1: Implement `illustration_what.dart`**
+- [x] **Step 1: Implement `illustration_what.dart`**
 
 A "journal page" rectangle with horizontal stroke lines (representing text rows) and a centered `MoodFace`.
 
@@ -1587,7 +1589,7 @@ class _JournalPainter extends CustomPainter {
 }
 ```
 
-- [ ] **Step 2: Implement `illustration_how.dart`**
+- [x] **Step 2: Implement `illustration_how.dart`**
 
 A `MoodCard`-shaped rounded rectangle with a `MoodFace` inside, plus a stylized finger silhouette tapping it.
 
@@ -1679,7 +1681,7 @@ class _CardAndFingerPainter extends CustomPainter {
 }
 ```
 
-- [ ] **Step 3: Implement `illustration_privacy.dart`**
+- [x] **Step 3: Implement `illustration_privacy.dart`**
 
 A phone outline with three tiny mood faces inside and a small padlock above.
 
@@ -1772,7 +1774,7 @@ class _PhoneAndLockPainter extends CustomPainter {
 }
 ```
 
-- [ ] **Step 4: Smoke test (no goldens — just pump and confirm no exceptions)**
+- [x] **Step 4: Smoke test (no goldens — just pump and confirm no exceptions)**
 
 ```dart
 // test/features/onboarding/presentation/widgets/illustrations_test.dart
@@ -1802,7 +1804,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 5: Verify + commit**
+- [x] **Step 5: Verify + commit**
 
 - `flutter test test/features/onboarding/presentation/widgets/illustrations_test.dart` → 1 test passes
 - `flutter analyze` → 0 issues
@@ -1820,7 +1822,7 @@ git commit -m "feat(onboarding): add three CustomPainter illustrations"
 **Files:**
 - Create: `lib/features/onboarding/presentation/widgets/onboarding_page.dart`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1869,7 +1871,7 @@ class OnboardingPage extends StatelessWidget {
 }
 ```
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 No test in this task; the page is exercised through `OnboardingScreen` in Task 13.
 
@@ -1888,7 +1890,7 @@ git commit -m "feat(onboarding): add OnboardingPage layout widget"
 - Create: `lib/features/onboarding/presentation/screens/onboarding_screen.dart`
 - Create: `test/features/onboarding/presentation/onboarding_screen_test.dart`
 
-- [ ] **Step 1: Implement `onboarding_screen.dart`**
+- [x] **Step 1: Implement `onboarding_screen.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -2016,7 +2018,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 }
 ```
 
-- [ ] **Step 2: Write the widget test**
+- [x] **Step 2: Write the widget test**
 
 ```dart
 // test/features/onboarding/presentation/onboarding_screen_test.dart
@@ -2113,7 +2115,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter test test/features/onboarding/presentation/onboarding_screen_test.dart` → 2 tests pass
 - `flutter analyze` → 0 issues
@@ -2132,7 +2134,7 @@ git commit -m "feat(onboarding): implement OnboardingScreen PageView with Skip +
 - Modify: `lib/core/navigation/app_router.dart`
 - Create: `test/core/navigation/app_router_redirect_test.dart`
 
-- [ ] **Step 1: Replace `lib/core/navigation/app_router.dart`**
+- [x] **Step 1: Replace `lib/core/navigation/app_router.dart`**
 
 The full file becomes:
 
@@ -2293,7 +2295,7 @@ class _NavDest {
 
 Note: this preserves the bottom-nav literal labels from Phase 1 (Calendar/Insights remain `_PlaceholderScreen`s for Phases 3/4). Settings is now a real screen with a nested `/settings/about` child route.
 
-- [ ] **Step 2: Write the redirect test**
+- [x] **Step 2: Write the redirect test**
 
 ```dart
 // test/core/navigation/app_router_redirect_test.dart
@@ -2392,7 +2394,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter test test/core/navigation/app_router_redirect_test.dart` → 2 tests pass
 - `flutter analyze` → 0 issues
@@ -2407,12 +2409,12 @@ git commit -m "feat(navigation): add onboarding redirect, /onboarding route, /se
 
 ## Task 15: Final validation pass
 
-- [ ] **Step 1: Analyze must be clean**
+- [x] **Step 1: Analyze must be clean**
 
 Run: `flutter analyze`
 Expected: `No issues found!`
 
-- [ ] **Step 2: Full test suite must pass**
+- [x] **Step 2: Full test suite must pass**
 
 Run: `flutter test`
 Expected: 72 tests pass (54 Phase 1 + 18 new Phase 2).
@@ -2422,7 +2424,7 @@ If any test fails, fix it before declaring Phase 2 complete. Likely sources of t
 - ARB key typos — run `flutter gen-l10n` and inspect any compile errors at `lib/l10n/app_localizations.dart`.
 - Spanish translation strings — verify every key in `app_es.arb` has a matching key in `app_en.arb`. Missing keys cause `flutter gen-l10n` to emit warnings.
 
-- [ ] **Step 3: Manual smoke run (optional — skip if no device)**
+- [ ] **Step 3: Manual smoke run (optional — skip if no device)** *(skipped — no device available; deferred to the developer)*
 
 If a simulator or device is available:
 
@@ -2433,12 +2435,12 @@ flutter run -d <device>
 Verify:
 - First launch lands on Onboarding. Tap Next twice → Get started → Today.
 - Open Settings tab → Theme → switch to Dark → app switches theme. Re-open → confirm subtitle shows "Dark".
-- Open Settings → Language → switch to Español → app re-renders in Spanish; nav-bar labels stay English-literal (carry-over from Phase 1 — they'll be localized when the shell starts using `context.l10n`; deferred).
+- Open Settings → Language → switch to Español → app re-renders in Spanish; the bottom-nav labels also localize (post-review fix in commit `800886d` wired `_MainShell` to `context.l10n`).
 - Reminders row shows "Coming in a future update", is not tappable.
 - About → version shows the package version, View licenses opens the standard `showLicensePage`.
 - Hot-restart → app skips onboarding (prefs persists).
 
-- [ ] **Step 4: No commit needed unless smoke-test issues surface**
+- [ ] **Step 4: No commit needed unless smoke-test issues surface** *(N/A — manual run was not executed)*
 
 If smoke-test issues surface, file them as follow-ups; do not silently amend.
 
