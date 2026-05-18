@@ -22,11 +22,13 @@ class MoodTrendSeries {
   final List<MoodTrendPoint> points;
   final InsightsRange range;
 
+  static bool _hasData(MoodTrendPoint p) => p.averageMood != null;
+
   int get daysWithData =>
-      points.where((p) => p.averageMood != null).length;
+      points.where(_hasData).length;
 
   double? get overallAverage {
-    final filled = points.where((p) => p.averageMood != null).toList();
+    final filled = points.where(_hasData).toList();
     if (filled.isEmpty) return null;
     final sum = filled.fold<double>(0, (acc, p) => acc + p.averageMood!);
     return sum / filled.length;
@@ -34,14 +36,14 @@ class MoodTrendSeries {
 
   double? get minDay {
     final filled =
-        points.where((p) => p.averageMood != null).map((p) => p.averageMood!);
+        points.where(_hasData).map((p) => p.averageMood!);
     if (filled.isEmpty) return null;
     return filled.reduce((a, b) => a < b ? a : b);
   }
 
   double? get maxDay {
     final filled =
-        points.where((p) => p.averageMood != null).map((p) => p.averageMood!);
+        points.where(_hasData).map((p) => p.averageMood!);
     if (filled.isEmpty) return null;
     return filled.reduce((a, b) => a > b ? a : b);
   }
