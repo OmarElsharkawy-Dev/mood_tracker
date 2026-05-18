@@ -40,4 +40,40 @@ void main() {
     await prefs.setOnboardingCompleted(false);
     expect(prefs.onboardingCompleted, isFalse);
   });
+
+  group('AppPrefs reminder accessors', () {
+    test('default reminderEnabled is false', () async {
+      final localSp = await SharedPreferences.getInstance();
+      final localPrefs = AppPrefs(localSp);
+      expect(localPrefs.reminderEnabled, false);
+    });
+
+    test('default reminderTime is null', () async {
+      final localSp = await SharedPreferences.getInstance();
+      final localPrefs = AppPrefs(localSp);
+      expect(localPrefs.reminderTime, isNull);
+    });
+
+    test('setReminderEnabled persists value', () async {
+      final localSp = await SharedPreferences.getInstance();
+      final localPrefs = AppPrefs(localSp);
+      await localPrefs.setReminderEnabled(true);
+      expect(AppPrefs(localSp).reminderEnabled, true);
+    });
+
+    test('setReminderTime persists HH:mm string', () async {
+      final localSp = await SharedPreferences.getInstance();
+      final localPrefs = AppPrefs(localSp);
+      await localPrefs.setReminderTime('21:00');
+      expect(AppPrefs(localSp).reminderTime, '21:00');
+    });
+
+    test('setReminderTime(null) removes the key', () async {
+      final localSp = await SharedPreferences.getInstance();
+      final localPrefs = AppPrefs(localSp);
+      await localPrefs.setReminderTime('21:00');
+      await localPrefs.setReminderTime(null);
+      expect(AppPrefs(localSp).reminderTime, isNull);
+    });
+  });
 }
