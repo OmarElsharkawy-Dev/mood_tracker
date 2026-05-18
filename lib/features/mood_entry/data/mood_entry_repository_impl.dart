@@ -74,6 +74,7 @@ class MoodEntryRepositoryImpl implements MoodEntryRepository {
   Stream<List<MoodEntry>> watchAll({EntryQuery? query}) {
     final select = _db.select(_db.entries)
       ..orderBy([(t) => OrderingTerm.desc(t.occurredAt)]);
+    if (query != null) _applyQuery(select, query);
     if (query?.limit != null) select.limit(query!.limit!);
     return select.watch().asyncMap(_hydrate);
   }
@@ -83,11 +84,40 @@ class MoodEntryRepositoryImpl implements MoodEntryRepository {
     try {
       final select = _db.select(_db.entries)
         ..orderBy([(t) => OrderingTerm.desc(t.occurredAt)]);
+      if (query != null) _applyQuery(select, query);
       if (query?.limit != null) select.limit(query!.limit!);
       final rows = await select.get();
       return (await _hydrate(rows), null);
     } catch (e) {
       return (null, DatabaseFailure(debugMessage: e.toString()));
+    }
+  }
+
+  void _applyQuery(
+    SimpleSelectStatement<$EntriesTable, EntryRow> select,
+    EntryQuery query,
+  ) {
+    final r = query.dateRange;
+    if (r != null) {
+      select.where((t) => t.occurredAt.isBetweenValues(
+            r.start.millisecondsSinceEpoch,
+            r.end.millisecondsSinceEpoch,
+          ));
+    }
+    final m = query.moodRange;
+    if (m != null) {
+      select.where((t) => t.mood.isBetweenValues(m.min.index, m.max.index));
+    }
+    final t = query.tagIds;
+    if (t != null && t.isNotEmpty) {
+      final sub = _db.selectOnly(_db.entryTags)
+        ..addColumns([_db.entryTags.entryId])
+        ..where(_db.entryTags.tagId.isIn(t));
+      select.where((row) => row.id.isInQuery(sub));
+    }
+    final text = query.text;
+    if (text != null && text.isNotEmpty) {
+      select.where((row) => row.note.like('%$text%'));
     }
   }
 
