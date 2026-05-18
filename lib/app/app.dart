@@ -21,6 +21,7 @@ class MoodTrackerApp extends ConsumerWidget {
       designSize: const Size(390, 844),
       minTextAdapt: true,
       builder: (_, child) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         routerConfig: router,
         themeMode: mode,
         theme: AppTheme.light(),
