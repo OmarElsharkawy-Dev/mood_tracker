@@ -4,7 +4,6 @@ import 'package:mood_tracker/features/statistics/domain/insights_range.dart';
 void main() {
   // Fixed "now" for deterministic boundary math.
   final now = DateTime(2026, 5, 18, 14, 30); // 2:30pm local
-  final today = DateTime(2026, 5, 18);       // start of day
 
   group('InsightsRangeX.toDateRange', () {
     test('d7 → today inclusive, 7 calendar days', () {
@@ -31,9 +30,13 @@ void main() {
       expect(r.end, isNull);
     });
 
+    test('d7 from early-of-month date crosses month boundary', () {
+      final r = InsightsRange.d7.toDateRange(DateTime(2026, 5, 3, 10));
+      expect(r.start, DateTime(2026, 4, 27));
+      expect(r.end, isNull);
+    });
+
     test('start aligns to midnight regardless of clock time', () {
-      // ignore: unused_local_variable
-      final _ = today; // referenced for reader clarity
       final r = InsightsRange.d7.toDateRange(DateTime(2026, 5, 18, 23, 59));
       expect(r.start!.hour, 0);
       expect(r.start!.minute, 0);
