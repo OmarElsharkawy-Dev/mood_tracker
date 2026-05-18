@@ -96,6 +96,18 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
             SettingsSection(
+              title: l10n.settingsDataSection,
+              children: [
+                SettingsTile(
+                  leading: const Icon(Icons.storage_outlined),
+                  title: l10n.settingsDataLabel,
+                  subtitle: l10n.settingsDataSubtitle,
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push(AppRoutes.settingsBackup),
+                ),
+              ],
+            ),
+            SettingsSection(
               title: l10n.settingsAboutSection,
               children: [
                 SettingsTile(

@@ -8,6 +8,7 @@ import '../../features/history/presentation/screens/history_screen.dart';
 import '../../features/mood_entry/presentation/screens/log_entry_sheet.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/statistics/presentation/screens/insights_screen.dart';
+import '../../features/backup/presentation/screens/backup_screen.dart';
 import '../../features/reminders/presentation/screens/reminders_screen.dart';
 import '../../features/settings/presentation/screens/about_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
@@ -72,6 +73,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 GoRoute(
                   path: 'about',
                   builder: (context, _) => const AboutScreen(),
+                ),
+                GoRoute(
+                  path: 'backup',
+                  builder: (context, _) => const BackupScreen(),
                 ),
                 GoRoute(
                   path: 'reminders',
