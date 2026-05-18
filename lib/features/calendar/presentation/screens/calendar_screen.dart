@@ -35,23 +35,28 @@ class CalendarScreen extends ConsumerWidget {
       ),
       body: SafeArea(
         top: false,
-        child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: Column(
-            children: [
-              _MonthNavRow(
-                monthLabel: monthLabel,
-                onPrev: notifier.previousMonth,
-                onNext: notifier.nextMonth,
-                onJumpToToday: notifier.jumpToToday,
-                prevTooltip: l10n.calendarPrevMonth,
-                nextTooltip: l10n.calendarNextMonth,
-                todayLabel: l10n.calendarTodayButton,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              child: Column(
+                children: [
+                  _MonthNavRow(
+                    monthLabel: monthLabel,
+                    onPrev: notifier.previousMonth,
+                    onNext: notifier.nextMonth,
+                    onJumpToToday: notifier.jumpToToday,
+                    prevTooltip: l10n.calendarPrevMonth,
+                    nextTooltip: l10n.calendarNextMonth,
+                    todayLabel: l10n.calendarTodayButton,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Expanded(child: CalendarMonth(month: month)),
+                ],
               ),
-              const SizedBox(height: AppSpacing.sm),
-              Expanded(child: CalendarMonth(month: month)),
-            ],
+            ),
           ),
         ),
       ),
