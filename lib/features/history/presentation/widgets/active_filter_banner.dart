@@ -19,6 +19,7 @@ class ActiveFilterBanner extends ConsumerWidget {
     final colors = context.appColors;
 
     return Container(
+      key: const ValueKey('active_filter_banner'),
       color: colors.muted,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
