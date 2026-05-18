@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -8,7 +9,6 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/mood_face.dart';
 import '../../../mood_entry/domain/enums/mood.dart';
 import '../../providers/settings_controller.dart';
-import '../widgets/settings_section.dart';
 import '../widgets/settings_tile.dart';
 
 class AboutScreen extends ConsumerWidget {
@@ -23,7 +23,31 @@ class AboutScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.aboutTitle)),
       body: async.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Skeletonizer(
+          child: ListView(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(32),
+                child: Column(
+                  children: [
+                    Icon(Icons.circle_outlined, size: 64),
+                    SizedBox(height: 8),
+                    Text('App Title'),
+                    SizedBox(height: 4),
+                    Text('Version 0.0.0'),
+                    SizedBox(height: 16),
+                    Text('Loading description text here'),
+                  ],
+                ),
+              ),
+              SettingsTile(
+                leading: const Icon(Icons.description_outlined),
+                title: 'Loading item',
+                trailing: const Icon(Icons.chevron_right),
+              ),
+            ],
+          ),
+        ),
         error: (_, _) => const SizedBox.shrink(),
         data: (vm) => ListView(
           children: [
@@ -49,20 +73,16 @@ class AboutScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            SettingsSection(
-              title: l10n.aboutTitle,
-              children: [
-                SettingsTile(
-                  leading: const Icon(Icons.description_outlined),
-                  title: l10n.aboutViewLicenses,
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => showLicensePage(
-                    context: context,
-                    applicationName: l10n.appTitle,
-                    applicationVersion: vm.appVersion,
-                  ),
-                ),
-              ],
+            const SizedBox(height: AppSpacing.md),
+            SettingsTile(
+              leading: const Icon(Icons.description_outlined),
+              title: l10n.aboutViewLicenses,
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => showLicensePage(
+                context: context,
+                applicationName: l10n.appTitle,
+                applicationVersion: vm.appVersion,
+              ),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mood_tracker/l10n/app_localizations.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/l10n/context_l10n_extension.dart';
@@ -25,7 +26,24 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: async.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Skeletonizer(
+          child: ListView(
+            children: [
+              for (var i = 0; i < 4; i++)
+                SettingsSection(
+                  title: 'Section',
+                  children: [
+                    const SettingsTile(
+                      leading: Icon(Icons.circle_outlined),
+                      title: 'Loading setting',
+                      subtitle: 'Loading value',
+                      trailing: Icon(Icons.chevron_right),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ),
         error: (e, _) => ErrorView(
           failure: e is Failure ? e : UnknownFailure(cause: e),
         ),

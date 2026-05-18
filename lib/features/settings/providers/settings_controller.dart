@@ -36,24 +36,12 @@ class SettingsController extends AsyncNotifier<SettingsViewModel> {
 
   Future<void> setTheme(ThemeMode mode) async {
     await ref.read(themeModeProvider.notifier).setMode(mode);
-    state = AsyncData(
-      SettingsViewModel(
-        themeMode: mode,
-        locale: state.value!.locale,
-        appVersion: state.value!.appVersion,
-      ),
-    );
+    ref.invalidateSelf();
   }
 
   Future<void> setLocale(Locale? locale) async {
     await ref.read(localeProvider.notifier).setLocale(locale);
-    state = AsyncData(
-      SettingsViewModel(
-        themeMode: state.value!.themeMode,
-        locale: locale,
-        appVersion: state.value!.appVersion,
-      ),
-    );
+    ref.invalidateSelf();
   }
 }
 

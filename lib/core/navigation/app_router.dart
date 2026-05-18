@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/history/presentation/screens/entry_detail_screen.dart';
+import '../l10n/context_l10n_extension.dart';
 import '../../features/history/presentation/screens/history_screen.dart';
 import '../../features/mood_entry/presentation/screens/log_entry_sheet.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -116,13 +117,7 @@ class _MainShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final destinations = const [
-      _NavDest(icon: Icons.home_outlined, selectedIcon: Icons.home, label: 'Today'),
-      _NavDest(icon: Icons.list_alt_outlined, selectedIcon: Icons.list_alt, label: 'History'),
-      _NavDest(icon: Icons.calendar_today_outlined, selectedIcon: Icons.calendar_today, label: 'Calendar'),
-      _NavDest(icon: Icons.show_chart_outlined, selectedIcon: Icons.show_chart, label: 'Insights'),
-      _NavDest(icon: Icons.settings_outlined, selectedIcon: Icons.settings, label: 'Settings'),
-    ];
+    final l10n = context.l10n;
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
@@ -131,22 +126,33 @@ class _MainShell extends StatelessWidget {
             i,
             initialLocation: i == navigationShell.currentIndex),
         destinations: [
-          for (final d in destinations)
-            NavigationDestination(
-              icon: Icon(d.icon),
-              selectedIcon: Icon(d.selectedIcon),
-              label: d.label,
-            ),
+          NavigationDestination(
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home),
+            label: l10n.navToday,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.list_alt_outlined),
+            selectedIcon: const Icon(Icons.list_alt),
+            label: l10n.navHistory,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.calendar_today_outlined),
+            selectedIcon: const Icon(Icons.calendar_today),
+            label: l10n.navCalendar,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.show_chart_outlined),
+            selectedIcon: const Icon(Icons.show_chart),
+            label: l10n.navInsights,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.settings_outlined),
+            selectedIcon: const Icon(Icons.settings),
+            label: l10n.navSettings,
+          ),
         ],
       ),
     );
   }
-}
-
-class _NavDest {
-  const _NavDest(
-      {required this.icon, required this.selectedIcon, required this.label});
-  final IconData icon;
-  final IconData selectedIcon;
-  final String label;
 }

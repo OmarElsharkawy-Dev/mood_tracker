@@ -41,7 +41,7 @@ void main() {
     final notifier = container.read(settingsControllerProvider.notifier);
     await container.read(settingsControllerProvider.future);
     await notifier.setTheme(ThemeMode.dark);
-    final vm = container.read(settingsControllerProvider).value!;
+    final vm = await container.read(settingsControllerProvider.future);
     expect(vm.themeMode, ThemeMode.dark);
     expect(prefs.themeMode, AppThemeMode.dark);
   });
@@ -50,7 +50,7 @@ void main() {
     final notifier = container.read(settingsControllerProvider.notifier);
     await container.read(settingsControllerProvider.future);
     await notifier.setLocale(const Locale('es'));
-    final vm = container.read(settingsControllerProvider).value!;
+    final vm = await container.read(settingsControllerProvider.future);
     expect(vm.locale, const Locale('es'));
     expect(prefs.localeTag, 'es');
   });
