@@ -134,7 +134,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            if (kDebugMode)
+            if (kDebugMode || kIsWeb)
               SettingsSection(
                 title: l10n.settingsDevSection,
                 children: [
