@@ -1,3 +1,5 @@
+import '../../features/mood_entry/domain/enums/mood.dart';
+
 abstract final class AppRoutes {
   static const String today = '/today';
   static const String history = '/history';
@@ -16,4 +18,5 @@ abstract final class AppRoutes {
 
   static String entryDetailFor(String id) => '/entry/$id';
   static String entryEditFor(String id) => '/entry/$id/edit';
+  static String logWithMood(Mood mood) => '$log?mood=${mood.name}';
 }

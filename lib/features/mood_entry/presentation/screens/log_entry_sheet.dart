@@ -7,6 +7,7 @@ import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/error_view.dart';
+import '../../domain/enums/mood.dart';
 import '../../providers/log_entry_controller.dart';
 import '../widgets/energy_segmented.dart';
 import '../widgets/intensity_slider.dart';
@@ -14,16 +15,17 @@ import '../widgets/mood_picker_row.dart';
 import '../widgets/tag_chip_input.dart';
 
 class LogEntrySheet extends ConsumerWidget {
-  const LogEntrySheet({super.key, this.editEntryId});
+  const LogEntrySheet({super.key, this.editEntryId, this.initialMood});
 
   final String? editEntryId;
+  final Mood? initialMood;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final asyncState = ref.watch(logEntryControllerProvider(editEntryId));
-    final controller =
-        ref.read(logEntryControllerProvider(editEntryId).notifier);
+    final args = (editEntryId: editEntryId, initialMood: initialMood);
+    final asyncState = ref.watch(logEntryControllerProvider(args));
+    final controller = ref.read(logEntryControllerProvider(args).notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +39,7 @@ class LogEntrySheet extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => ErrorView(
           failure: e is Failure ? e : UnknownFailure(cause: e),
-          onRetry: () => ref.invalidate(logEntryControllerProvider(editEntryId)),
+          onRetry: () => ref.invalidate(logEntryControllerProvider(args)),
         ),
         data: (form) => SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.md),

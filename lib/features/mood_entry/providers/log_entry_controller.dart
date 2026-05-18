@@ -8,21 +8,26 @@ import '../domain/enums/mood.dart';
 import '../domain/repositories/mood_entry_repository.dart';
 import 'log_entry_form_state.dart';
 
+typedef LogEntryArgs = ({String? editEntryId, Mood? initialMood});
+
 class LogEntryController
-    extends AutoDisposeFamilyAsyncNotifier<LogEntryFormState, String?> {
+    extends AutoDisposeFamilyAsyncNotifier<LogEntryFormState, LogEntryArgs> {
   late MoodEntryRepository _repo;
   late String _entryId;
 
   @override
-  Future<LogEntryFormState> build(String? editEntryId) async {
+  Future<LogEntryFormState> build(LogEntryArgs args) async {
     _repo = ref.watch(moodEntryRepositoryProvider);
     final now = DateTime.now();
-    if (editEntryId == null) {
+    final editId = args.editEntryId;
+    if (editId == null) {
       _entryId = generateId();
-      return LogEntryFormState.blank(now);
+      final blank = LogEntryFormState.blank(now);
+      final initial = args.initialMood;
+      return initial == null ? blank : blank.copyWith(mood: initial);
     }
-    _entryId = editEntryId;
-    final (entry, err) = await _repo.getById(editEntryId);
+    _entryId = editId;
+    final (entry, err) = await _repo.getById(editId);
     if (entry == null) throw err!;
     return LogEntryFormState(
       occurredAt: entry.occurredAt,
@@ -55,7 +60,7 @@ class LogEntryController
     if (s == null || !s.canSubmit) return false;
     final now = DateTime.now();
     final entity = s.toEntity(id: _entryId, now: now)!;
-    final (_, err) = arg == null
+    final (_, err) = arg.editEntryId == null
         ? await _repo.create(entity)
         : await _repo.update(entity);
     return err == null;
@@ -63,6 +68,6 @@ class LogEntryController
 }
 
 final logEntryControllerProvider = AsyncNotifierProvider.autoDispose
-    .family<LogEntryController, LogEntryFormState, String?>(
+    .family<LogEntryController, LogEntryFormState, LogEntryArgs>(
   LogEntryController.new,
 );

@@ -6,6 +6,7 @@ import '../../features/backup/presentation/screens/backup_screen.dart';
 import '../../features/calendar/presentation/screens/calendar_screen.dart';
 import '../../features/history/presentation/screens/entry_detail_screen.dart';
 import '../../features/history/presentation/screens/history_screen.dart';
+import '../../features/mood_entry/domain/enums/mood.dart';
 import '../../features/mood_entry/presentation/screens/log_entry_sheet.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/reminders/presentation/screens/reminders_screen.dart';
@@ -39,10 +40,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               routes: [
                 GoRoute(
                   path: 'log',
-                  pageBuilder: (context, _) => const MaterialPage(
-                    fullscreenDialog: true,
-                    child: LogEntrySheet(),
-                  ),
+                  pageBuilder: (context, state) {
+                    final raw = state.uri.queryParameters['mood'];
+                    Mood? initial;
+                    if (raw != null) {
+                      for (final m in Mood.values) {
+                        if (m.name == raw) {
+                          initial = m;
+                          break;
+                        }
+                      }
+                    }
+                    return MaterialPage(
+                      fullscreenDialog: true,
+                      child: LogEntrySheet(initialMood: initial),
+                    );
+                  },
                 ),
               ],
             ),

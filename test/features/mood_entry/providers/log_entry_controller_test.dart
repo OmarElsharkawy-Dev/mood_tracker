@@ -54,23 +54,23 @@ void main() {
   tearDown(() => container.dispose());
 
   test('initial state is blank LogEntryFormState wrapped in AsyncData', () async {
-    final s = await container.read(logEntryControllerProvider(null).future);
+    final s = await container.read(logEntryControllerProvider((editEntryId: null, initialMood: null)).future);
     expect(s.mood, isNull);
   });
 
   test('selectMood updates state', () async {
     final notifier =
-        container.read(logEntryControllerProvider(null).notifier);
-    await container.read(logEntryControllerProvider(null).future);
+        container.read(logEntryControllerProvider((editEntryId: null, initialMood: null)).notifier);
+    await container.read(logEntryControllerProvider((editEntryId: null, initialMood: null)).future);
     notifier.selectMood(Mood.good);
-    final state = container.read(logEntryControllerProvider(null)).value!;
+    final state = container.read(logEntryControllerProvider((editEntryId: null, initialMood: null))).value!;
     expect(state.mood, Mood.good);
   });
 
   test('submit persists when valid', () async {
     final notifier =
-        container.read(logEntryControllerProvider(null).notifier);
-    await container.read(logEntryControllerProvider(null).future);
+        container.read(logEntryControllerProvider((editEntryId: null, initialMood: null)).notifier);
+    await container.read(logEntryControllerProvider((editEntryId: null, initialMood: null)).future);
     notifier.selectMood(Mood.good);
     final ok = await notifier.submit();
     expect(ok, isTrue);
@@ -80,8 +80,8 @@ void main() {
 
   test('submit returns false and does not call repo when invalid', () async {
     final notifier =
-        container.read(logEntryControllerProvider(null).notifier);
-    await container.read(logEntryControllerProvider(null).future);
+        container.read(logEntryControllerProvider((editEntryId: null, initialMood: null)).notifier);
+    await container.read(logEntryControllerProvider((editEntryId: null, initialMood: null)).future);
     final ok = await notifier.submit(); // mood not set
     expect(ok, isFalse);
     expect(repo.created, isEmpty);
@@ -101,7 +101,7 @@ void main() {
       createdAt: now,
       updatedAt: now,
     );
-    final s = await container.read(logEntryControllerProvider('e1').future);
+    final s = await container.read(logEntryControllerProvider((editEntryId: 'e1', initialMood: null)).future);
     expect(s.mood, Mood.bad);
     expect(s.intensity, 3);
   });

@@ -7,6 +7,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/navigation/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/empty_state_view.dart';
@@ -23,31 +24,71 @@ class TodayScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final colors = context.appColors;
+    final now = DateTime.now();
+    final greeting = switch (greetingFor(now)) {
+      'morning' => l10n.todayGreetingMorning,
+      'afternoon' => l10n.todayGreetingAfternoon,
+      _ => l10n.todayGreetingEvening,
+    };
+    final localeTag = Localizations.localeOf(context).toLanguageTag();
+    final dateText = DateFormat.yMMMMEEEEd(localeTag).format(now);
     final async = ref.watch(recentEntriesProvider);
-    final greetingKey = greetingFor(DateTime.now());
-    final greeting = greetingKey == 'morning'
-        ? l10n.todayGreetingMorning
-        : greetingKey == 'afternoon'
-            ? l10n.todayGreetingAfternoon
-            : l10n.todayGreetingEvening;
+    final todayMood = _todaysMood(async.value, now);
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: colors.primary,
+        foregroundColor: colors.onPrimary,
         onPressed: () => context.push(AppRoutes.log),
         child: const Icon(Icons.add),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(greeting,
-                  style: AppTextStyles.headline.copyWith(color: colors.onBackground)),
-              const SizedBox(height: AppSpacing.xs),
-              Text(l10n.todayPrompt, style: AppTextStyles.body),
+              Text(
+                greeting,
+                style: AppTextStyles.headline
+                    .copyWith(color: colors.onBackground),
+              ),
+              const SizedBox(height: AppSpacing.xxs),
+              Text(
+                dateText,
+                style: AppTextStyles.bodySmall
+                    .copyWith(color: colors.onSurfaceVariant),
+              ),
               const SizedBox(height: AppSpacing.lg),
-              QuickLogRow(onPick: (mood) => context.push(AppRoutes.log)),
+              Container(
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppSpacing.md,
+                  horizontal: AppSpacing.sm,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.sm),
+                      child: Text(l10n.todayPrompt, style: AppTextStyles.body),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    QuickLogRow(
+                      selectedMood: todayMood,
+                      onPick: (mood) =>
+                          context.push(AppRoutes.logWithMood(mood)),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: AppSpacing.xl),
               Text(l10n.todayRecentTitle, style: AppTextStyles.title),
               const SizedBox(height: AppSpacing.xs),
@@ -79,6 +120,18 @@ class TodayScreen extends ConsumerWidget {
     );
   }
 
+  Mood? _todaysMood(List<MoodEntry>? entries, DateTime now) {
+    if (entries == null || entries.isEmpty) return null;
+    final start = DateTime(now.year, now.month, now.day);
+    final end = DateTime(now.year, now.month, now.day + 1);
+    for (final e in entries) {
+      if (!e.occurredAt.isBefore(start) && e.occurredAt.isBefore(end)) {
+        return e.mood;
+      }
+    }
+    return null;
+  }
+
   Widget _recentSkeleton() => const ListTile(
         leading: MoodDot(mood: Mood.okay, size: 14),
         title: Text('placeholder time'),
@@ -95,7 +148,8 @@ class TodayScreen extends ConsumerWidget {
         e.note ?? '',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.bodySmall.copyWith(color: context.appColors.onSurfaceVariant),
+        style: AppTextStyles.bodySmall
+            .copyWith(color: context.appColors.onSurfaceVariant),
       ),
       onTap: () => context.push(AppRoutes.entryDetailFor(e.id)),
     );
