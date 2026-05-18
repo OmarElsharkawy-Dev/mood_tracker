@@ -10,19 +10,21 @@ No accounts. No cloud. English + Spanish (both LTR).
 
 ## Current status
 
-Phases 1 + 2 shipped (Phase 1 on 2026-05-17, Phase 2 on 2026-05-18). What works today:
+Phases 1, 2, and 3 shipped (Phase 1 on 2026-05-17, Phases 2 and 3 on 2026-05-18). What works today:
 
 - `core/` infrastructure — theme tokens, l10n pipeline (EN + ES), GoRouter shell with first-run redirect, Drift schema, Failure/Result, prefs, GetIt+Riverpod DI.
 - `features/mood_entry/` — log + edit journal-style entries (mood, intensity, note, tags, sleep hours, energy).
-- `features/history/` — list + entry detail + delete + skeleton loader + empty state.
+- `features/history/` — list + entry detail + delete + skeleton loader + empty state, search icon, active-filter banner, no-matches state.
 - `features/today/` — greeting + quick-log row + recent entries + FAB.
-- `features/settings/` — Appearance (theme picker), Language (en/es picker), Reminders (disabled stub, "Coming in a future update"), About (version + description + `showLicensePage`).
-- `features/onboarding/` — 3-page first-run flow with `CustomPainter` illustrations (journal page / finger tapping a card / phone with padlock) and a GoRouter `redirect:` gated on `AppPrefs.onboardingCompleted`.
-- Full Spanish translations in `lib/l10n/app_es.arb` mirroring every Phase 1 + Phase 2 key (73 keys).
+- `features/settings/` — Appearance (theme picker), Language (en/es picker), Reminders (disabled stub), About (version + `showLicensePage`).
+- `features/onboarding/` — 3-page first-run flow with `CustomPainter` illustrations and GoRouter `redirect:` gated on `AppPrefs.onboardingCompleted`.
+- `features/search/` — shared `EntryFilterController` (Notifier&lt;EntryFilter&gt;), `allTagsProvider` derived from entries, modal `FilterSheet` with draft-state-then-Apply UX, subcomponents (`MoodRangeSlider`, `DateRangeField`, `TagFilterChips`).
+- `features/calendar/` — `YearMonth` + `DayMoodSummary` value objects, `SelectedMonthController`, derived `calendarEntriesProvider` + `daySummariesProvider`, 6×7 `CalendarMonth` grid + `CalendarDayCell` (with ×N badge + today highlight) + `CalendarDaySheet`, `CalendarScreen` with prev/next/jump-to-today nav. Filter from `features/search/` shapes the dots too — cross-tab.
+- Full Spanish translations across all phases (~90 keys mirrored).
 
-`flutter analyze` reports 0 issues; `flutter test` passes 75/75 (including 5 `MoodFace` goldens).
+`flutter analyze` reports 0 issues; `flutter test` passes 122/122 (including 5 `MoodFace` goldens).
 
-Phases 3-5 are designed in the master spec but not yet planned in detail. Phase 3 = Calendar + Search/filter; Phase 4 = Statistics & charts (`fl_chart`); Phase 5 = Reminders (`flutter_local_notifications`) + JSON export/import.
+Phases 4-5 are designed in the master spec but not yet planned in detail. Phase 4 = Statistics & charts (`fl_chart`); Phase 5 = Reminders (`flutter_local_notifications`) + JSON export/import.
 
 ## Hard rules to honor
 
@@ -46,6 +48,10 @@ Phases 3-5 are designed in the master spec but not yet planned in detail. Phase 
 - **Locale picker labels use native names** (`English`, `Español`) via `nativeNameFor(Locale)` in `lib/core/l10n/native_name.dart`, NOT localized-by-current-locale names. This is intentional so users picking a language they don't speak aren't locked out by the current locale's label.
 - **Onboarding illustrations are `CustomPainter`s** that reuse `MoodFace` for the embedded face icons. Paint colors come from `context.appColors.primary` so they re-paint on theme switch.
 - **First-run redirect** lives in the GoRouter `redirect:` callback in `app_router.dart` — gated on `AppPrefs.onboardingCompleted` (synchronous read after SP cache hits). `/onboarding` is a top-level route OUTSIDE the `StatefulShellRoute`, so the bottom nav doesn't show during onboarding.
+- **`MoodEntryRepositoryImpl._applyQuery`** is the single private helper that translates an `EntryQuery` into a chain of Drift `.where(...)` predicates. Multiple `.where(...)` calls on the same `SimpleSelectStatement` AND together — Drift composes them automatically. Tag filtering uses `isInQuery` against an `entry_tags` subselect; text search is `LIKE '%text%'` against the `note` column (case-insensitive for ASCII by default).
+- **Cross-tab filter** is one provider (`entryFilterProvider`, a `Notifier<EntryFilter>`) consumed by both `historyProvider` and `calendarEntriesProvider`. Setting a filter in History instantly reshapes the Calendar dots too. The filter is in-memory only — no persistence — so a fresh app launch starts with `EntryFilter.empty`.
+- **`EntryFilter.copyWith`** uses an `_unset` sentinel `Object` so `copyWith(text: null)` clears the field instead of being treated as "no change". Same pattern any future Phase 4/5 view-models with nullable fields should use.
+- **Calendar month grid** is a 6×7 (42-cell) `GridView.count` with non-current-month cells faded to 0.4 opacity and non-tappable. The single-dot rendering (vs. multi-dot or mini-face) was decided in Phase 1 brainstorming; multi-entry days get a small `×N` badge in the top-right of the cell.
 
 ## Environment quirks we hit during Phase 1 + 2
 
@@ -68,11 +74,11 @@ Each phase ships against the master spec and gets its own plan in `docs/superpow
 
 1. **Phase 1 — Foundation + first vertical slice** *(complete 2026-05-17)* — `core/`, `mood_entry`, `history`, `today`, app wiring.
 2. **Phase 2 — Settings, onboarding, Spanish translations** *(complete 2026-05-18)* — settings tab + onboarding flow + first-run redirect + `app_es.arb`.
-3. **Phase 3 — Calendar view, search/filter.**
+3. **Phase 3 — Calendar view + cross-tab filter** *(complete 2026-05-18)* — `features/search/` (EntryFilter + FilterSheet + allTagsProvider), `features/calendar/` (month grid + day-detail sheet + nav), repository `EntryQuery` filtering, History search icon + active-filter banner + no-matches state.
 4. **Phase 4 — Statistics & charts (`fl_chart`).**
 5. **Phase 5 — Local reminders, JSON export/import.**
 
-## File map (Phases 1 + 2)
+## File map (Phases 1 + 2 + 3)
 
 ```
 lib/
@@ -108,6 +114,14 @@ lib/
     onboarding/                                   # 3-page first-run flow
       presentation/{screens/onboarding_screen, widgets/{onboarding_page, illustration_what, illustration_how, illustration_privacy}}
       providers/onboarding_controller
+    search/                                       # cross-tab filter (Phase 3)
+      domain/entry_filter
+      providers/{entry_filter_controller, all_tags_provider}
+      presentation/widgets/{filter_sheet, mood_range_slider, date_range_field, tag_filter_chips}
+    calendar/                                     # month grid (Phase 3)
+      domain/{year_month, day_mood_summary}
+      providers/{selected_month_controller, calendar_entries_provider, day_summaries_provider}
+      presentation/{screens/calendar_screen, widgets/{calendar_month, calendar_day_cell, calendar_day_sheet}}
   l10n/
     app_en.arb                                    # EN ARB source (73 keys)
     app_es.arb                                    # ES ARB source (mirrors EN key-for-key)

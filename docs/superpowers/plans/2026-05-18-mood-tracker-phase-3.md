@@ -1,5 +1,7 @@
 # Mood Tracker — Phase 3 Implementation Plan
 
+> **Status: ✅ Complete (2026-05-18).** All 16 tasks landed across 15 commits (Tasks 15 + 16 were a 3-line router swap + inline validation, no separate commits). `flutter analyze` reports 0 issues; `flutter test` passes 122/122 (47 new Phase 3 tests + 75 prior). The only unchecked items are Task 16's manual on-device smoke run + the no-op follow-up commit step — deferred to the developer since the automated environment had no simulator.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add a real Calendar tab (month grid with mood dots + day-detail sheet + month nav) and a cross-tab filter (text + mood range + date range + tag chips) that shapes both History and Calendar.
@@ -34,7 +36,7 @@ Phase 1 left `MoodEntryRepositoryImpl.watchAll`/`getAll` accepting `EntryQuery` 
 - Modify: `lib/features/mood_entry/data/mood_entry_repository_impl.dart`
 - Modify: `test/features/mood_entry/data/mood_entry_repository_impl_test.dart`
 
-- [ ] **Step 1: Append 5 new failing tests at the end of `main()` in `mood_entry_repository_impl_test.dart`**
+- [x] **Step 1: Append 5 new failing tests at the end of `main()` in `mood_entry_repository_impl_test.dart`**
 
 Keep all 6 existing tests intact. Add inside the existing test scaffolding so `repo`, `db`, and `sample(...)` remain in scope:
 
@@ -107,12 +109,12 @@ Keep all 6 existing tests intact. Add inside the existing test scaffolding so `r
   });
 ```
 
-- [ ] **Step 2: Run, verify FAIL**
+- [x] **Step 2: Run, verify FAIL**
 
 Run: `flutter test test/features/mood_entry/data/mood_entry_repository_impl_test.dart`
 Expected: 5 new tests FAIL (the repository currently ignores `query`). Existing 6 tests still pass.
 
-- [ ] **Step 3: Add a private `_applyQuery` helper and call it from `watchAll`/`getAll`**
+- [x] **Step 3: Add a private `_applyQuery` helper and call it from `watchAll`/`getAll`**
 
 In `lib/features/mood_entry/data/mood_entry_repository_impl.dart`, modify the two methods and add the helper. Full text of the changed regions:
 
@@ -171,12 +173,12 @@ In `lib/features/mood_entry/data/mood_entry_repository_impl.dart`, modify the tw
 
 The two `where(...)` calls within the same `SimpleSelectStatement` AND together automatically — Drift composes successive `.where` predicates with logical AND.
 
-- [ ] **Step 4: Re-run, verify PASS**
+- [x] **Step 4: Re-run, verify PASS**
 
 Run: `flutter test test/features/mood_entry/data/mood_entry_repository_impl_test.dart`
 Expected: 11 tests pass (6 existing + 5 new).
 
-- [ ] **Step 5: Full suite + analyze + commit**
+- [x] **Step 5: Full suite + analyze + commit**
 
 - `flutter analyze` → 0 issues
 - `flutter test` → 80 tests pass (75 prior + 5 new)
@@ -196,7 +198,7 @@ No `Co-Authored-By` trailer.
 - Create: `lib/features/search/domain/entry_filter.dart`
 - Create: `test/features/search/domain/entry_filter_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -262,12 +264,12 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: FAIL**
+- [x] **Step 2: FAIL**
 
 Run: `flutter test test/features/search/domain/entry_filter_test.dart`
 Expected: FAIL — `EntryFilter` undefined.
 
-- [ ] **Step 3: Implement `lib/features/search/domain/entry_filter.dart`**
+- [x] **Step 3: Implement `lib/features/search/domain/entry_filter.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -348,7 +350,7 @@ const Object _unset = Object();
 
 The `_unset` sentinel lets `copyWith` distinguish between "field omitted" and "field explicitly set to null" — needed so `copyWith(text: null)` clears the text rather than being a no-op.
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter test test/features/search/domain/entry_filter_test.dart` → 8 tests pass
 - `flutter analyze` → 0 issues
@@ -367,7 +369,7 @@ git commit -m "feat(search): add EntryFilter value class with isActive/activeCou
 - Create: `lib/features/search/providers/entry_filter_controller.dart`
 - Create: `test/features/search/providers/entry_filter_controller_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -428,11 +430,11 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: FAIL**
+- [x] **Step 2: FAIL**
 
 Run: `flutter test test/features/search/providers/entry_filter_controller_test.dart` → FAIL.
 
-- [ ] **Step 3: Implement `lib/features/search/providers/entry_filter_controller.dart`**
+- [x] **Step 3: Implement `lib/features/search/providers/entry_filter_controller.dart`**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -475,7 +477,7 @@ final entryFilterProvider =
     NotifierProvider<EntryFilterController, EntryFilter>(EntryFilterController.new);
 ```
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter test test/features/search/providers/entry_filter_controller_test.dart` → 6 tests pass
 - `flutter analyze` → 0 issues
@@ -494,7 +496,7 @@ git commit -m "feat(search): add EntryFilterController shared by History + Calen
 - Create: `lib/features/search/providers/all_tags_provider.dart`
 - Create: `test/features/search/providers/all_tags_provider_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -580,11 +582,11 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: FAIL**
+- [x] **Step 2: FAIL**
 
 Run: `flutter test test/features/search/providers/all_tags_provider_test.dart` → FAIL.
 
-- [ ] **Step 3: Implement `lib/features/search/providers/all_tags_provider.dart`**
+- [x] **Step 3: Implement `lib/features/search/providers/all_tags_provider.dart`**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -608,7 +610,7 @@ final allTagsProvider = StreamProvider<List<Tag>>((ref) {
 });
 ```
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter test test/features/search/providers/all_tags_provider_test.dart` → 2 tests pass
 - `flutter analyze` → 0 issues
@@ -626,7 +628,7 @@ git commit -m "feat(search): add allTagsProvider derived from entries"
 **Files:**
 - Modify: `lib/l10n/app_en.arb`
 
-- [ ] **Step 1: Append the new keys to `lib/l10n/app_en.arb`**
+- [x] **Step 1: Append the new keys to `lib/l10n/app_en.arb`**
 
 Insert these entries before the final closing `}` (preserve all existing keys):
 
@@ -675,12 +677,12 @@ The leading `,` at the very top of the chunk separates this new run of keys from
 
 Verify the resulting file is valid JSON with `python3 -c 'import json;json.load(open("lib/l10n/app_en.arb"))'` — must complete with no error.
 
-- [ ] **Step 2: Regenerate l10n**
+- [x] **Step 2: Regenerate l10n**
 
 Run: `flutter gen-l10n`
 Expected: writes `lib/l10n/app_localizations.dart` and `lib/l10n/app_localizations_en.dart` (gitignored).
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter analyze` → 0 issues
 - `flutter test` → 96 tests pass (no consumers of new keys yet)
@@ -698,7 +700,7 @@ git commit -m "feat(l10n): add Phase 3 ARB keys (filter sheet, no-matches, calen
 **Files:**
 - Modify: `lib/l10n/app_es.arb`
 
-- [ ] **Step 1: Append the new keys to `lib/l10n/app_es.arb`**
+- [x] **Step 1: Append the new keys to `lib/l10n/app_es.arb`**
 
 Insert these entries before the final closing `}`:
 
@@ -745,11 +747,11 @@ Insert these entries before the final closing `}`:
 
 The leading `,` at the top of the chunk separates from the existing last entry; the chunk has no trailing comma because the file's existing `}` immediately follows. Verify with `python3 -c 'import json;json.load(open("lib/l10n/app_es.arb"))'`.
 
-- [ ] **Step 2: Regenerate l10n**
+- [x] **Step 2: Regenerate l10n**
 
 Run `flutter gen-l10n` again. Both `app_localizations_en.dart` and `app_localizations_es.dart` regenerate. They stay gitignored.
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter analyze` → 0 issues
 - `flutter test` → 96 tests pass
@@ -770,7 +772,7 @@ Three small widgets used inside `FilterSheet`. Implement together since none has
 - Create: `lib/features/search/presentation/widgets/date_range_field.dart`
 - Create: `lib/features/search/presentation/widgets/tag_filter_chips.dart`
 
-- [ ] **Step 1: Implement `mood_range_slider.dart`**
+- [x] **Step 1: Implement `mood_range_slider.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -846,7 +848,7 @@ class MoodRangeSlider extends StatelessWidget {
 
 `max: Mood.values.length - 1` is the index of the last enum value; with `divisions: 4`, the slider snaps to exactly the 5 mood positions.
 
-- [ ] **Step 2: Implement `date_range_field.dart`**
+- [x] **Step 2: Implement `date_range_field.dart`**
 
 ```dart
 import 'package:flutter/material.dart' hide DateTimeRange;
@@ -923,7 +925,7 @@ class DateRangeField extends StatelessWidget {
 
 The `hide ... as material show` dance is necessary because the project's domain `DateTimeRange` (in `lib/features/mood_entry/domain/repositories/entry_query.dart`) shadows Material's `DateTimeRange`. The widget interface uses the project's type; only the `showDateRangePicker` call internally needs Material's type.
 
-- [ ] **Step 3: Implement `tag_filter_chips.dart`**
+- [x] **Step 3: Implement `tag_filter_chips.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -970,7 +972,7 @@ class TagFilterChips extends ConsumerWidget {
 }
 ```
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter analyze` → 0 issues
 - `flutter test` → 96 tests pass
@@ -988,7 +990,7 @@ git commit -m "feat(search): add MoodRangeSlider, DateRangeField, TagFilterChips
 - Create: `lib/features/search/presentation/widgets/filter_sheet.dart`
 - Create: `test/features/search/presentation/filter_sheet_test.dart`
 
-- [ ] **Step 1: Implement `filter_sheet.dart`**
+- [x] **Step 1: Implement `filter_sheet.dart`**
 
 ```dart
 import 'package:flutter/material.dart' hide DateTimeRange;
@@ -1131,7 +1133,7 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
 }
 ```
 
-- [ ] **Step 2: Widget test**
+- [x] **Step 2: Widget test**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1248,7 +1250,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter test test/features/search/presentation/filter_sheet_test.dart` → 2 tests pass
 - `flutter analyze` → 0 issues
@@ -1270,7 +1272,7 @@ git commit -m "feat(search): add FilterSheet modal with draft state and apply-on
 - Create: `test/features/history/active_filter_banner_test.dart`
 - Modify: `test/features/history/history_screen_test.dart`
 
-- [ ] **Step 1: Update `history_controller.dart`**
+- [x] **Step 1: Update `history_controller.dart`**
 
 Replace the file with:
 
@@ -1288,7 +1290,7 @@ final historyProvider = StreamProvider<List<MoodEntry>>((ref) {
 });
 ```
 
-- [ ] **Step 2: Implement `active_filter_banner.dart`**
+- [x] **Step 2: Implement `active_filter_banner.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1338,7 +1340,7 @@ class ActiveFilterBanner extends ConsumerWidget {
 }
 ```
 
-- [ ] **Step 3: Replace `history_screen.dart`**
+- [x] **Step 3: Replace `history_screen.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1449,7 +1451,7 @@ final _skeletonEntry = MoodEntry(
 );
 ```
 
-- [ ] **Step 4: ActiveFilterBanner widget test**
+- [x] **Step 4: ActiveFilterBanner widget test**
 
 ```dart
 // test/features/history/active_filter_banner_test.dart
@@ -1505,7 +1507,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 5: Extend `history_screen_test.dart` with the no-matches case**
+- [x] **Step 5: Extend `history_screen_test.dart` with the no-matches case**
 
 Inside the existing `main()` (after the existing test), add:
 
@@ -1542,7 +1544,7 @@ Add the new import at the top of the test file:
 import 'package:mood_tracker/features/search/providers/entry_filter_controller.dart';
 ```
 
-- [ ] **Step 6: Verify + commit**
+- [x] **Step 6: Verify + commit**
 
 - `flutter test test/features/history/` → all history tests pass
 - `flutter analyze` → 0 issues
@@ -1562,7 +1564,7 @@ git commit -m "feat(history): wire filter, add search icon + ActiveFilterBanner 
 - Create: `lib/features/calendar/domain/day_mood_summary.dart`
 - Create: `test/features/calendar/domain/year_month_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -1606,11 +1608,11 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: FAIL**
+- [x] **Step 2: FAIL**
 
 Run: `flutter test test/features/calendar/domain/year_month_test.dart` → FAIL.
 
-- [ ] **Step 3: Implement `year_month.dart`**
+- [x] **Step 3: Implement `year_month.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1648,7 +1650,7 @@ class YearMonth {
 
 `DateTime(year, month + 1, 0)` returns the last day of the previous month — passing month+1 with day 0 normalizes to the last day of `month`. Standard Dart idiom.
 
-- [ ] **Step 4: Implement `day_mood_summary.dart`**
+- [x] **Step 4: Implement `day_mood_summary.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1680,7 +1682,7 @@ class DayMoodSummary {
 }
 ```
 
-- [ ] **Step 5: Verify + commit**
+- [x] **Step 5: Verify + commit**
 
 - `flutter test test/features/calendar/domain/year_month_test.dart` → 8 tests pass
 - `flutter analyze` → 0 issues
@@ -1699,7 +1701,7 @@ git commit -m "feat(calendar): add YearMonth and DayMoodSummary value objects"
 - Create: `lib/features/calendar/providers/selected_month_controller.dart`
 - Create: `test/features/calendar/providers/selected_month_controller_test.dart`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1748,7 +1750,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: FAIL + implement**
+- [x] **Step 2: FAIL + implement**
 
 ```dart
 // lib/features/calendar/providers/selected_month_controller.dart
@@ -1770,7 +1772,7 @@ final selectedMonthControllerProvider =
     NotifierProvider<SelectedMonthController, YearMonth>(SelectedMonthController.new);
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter test test/features/calendar/providers/selected_month_controller_test.dart` → 4 tests pass
 - `flutter analyze` → 0 issues
@@ -1790,7 +1792,7 @@ git commit -m "feat(calendar): add SelectedMonthController for month navigation"
 - Create: `lib/features/calendar/providers/day_summaries_provider.dart`
 - Create: `test/features/calendar/providers/day_summaries_provider_test.dart`
 
-- [ ] **Step 1: Implement `calendar_entries_provider.dart`**
+- [x] **Step 1: Implement `calendar_entries_provider.dart`**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1835,7 +1837,7 @@ final calendarEntriesProvider = StreamProvider<List<MoodEntry>>((ref) {
 });
 ```
 
-- [ ] **Step 2: Implement `day_summaries_provider.dart`**
+- [x] **Step 2: Implement `day_summaries_provider.dart`**
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1881,7 +1883,7 @@ Mood _averageMood(List<MoodEntry> entries) {
 }
 ```
 
-- [ ] **Step 3: Write the day-summaries test**
+- [x] **Step 3: Write the day-summaries test**
 
 ```dart
 // test/features/calendar/providers/day_summaries_provider_test.dart
@@ -1982,7 +1984,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 4: Verify + commit**
+- [x] **Step 4: Verify + commit**
 
 - `flutter test test/features/calendar/providers/day_summaries_provider_test.dart` → 2 tests pass
 - `flutter analyze` → 0 issues
@@ -2004,7 +2006,7 @@ git commit -m "feat(calendar): add calendarEntriesProvider + daySummariesProvide
 - Create: `test/features/calendar/presentation/widgets/calendar_day_cell_test.dart`
 - Create: `test/features/calendar/presentation/widgets/calendar_month_test.dart`
 
-- [ ] **Step 1: Implement `calendar_day_cell.dart`**
+- [x] **Step 1: Implement `calendar_day_cell.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -2092,7 +2094,7 @@ class CalendarDayCell extends StatelessWidget {
 }
 ```
 
-- [ ] **Step 2: `CalendarDayCell` widget test**
+- [x] **Step 2: `CalendarDayCell` widget test**
 
 ```dart
 // test/features/calendar/presentation/widgets/calendar_day_cell_test.dart
@@ -2172,7 +2174,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Implement `calendar_day_sheet.dart`**
+- [x] **Step 3: Implement `calendar_day_sheet.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -2263,7 +2265,7 @@ class CalendarDaySheet extends StatelessWidget {
 }
 ```
 
-- [ ] **Step 4: Implement `calendar_month.dart`**
+- [x] **Step 4: Implement `calendar_month.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -2356,7 +2358,7 @@ class CalendarMonth extends ConsumerWidget {
 }
 ```
 
-- [ ] **Step 5: `CalendarMonth` widget test**
+- [x] **Step 5: `CalendarMonth` widget test**
 
 ```dart
 // test/features/calendar/presentation/widgets/calendar_month_test.dart
@@ -2479,7 +2481,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 6: Verify + commit**
+- [x] **Step 6: Verify + commit**
 
 - `flutter test test/features/calendar/presentation/widgets/` → 5 tests pass
 - `flutter analyze` → 0 issues
@@ -2498,7 +2500,7 @@ git commit -m "feat(calendar): add CalendarMonth grid, CalendarDayCell, Calendar
 - Create: `lib/features/calendar/presentation/screens/calendar_screen.dart`
 - Create: `test/features/calendar/presentation/calendar_screen_test.dart`
 
-- [ ] **Step 1: Implement `calendar_screen.dart`**
+- [x] **Step 1: Implement `calendar_screen.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -2551,7 +2553,7 @@ class CalendarScreen extends ConsumerWidget {
 }
 ```
 
-- [ ] **Step 2: Widget test**
+- [x] **Step 2: Widget test**
 
 ```dart
 // test/features/calendar/presentation/calendar_screen_test.dart
@@ -2676,7 +2678,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 - `flutter test test/features/calendar/presentation/calendar_screen_test.dart` → 2 tests pass
 - `flutter analyze` → 0 issues
@@ -2694,7 +2696,7 @@ git commit -m "feat(calendar): implement CalendarScreen with month title + prev/
 **Files:**
 - Modify: `lib/core/navigation/app_router.dart`
 
-- [ ] **Step 1: Add the import and swap the route builder**
+- [x] **Step 1: Add the import and swap the route builder**
 
 Add to the imports (alphabetically):
 
@@ -2715,7 +2717,7 @@ Replace the Calendar branch's builder:
 
 The `_PlaceholderScreen('Calendar')` reference is gone; `_PlaceholderScreen` stays in the file because the `Insights` branch (Phase 4) still uses it.
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 - `flutter analyze` → 0 issues
 - `flutter test` → 122 tests pass (no test depends on the placeholder)
@@ -2729,12 +2731,12 @@ git commit -m "feat(navigation): swap Calendar placeholder for real CalendarScre
 
 ## Task 16: Final validation pass
 
-- [ ] **Step 1: Analyze must be clean**
+- [x] **Step 1: Analyze must be clean**
 
 Run: `flutter analyze`
 Expected: `No issues found!`
 
-- [ ] **Step 2: Full test suite must pass**
+- [x] **Step 2: Full test suite must pass**
 
 Run: `flutter test`
 Expected: 122 tests pass (75 Phase 1+2 + 47 Phase 3).
@@ -2744,7 +2746,7 @@ If a test fails, fix it before declaring Phase 3 complete. Likely sources of tro
 - ARB JSON syntax errors — `flutter gen-l10n` will surface them at the line.
 - Drift `.watch()` test timing — increase the `Future.delayed` in `day_summaries_provider_test.dart` if flaky.
 
-- [ ] **Step 3: Manual smoke run (optional — skip if no device)**
+- [ ] **Step 3: Manual smoke run (optional — skip if no device)** *(skipped — no device available; deferred to the developer)*
 
 If a simulator or device is available:
 
@@ -2759,7 +2761,7 @@ Verify:
 - Calendar day with entries → tap → bottom sheet lists those entries; tap a row → entry detail.
 - Apply a mood filter in History → Calendar dots also reflect only those moods (cross-tab filter).
 
-- [ ] **Step 4: No commit needed unless issues surface**
+- [ ] **Step 4: No commit needed unless issues surface** *(N/A — manual run was not executed)*
 
 If smoke-test issues surface, file them as follow-ups; do not silently amend.
 
