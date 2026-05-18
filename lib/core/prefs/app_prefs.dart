@@ -9,6 +9,7 @@ class AppPrefs {
 
   static const _kThemeMode = 'app.themeMode';
   static const _kLocaleTag = 'app.localeTag';
+  static const _kOnboardingCompleted = 'app.onboardingCompleted';
 
   AppThemeMode get themeMode {
     final raw = _sp.getString(_kThemeMode);
@@ -31,4 +32,10 @@ class AppPrefs {
       await _sp.setString(_kLocaleTag, tag);
     }
   }
+
+  bool get onboardingCompleted =>
+      _sp.getBool(_kOnboardingCompleted) ?? false;
+
+  Future<void> setOnboardingCompleted(bool value) =>
+      _sp.setBool(_kOnboardingCompleted, value);
 }

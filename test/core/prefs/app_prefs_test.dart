@@ -29,4 +29,15 @@ void main() {
     await prefs.setLocaleTag('en');
     expect(prefs.localeTag, 'en');
   });
+
+  test('onboardingCompleted defaults to false', () {
+    expect(prefs.onboardingCompleted, isFalse);
+  });
+
+  test('onboardingCompleted round-trips', () async {
+    await prefs.setOnboardingCompleted(true);
+    expect(prefs.onboardingCompleted, isTrue);
+    await prefs.setOnboardingCompleted(false);
+    expect(prefs.onboardingCompleted, isFalse);
+  });
 }
