@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/widgets/app_divider.dart';
 
 class SettingsSection extends StatelessWidget {
   const SettingsSection({
@@ -26,13 +25,18 @@ class SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text(
             title.toUpperCase(),
-            style: AppTextStyles.label.copyWith(color: colors.onSurfaceVariant),
+            style: AppTextStyles.label
+                .copyWith(color: colors.onSurfaceVariant),
           ),
         ),
         const SizedBox(height: AppSpacing.xs),
         for (var i = 0; i < children.length; i++) ...[
-          if (i > 0) const AppDivider(),
-          children[i],
+          if (i > 0) const SizedBox(height: AppSpacing.xs),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            child: children[i],
+          ),
         ],
       ],
     );

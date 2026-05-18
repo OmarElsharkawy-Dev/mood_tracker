@@ -15,30 +15,49 @@ class PermissionDeniedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.appColors;
-    return Card(
-      margin: const EdgeInsets.all(AppSpacing.md),
-      shape: RoundedRectangleBorder(borderRadius: AppRadius.cardBR),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.remindersPermissionDeniedTitle, style: AppTextStyles.title),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              l10n.remindersPermissionDeniedBody,
-              style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: onOpenSettings,
-                child: Text(l10n.remindersOpenSettings),
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: colors.error.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.error_outline, color: colors.error),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Text(
+                  l10n.remindersPermissionDeniedTitle,
+                  style: AppTextStyles.label.copyWith(
+                    color: colors.error,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            l10n.remindersPermissionDeniedBody,
+            style: AppTextStyles.body
+                .copyWith(color: colors.onSurfaceVariant),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: onOpenSettings,
+              style: TextButton.styleFrom(foregroundColor: colors.error),
+              child: Text(
+                l10n.remindersOpenSettings,
+                style: AppTextStyles.label.copyWith(color: colors.error),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

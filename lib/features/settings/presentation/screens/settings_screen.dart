@@ -8,6 +8,8 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/l10n/native_name.dart';
 import '../../../../core/navigation/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/error_view.dart';
 import '../../../reminders/providers/reminder_controller.dart';
 import '../../providers/settings_controller.dart';
@@ -22,10 +24,21 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final colors = context.appColors;
     final async = ref.watch(settingsControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.settingsTitle)),
+      backgroundColor: colors.background,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(
+          l10n.settingsTitle,
+          style:
+              AppTextStyles.headline.copyWith(color: colors.onBackground),
+        ),
+      ),
       body: async.when(
         loading: () => Skeletonizer(
           child: ListView(
@@ -124,7 +137,8 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  String _themeLabel(AppLocalizations l10n, ThemeMode mode) => switch (mode) {
+  String _themeLabel(AppLocalizations l10n, ThemeMode mode) =>
+      switch (mode) {
         ThemeMode.light => l10n.themeLight,
         ThemeMode.dark => l10n.themeDark,
         ThemeMode.system => l10n.themeSystem,

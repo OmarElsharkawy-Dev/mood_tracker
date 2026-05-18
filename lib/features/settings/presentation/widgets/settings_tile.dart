@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
@@ -33,43 +34,59 @@ class SettingsTile extends StatelessWidget {
       button: effectiveOnTap != null,
       child: Opacity(
         opacity: opacity,
-        child: InkWell(
-          onTap: effectiveOnTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.sm,
-            ),
-            child: Row(
-              children: [
-                if (leading != null) ...[
-                  IconTheme.merge(
-                    data: IconThemeData(color: colors.onSurfaceVariant, size: 22),
-                    child: leading!,
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                ],
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title,
-                          style: AppTextStyles.body
-                              .copyWith(color: colors.onSurface)),
-                      if (subtitle != null) ...[
-                        const SizedBox(height: 2),
-                        Text(subtitle!,
-                            style: AppTextStyles.bodySmall
-                                .copyWith(color: colors.onSurfaceVariant)),
+        child: Material(
+          color: colors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: effectiveOnTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              child: Row(
+                children: [
+                  if (leading != null) ...[
+                    IconTheme.merge(
+                      data: IconThemeData(
+                          color: colors.primary, size: 22),
+                      child: leading!,
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                  ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: AppTextStyles.label.copyWith(
+                            color: colors.onSurface,
+                            fontSize: 16,
+                          ),
+                        ),
+                        if (subtitle != null) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle!,
+                            style: AppTextStyles.bodySmall.copyWith(
+                                color: colors.onSurfaceVariant),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-                if (trailing != null) ...[
-                  const SizedBox(width: AppSpacing.xs),
-                  trailing!,
+                  if (trailing != null) ...[
+                    const SizedBox(width: AppSpacing.xs),
+                    IconTheme.merge(
+                      data: IconThemeData(
+                          color: colors.onSurfaceVariant, size: 22),
+                      child: trailing!,
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
