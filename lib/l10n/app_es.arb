@@ -156,5 +156,42 @@
   "onboardingPrivacyTitle": "Tus datos se quedan aquí",
   "@onboardingPrivacyTitle": {},
   "onboardingPrivacyBody": "Sin cuentas ni nube: todo vive en este dispositivo.",
-  "@onboardingPrivacyBody": {}
+  "@onboardingPrivacyBody": {},
+
+  "filterTitle": "Filtro",
+  "@filterTitle": {},
+  "filterTextHint": "Buscar en las notas…",
+  "@filterTextHint": {},
+  "filterMoodRange": "Rango de ánimo",
+  "@filterMoodRange": {},
+  "filterDateRange": "Rango de fechas",
+  "@filterDateRange": {},
+  "filterDateAny": "Cualquier fecha",
+  "@filterDateAny": {},
+  "filterTags": "Etiquetas",
+  "@filterTags": {},
+  "filterApply": "Aplicar",
+  "@filterApply": {},
+  "filterClear": "Limpiar",
+  "@filterClear": {},
+  "filterActiveCount": "{count, plural, =1{1 filtro activo} other{{count} filtros activos}}",
+  "@filterActiveCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "historyNoMatchesTitle": "Sin resultados",
+  "@historyNoMatchesTitle": {},
+  "historyNoMatchesMessage": "Nada coincide con el filtro actual.",
+  "@historyNoMatchesMessage": {},
+  "historySearchTooltip": "Filtrar entradas",
+  "@historySearchTooltip": {},
+  "calendarPrevMonth": "Mes anterior",
+  "@calendarPrevMonth": {},
+  "calendarNextMonth": "Mes siguiente",
+  "@calendarNextMonth": {},
+  "calendarJumpToToday": "Ir a hoy",
+  "@calendarJumpToToday": {},
+  "calendarDayEmpty": "Sin entradas en este día.",
+  "@calendarDayEmpty": {}
 }
