@@ -30,70 +30,93 @@ class InsightSectionCard<T> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.appColors;
-    return Card(
+    return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.xs,
       ),
-      shape: RoundedRectangleBorder(borderRadius: AppRadius.cardBR),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: AppTextStyles.title),
-            const SizedBox(height: AppSpacing.sm),
-            value.when(
-              loading: () => Skeletonizer(
-                child: Container(
-                  height: 160,
-                  decoration: BoxDecoration(
-                    color: colors.surfaceVariant,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(AppRadius.sm),
-                    ),
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 3,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: colors.primary,
+                  borderRadius: BorderRadius.circular(AppRadius.xs),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTextStyles.label.copyWith(
+                    color: colors.onSurface,
+                    fontSize: 16,
                   ),
                 ),
               ),
-              error: (err, st) => SizedBox(
-                height: 100,
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.error_outline, color: colors.onSurfaceVariant),
-                      const SizedBox(height: 4),
-                      TextButton(
-                        onPressed: () =>
-                            ref.invalidate(insightsEntriesProvider),
-                        child: Text(context.l10n.errorRetry),
-                      ),
-                    ],
-                  ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          value.when(
+            loading: () => Skeletonizer(
+              child: Container(
+                height: 160,
+                decoration: BoxDecoration(
+                  color: colors.surfaceVariant,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
               ),
-              data: (data) {
-                if (isEmpty(data)) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: AppSpacing.md),
-                    child: Text(
-                      emptyMessage,
-                      style: AppTextStyles.body.copyWith(color: colors.onSurfaceVariant),
-                    ),
-                  );
-                }
-                final child = builder(data);
-                if (accessibilitySummary == null) return child;
-                return Semantics(
-                  label: accessibilitySummary,
-                  container: true,
-                  child: ExcludeSemantics(child: child),
-                );
-              },
             ),
-          ],
-        ),
+            error: (err, st) => SizedBox(
+              height: 100,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.error_outline,
+                        color: colors.onSurfaceVariant),
+                    const SizedBox(height: 4),
+                    TextButton(
+                      onPressed: () =>
+                          ref.invalidate(insightsEntriesProvider),
+                      child: Text(context.l10n.errorRetry),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            data: (data) {
+              if (isEmpty(data)) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.md),
+                  child: Text(
+                    emptyMessage,
+                    style: AppTextStyles.body
+                        .copyWith(color: colors.onSurfaceVariant),
+                  ),
+                );
+              }
+              final child = builder(data);
+              if (accessibilitySummary == null) return child;
+              return Semantics(
+                label: accessibilitySummary,
+                container: true,
+                child: ExcludeSemantics(child: child),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

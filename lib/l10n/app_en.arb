@@ -215,6 +215,8 @@
   "@insightsRangeAll": {},
   "insightsFilterTooltip": "Filter",
   "@insightsFilterTooltip": {},
+  "insightsChartEmpty": "Not enough data",
+  "@insightsChartEmpty": {},
   "insightsMoodTrend": "Mood trend",
   "@insightsMoodTrend": {},
   "insightsDistribution": "Mood distribution",
@@ -377,5 +379,7 @@
   "backupErrorWriteFailed": "Could not save the export file.",
   "@backupErrorWriteFailed": {},
   "backupErrorPickCanceled": "No file selected.",
-  "@backupErrorPickCanceled": {}
+  "@backupErrorPickCanceled": {},
+  "backupErrorPlatformUnsupported": "Backup is not available in the web version.",
+  "@backupErrorPlatformUnsupported": {}
 }

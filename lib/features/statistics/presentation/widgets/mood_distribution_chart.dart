@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../mood_entry/domain/enums/mood.dart';
 import '../../domain/mood_distribution.dart';
 
@@ -19,7 +21,10 @@ class MoodDistributionChart extends StatelessWidget {
         data.counts.values.fold<int>(0, (a, b) => a > b ? a : b);
     final maxY = (maxCount == 0 ? 1 : maxCount).toDouble();
 
-    Color barColor(Mood m) => colors.moodColor(m);
+    final axisStyle = AppTextStyles.caption.copyWith(
+      color: colors.onSurfaceVariant,
+      fontSize: 11,
+    );
 
     return SizedBox(
       height: 200,
@@ -41,15 +46,22 @@ class MoodDistributionChart extends StatelessWidget {
                   if (i < 0 || i >= Mood.values.length) {
                     return const SizedBox.shrink();
                   }
-                  return Text(
-                    _label(Mood.values[i]),
-                    style: const TextStyle(fontSize: 10),
-                  );
+                  return Text(_label(Mood.values[i]), style: axisStyle);
                 },
               ),
             ),
           ),
-          barTouchData: BarTouchData(enabled: true),
+          barTouchData: BarTouchData(
+            enabled: true,
+            touchTooltipData: BarTouchTooltipData(
+              getTooltipColor: (_) => colors.surfaceVariant,
+              tooltipBorderRadius: BorderRadius.circular(AppRadius.sm),
+              getTooltipItem: (group, gIdx, rod, rIdx) => BarTooltipItem(
+                rod.toY.toInt().toString(),
+                AppTextStyles.bodySmall.copyWith(color: colors.onSurface),
+              ),
+            ),
+          ),
           barGroups: [
             for (var i = 0; i < Mood.values.length; i++)
               BarChartGroupData(x: i, barRods: [
@@ -57,10 +69,10 @@ class MoodDistributionChart extends StatelessWidget {
                   toY: (data.counts[Mood.values[i]] ?? 0).toDouble(),
                   color: data.counts[Mood.values[i]] == 0
                       ? colors.surfaceVariant
-                      : barColor(Mood.values[i]),
+                      : colors.moodColor(Mood.values[i]),
                   width: 18,
                   borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(4),
+                    top: Radius.circular(AppRadius.sm),
                   ),
                 ),
               ]),

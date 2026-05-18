@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../mood_entry/domain/enums/mood.dart';
 import '../../domain/mood_trend.dart';
 
 class MoodTrendChart extends StatelessWidget {
@@ -35,6 +37,11 @@ class MoodTrendChart extends StatelessWidget {
         ? 1.0
         : (series.points.length - 1).toDouble().clamp(1.0, double.infinity);
 
+    final axisStyle = AppTextStyles.caption.copyWith(
+      color: colors.onSurfaceVariant,
+      fontSize: 11,
+    );
+
     return SizedBox(
       height: 200,
       child: LineChart(
@@ -43,14 +50,18 @@ class MoodTrendChart extends StatelessWidget {
           maxY: 5,
           minX: 0,
           maxX: maxX,
-          gridData: const FlGridData(show: true, drawVerticalLine: false),
+          gridData: _dashedGrid(colors),
           borderData: FlBorderData(show: false),
           titlesData: FlTitlesData(
-            leftTitles: const AxisTitles(
+            leftTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
                 interval: 1,
                 reservedSize: 24,
+                getTitlesWidget: (value, meta) => Text(
+                  value.toInt().toString(),
+                  style: axisStyle,
+                ),
               ),
             ),
             rightTitles: const AxisTitles(),
@@ -66,10 +77,7 @@ class MoodTrendChart extends StatelessWidget {
                     return const SizedBox.shrink();
                   }
                   final d = series.points[idx].day;
-                  return Text(
-                    '${d.month}/${d.day}',
-                    style: const TextStyle(fontSize: 10),
-                  );
+                  return Text('${d.month}/${d.day}', style: axisStyle);
                 },
               ),
             ),
@@ -82,19 +90,55 @@ class MoodTrendChart extends StatelessWidget {
                 color: colors.primary,
                 barWidth: 2,
                 isStrokeCapRound: true,
-                dotData: const FlDotData(show: false),
+                dotData: FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, bar, index) =>
+                      FlDotCirclePainter(
+                    radius: 3.5,
+                    color: colors.moodColor(_moodFromScore(spot.y)),
+                    strokeWidth: 0,
+                  ),
+                ),
                 belowBarData: BarAreaData(
                   show: true,
-                  color: colors.primary.withValues(alpha: 0.2),
+                  color: colors.primary.withValues(alpha: 0.08),
                 ),
               ),
           ],
-          lineTouchData: const LineTouchData(enabled: true),
+          lineTouchData: LineTouchData(
+            enabled: true,
+            touchTooltipData: LineTouchTooltipData(
+              getTooltipColor: (_) => colors.surfaceVariant,
+              tooltipBorderRadius: BorderRadius.circular(8),
+              getTooltipItems: (spots) => spots
+                  .map((s) => LineTooltipItem(
+                        s.y.toStringAsFixed(1),
+                        AppTextStyles.bodySmall
+                            .copyWith(color: colors.onSurface),
+                      ))
+                  .toList(),
+            ),
+          ),
         ),
         duration: reduceMotion ? Duration.zero : AppMotion.base,
       ),
     );
   }
+
+  static Mood _moodFromScore(double score) {
+    final i = score.round().clamp(1, 5) - 1;
+    return Mood.values[i];
+  }
+
+  static FlGridData _dashedGrid(AppColors colors) => FlGridData(
+        show: true,
+        drawVerticalLine: false,
+        getDrawingHorizontalLine: (_) => FlLine(
+          color: colors.outline.withValues(alpha: 0.4),
+          strokeWidth: 1,
+          dashArray: const [4, 4],
+        ),
+      );
 
   static double _bottomInterval(int days) {
     if (days <= 8) return 1;

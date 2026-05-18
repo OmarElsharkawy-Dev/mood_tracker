@@ -1,9 +1,10 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../domain/top_tags_view.dart';
 
 class TopTagsChart extends StatelessWidget {
@@ -11,62 +12,90 @@ class TopTagsChart extends StatelessWidget {
 
   final TopTagsView data;
 
+  static const double _barHeight = 14;
+  static const double _labelWidth = 80;
+  static const double _countWidth = 28;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
-    final maxCount = data.entries.fold<int>(0, (a, e) => a > e.count ? a : e.count);
-    final maxY = (maxCount == 0 ? 1 : maxCount).toDouble();
-
-    return SizedBox(
-      height: 200,
-      child: BarChart(
-        BarChartData(
-          minY: 0,
-          maxY: maxY,
-          gridData: const FlGridData(show: false),
-          borderData: FlBorderData(show: false),
-          titlesData: FlTitlesData(
-            topTitles: const AxisTitles(),
-            rightTitles: const AxisTitles(),
-            leftTitles: const AxisTitles(),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 32,
-                getTitlesWidget: (value, meta) {
-                  final i = value.toInt();
-                  if (i < 0 || i >= data.entries.length) {
-                    return const SizedBox.shrink();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(top: AppSpacing.xxs),
-                    child: Text(
-                      data.entries[i].tag.label,
-                      style: const TextStyle(fontSize: 11),
-                      overflow: TextOverflow.ellipsis,
+    final l10n = context.l10n;
+    if (data.entries.isEmpty) {
+      return SizedBox(
+        height: 80,
+        child: Center(
+          child: Text(
+            l10n.insightsChartEmpty,
+            style: AppTextStyles.body
+                .copyWith(color: colors.onSurfaceVariant),
+          ),
+        ),
+      );
+    }
+    final maxCount = data.entries
+        .map((e) => e.count)
+        .fold<int>(0, (a, b) => a > b ? a : b)
+        .clamp(1, 1 << 30);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final entry in data.entries)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: _labelWidth,
+                  child: Text(
+                    entry.tag.label,
+                    style: AppTextStyles.bodySmall
+                        .copyWith(color: colors.onSurface),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: SizedBox(
+                    height: _barHeight,
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: colors.surfaceVariant,
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.pill),
+                          ),
+                        ),
+                        FractionallySizedBox(
+                          widthFactor: entry.count / maxCount,
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: colors.primary,
+                              borderRadius:
+                                  BorderRadius.circular(AppRadius.pill),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                SizedBox(
+                  width: _countWidth,
+                  child: Text(
+                    '${entry.count}',
+                    textAlign: TextAlign.right,
+                    style: AppTextStyles.caption
+                        .copyWith(color: colors.onSurfaceVariant),
+                  ),
+                ),
+              ],
             ),
           ),
-          barTouchData: BarTouchData(enabled: true),
-          barGroups: [
-            for (var i = 0; i < data.entries.length; i++)
-              BarChartGroupData(x: i, barRods: [
-                BarChartRodData(
-                  toY: data.entries[i].count.toDouble(),
-                  color: colors.primary,
-                  width: 18,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(4)),
-                ),
-              ]),
-          ],
-        ),
-        duration: reduceMotion ? Duration.zero : AppMotion.base,
-      ),
+      ],
     );
   }
 }

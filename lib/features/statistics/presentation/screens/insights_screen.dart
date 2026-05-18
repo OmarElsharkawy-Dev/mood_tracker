@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/l10n/context_l10n_extension.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../history/presentation/widgets/active_filter_banner.dart';
 import '../../../search/presentation/widgets/filter_sheet.dart';
 import '../../domain/accessibility_summaries.dart';
@@ -21,86 +24,107 @@ class InsightsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final colors = context.appColors;
     return Scaffold(
+      backgroundColor: colors.background,
       appBar: AppBar(
-        title: Text(l10n.insightsTitle),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(
+          l10n.insightsTitle,
+          style:
+              AppTextStyles.headline.copyWith(color: colors.onBackground),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.tune),
+            color: colors.onSurface,
             tooltip: l10n.insightsFilterTooltip,
             onPressed: () => FilterSheet.show(context),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          const RangeSelector(),
-          const ActiveFilterBanner(),
-          Expanded(
-            child: ListView(
-              children: [
-                InsightSectionCard(
-                  title: l10n.insightsMoodTrend,
-                  value: ref.watch(moodTrendProvider),
-                  isEmpty: (v) => v.daysWithData < 2,
-                  emptyMessage: l10n.insightsTrendEmpty,
-                  accessibilitySummary: ref.watch(moodTrendProvider).maybeWhen(
-                        data: (v) => trendSummary(v, l10n),
-                        orElse: () => null,
-                      ),
-                  builder: (v) => MoodTrendChart(series: v),
-                ),
-                InsightSectionCard<MoodDistribution>(
-                  title: l10n.insightsDistribution,
-                  value: ref.watch(moodDistributionProvider),
-                  isEmpty: (v) => v.total == 0,
-                  emptyMessage: l10n.insightsDistributionEmpty,
-                  accessibilitySummary:
-                      ref.watch(moodDistributionProvider).maybeWhen(
-                            data: (v) => distributionSummary(v, l10n),
-                            orElse: () => null,
-                          ),
-                  builder: (v) => MoodDistributionChart(data: v),
-                ),
-                InsightSectionCard(
-                  title: l10n.insightsTopTags,
-                  value: ref.watch(topTagsProvider),
-                  isEmpty: (v) => v.entries.isEmpty,
-                  emptyMessage: l10n.insightsTopTagsEmpty,
-                  accessibilitySummary: ref.watch(topTagsProvider).maybeWhen(
-                        data: (v) => topTagsSummary(v, l10n),
-                        orElse: () => null,
-                      ),
-                  builder: (v) => TopTagsChart(data: v),
-                ),
-                InsightSectionCard(
-                  title: l10n.insightsSleepVsMood,
-                  value: ref.watch(sleepCorrelationProvider),
-                  isEmpty: (v) => v.nonEmptyBucketCount == 0,
-                  emptyMessage: l10n.insightsSleepEmpty,
-                  accessibilitySummary:
-                      ref.watch(sleepCorrelationProvider).maybeWhen(
-                            data: (v) => sleepSummary(v, l10n),
-                            orElse: () => null,
-                          ),
-                  builder: (v) => SleepCorrelationChart(data: v),
-                ),
-                InsightSectionCard(
-                  title: l10n.insightsEnergyVsMood,
-                  value: ref.watch(energyCorrelationProvider),
-                  isEmpty: (v) => v.nonEmptyBucketCount == 0,
-                  emptyMessage: l10n.insightsEnergyEmpty,
-                  accessibilitySummary:
-                      ref.watch(energyCorrelationProvider).maybeWhen(
-                            data: (v) => energySummary(v, l10n),
-                            orElse: () => null,
-                          ),
-                  builder: (v) => EnergyCorrelationChart(data: v),
-                ),
-              ],
+      body: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.xs,
+              ),
+              child: RangeSelector(),
             ),
-          ),
-        ],
+            const ActiveFilterBanner(),
+            Expanded(
+              child: ListView(
+                children: [
+                  InsightSectionCard(
+                    title: l10n.insightsMoodTrend,
+                    value: ref.watch(moodTrendProvider),
+                    isEmpty: (v) => v.daysWithData < 2,
+                    emptyMessage: l10n.insightsTrendEmpty,
+                    accessibilitySummary:
+                        ref.watch(moodTrendProvider).maybeWhen(
+                              data: (v) => trendSummary(v, l10n),
+                              orElse: () => null,
+                            ),
+                    builder: (v) => MoodTrendChart(series: v),
+                  ),
+                  InsightSectionCard<MoodDistribution>(
+                    title: l10n.insightsDistribution,
+                    value: ref.watch(moodDistributionProvider),
+                    isEmpty: (v) => v.total == 0,
+                    emptyMessage: l10n.insightsDistributionEmpty,
+                    accessibilitySummary:
+                        ref.watch(moodDistributionProvider).maybeWhen(
+                              data: (v) => distributionSummary(v, l10n),
+                              orElse: () => null,
+                            ),
+                    builder: (v) => MoodDistributionChart(data: v),
+                  ),
+                  InsightSectionCard(
+                    title: l10n.insightsTopTags,
+                    value: ref.watch(topTagsProvider),
+                    isEmpty: (v) => v.entries.isEmpty,
+                    emptyMessage: l10n.insightsTopTagsEmpty,
+                    accessibilitySummary:
+                        ref.watch(topTagsProvider).maybeWhen(
+                              data: (v) => topTagsSummary(v, l10n),
+                              orElse: () => null,
+                            ),
+                    builder: (v) => TopTagsChart(data: v),
+                  ),
+                  InsightSectionCard(
+                    title: l10n.insightsSleepVsMood,
+                    value: ref.watch(sleepCorrelationProvider),
+                    isEmpty: (v) => v.nonEmptyBucketCount == 0,
+                    emptyMessage: l10n.insightsSleepEmpty,
+                    accessibilitySummary:
+                        ref.watch(sleepCorrelationProvider).maybeWhen(
+                              data: (v) => sleepSummary(v, l10n),
+                              orElse: () => null,
+                            ),
+                    builder: (v) => SleepCorrelationChart(data: v),
+                  ),
+                  InsightSectionCard(
+                    title: l10n.insightsEnergyVsMood,
+                    value: ref.watch(energyCorrelationProvider),
+                    isEmpty: (v) => v.nonEmptyBucketCount == 0,
+                    emptyMessage: l10n.insightsEnergyEmpty,
+                    accessibilitySummary:
+                        ref.watch(energyCorrelationProvider).maybeWhen(
+                              data: (v) => energySummary(v, l10n),
+                              orElse: () => null,
+                            ),
+                    builder: (v) => EnergyCorrelationChart(data: v),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -215,6 +215,8 @@
   "@insightsRangeAll": {},
   "insightsFilterTooltip": "Filtrar",
   "@insightsFilterTooltip": {},
+  "insightsChartEmpty": "Datos insuficientes",
+  "@insightsChartEmpty": {},
   "insightsMoodTrend": "Tendencia del ánimo",
   "@insightsMoodTrend": {},
   "insightsDistribution": "Distribución del ánimo",
@@ -377,5 +379,7 @@
   "backupErrorWriteFailed": "No se pudo guardar el archivo de exportación.",
   "@backupErrorWriteFailed": {},
   "backupErrorPickCanceled": "Ningún archivo seleccionado.",
-  "@backupErrorPickCanceled": {}
+  "@backupErrorPickCanceled": {},
+  "backupErrorPlatformUnsupported": "La copia de seguridad no está disponible en la versión web.",
+  "@backupErrorPlatformUnsupported": {}
 }
