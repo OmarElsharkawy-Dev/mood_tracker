@@ -9,6 +9,7 @@ import 'package:mood_tracker/features/mood_entry/data/mood_entry_repository_prov
 import 'package:mood_tracker/features/mood_entry/domain/entities/mood_entry.dart';
 import 'package:mood_tracker/features/mood_entry/domain/repositories/entry_query.dart';
 import 'package:mood_tracker/features/mood_entry/domain/repositories/mood_entry_repository.dart';
+import 'package:mood_tracker/features/statistics/presentation/screens/insights_screen.dart';
 import 'package:mood_tracker/features/today/presentation/screens/today_screen.dart';
 import 'package:mood_tracker/l10n/app_localizations.dart';
 
@@ -54,5 +55,27 @@ void main() {
     ));
     await tester.pumpAndSettle();
     expect(find.text('How are you feeling right now?'), findsOneWidget);
+  });
+
+  testWidgets('Insights screen renders against empty repo', (tester) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(ProviderScope(
+      overrides: [
+        moodEntryRepositoryProvider.overrideWithValue(_EmptyRepo()),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(extensions: const [AppColors.light]),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const InsightsScreen(),
+      ),
+    ));
+    await tester.pump();
+    expect(find.text('Mood trend'), findsOneWidget);
+    expect(find.text('Energy vs. mood'), findsOneWidget);
   });
 }
