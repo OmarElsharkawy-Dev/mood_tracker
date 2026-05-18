@@ -2,6 +2,31 @@
 
 Context bundle for human collaborators and AI assistants picking up this repo cold. Read alongside the spec ([`docs/superpowers/specs/2026-05-17-mood-tracker-design.md`](docs/superpowers/specs/2026-05-17-mood-tracker-design.md)) and the active phase plan under [`docs/superpowers/plans/`](docs/superpowers/plans/).
 
+**Maintenance rule:** This file is updated at the end of every working session — newest entries at the top of the **Session log** below. The status, file map, and decision sections are kept current as material state changes. If you're starting a session, scan the latest log entry first to see what's fresh.
+
+## Session log
+
+### 2026-05-18 — Phase 3 ship + memory-policy change
+
+- Phase 3 (Calendar + cross-tab filter) landed in 15 commits on `main` (top: `634e90b`). 47 new tests, full suite at **122/122 passing**, `flutter analyze` clean.
+- Shipped: `features/search/` (EntryFilter + EntryFilterController + allTagsProvider + FilterSheet modal with subcomponents), `features/calendar/` (YearMonth + DayMoodSummary + SelectedMonthController + calendar/day-summaries providers + CalendarMonth/DayCell/DaySheet widgets + CalendarScreen), `MoodEntryRepositoryImpl._applyQuery` honoring `EntryQuery`, History search icon + `ActiveFilterBanner` + no-matches state, 17 new EN+ES ARB key pairs.
+- Cross-tab filter is the headline architectural addition: one `entryFilterProvider` consumed by both `historyProvider` and `calendarEntriesProvider`.
+- Docs hygiene: Phase 3 plan checkboxes ticked, README + this file + cross-session memory refreshed, `project_phase3_complete` memory added.
+- **Process change:** This file is now updated every session, not just at phase boundaries. Session log section added.
+- Next up: Phase 4 (Statistics & charts with `fl_chart`) — designed in master spec §10 but not yet brainstormed.
+
+### 2026-05-18 — Phase 2 ship
+
+- Phase 2 (Settings + Onboarding + Spanish) landed in 16 commits (15 implementation + 1 post-review polish at `800886d`). Test suite reached 75/75 passing.
+- Shipped: `features/settings/` (theme/language/reminders-stub/about + modal pickers), `features/onboarding/` (3-page first-run flow with CustomPainter illustrations + GoRouter `redirect:` gate), full `app_es.arb`, `package_info_plus` dep.
+- Post-review polish replaced `CircularProgressIndicator` loading states with `Skeletonizer`, localized bottom-nav labels via `context.l10n`, and switched `SettingsController` setters to `ref.invalidateSelf()` instead of force-unwrapping `state.value!`.
+
+### 2026-05-17 — Phase 1 ship
+
+- Phase 1 (foundation + first vertical slice) landed in 28 implementation commits + 1 follow-up `MoodCard` overflow fix. Test suite reached 54/54 passing.
+- Shipped: full `core/` infrastructure (theme tokens, l10n pipeline EN-only, GoRouter shell, Drift schema, Failure/Result, prefs, GetIt+Riverpod DI, shared widgets including `MoodFace` `CustomPainter` with 5 goldens), `features/mood_entry/` (log + edit), `features/history/` (list + detail + delete), `features/today/` (quick-log + recent + FAB), app bootstrap, integration smoke test.
+- Notable env quirk discoveries: Flutter 3.41.9 removed `synthetic-package` from `l10n.yaml` (l10n outputs now land in `lib/l10n/`, gitignored); `custom_lint` bumped to `^0.7.6` for `riverpod_lint` compatibility; `skeletonizer` bumped to `2.1.3` for Flutter 3.41.9 Canvas API.
+
 ## What the project is
 
 A local-only Flutter mood tracker. Journal-style entries (mood + intensity + note + tags + sleep hours + energy level) persisted to a single SQLite database via Drift. The whole thing is a learning playground exercising Feature-First Clean Architecture, Riverpod, GoRouter, l10n, theming, and TDD end-to-end.
