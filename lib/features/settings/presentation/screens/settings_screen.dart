@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +12,8 @@ import '../../../../core/navigation/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/error_view.dart';
+import '../../../../dev/demo_data_seeder.dart';
+import '../../../mood_entry/data/mood_entry_repository_provider.dart';
 import '../../../reminders/providers/reminder_controller.dart';
 import '../../providers/settings_controller.dart';
 import '../widgets/language_picker_sheet.dart';
@@ -131,6 +134,21 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            if (kDebugMode)
+              SettingsSection(
+                title: l10n.settingsDevSection,
+                children: [
+                  Consumer(builder: (context, ref, _) {
+                    return SettingsTile(
+                      leading: const Icon(Icons.bug_report_outlined),
+                      title: l10n.settingsDevSeedDemo,
+                      subtitle: l10n.settingsDevSeedDemoSubtitle,
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => _runSeed(context, ref),
+                    );
+                  }),
+                ],
+              ),
           ],
         ),
       ),
@@ -143,4 +161,14 @@ class SettingsScreen extends ConsumerWidget {
         ThemeMode.dark => l10n.themeDark,
         ThemeMode.system => l10n.themeSystem,
       };
+
+  Future<void> _runSeed(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    final repo = ref.read(moodEntryRepositoryProvider);
+    final count = await seedDemoData(repo);
+    messenger.showSnackBar(
+      SnackBar(content: Text(l10n.settingsDevSeedDone(count))),
+    );
+  }
 }

@@ -322,6 +322,16 @@
   "@settingsDataSubtitle": {},
   "settingsDataSection": "Datos",
   "@settingsDataSection": {},
+  "settingsDevSection": "Desarrollador",
+  "@settingsDevSection": {},
+  "settingsDevSeedDemo": "Generar datos de prueba",
+  "@settingsDevSeedDemo": {},
+  "settingsDevSeedDemoSubtitle": "Agrega ~150 entradas de los últimos 6 meses",
+  "@settingsDevSeedDemoSubtitle": {},
+  "settingsDevSeedDone": "{count, plural, =1{1 entrada generada} other{{count} entradas generadas}}",
+  "@settingsDevSeedDone": {
+    "placeholders": {"count": {"type": "int"}}
+  },
   "remindersTitle": "Recordatorios",
   "@remindersTitle": {},
   "remindersEnabledTitle": "Recordatorio diario",

@@ -322,6 +322,16 @@
   "@settingsDataSubtitle": {},
   "settingsDataSection": "Data",
   "@settingsDataSection": {},
+  "settingsDevSection": "Developer",
+  "@settingsDevSection": {},
+  "settingsDevSeedDemo": "Seed demo data",
+  "@settingsDevSeedDemo": {},
+  "settingsDevSeedDemoSubtitle": "Add ~150 entries across the last 6 months",
+  "@settingsDevSeedDemoSubtitle": {},
+  "settingsDevSeedDone": "{count, plural, =1{Seeded 1 entry} other{Seeded {count} entries}}",
+  "@settingsDevSeedDone": {
+    "placeholders": {"count": {"type": "int"}}
+  },
   "remindersTitle": "Reminders",
   "@remindersTitle": {},
   "remindersEnabledTitle": "Daily reminder",
