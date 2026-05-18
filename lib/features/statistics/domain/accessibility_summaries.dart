@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart' show visibleForTesting;
-
 import '../../../l10n/app_localizations.dart';
 import '../../mood_entry/domain/enums/mood.dart';
 import 'correlation.dart';
@@ -9,7 +7,6 @@ import 'top_tags_view.dart';
 
 String _fmt(double v) => v.toStringAsFixed(1);
 
-@visibleForTesting
 String labelForBucketKey(String key, AppLocalizations l) {
   switch (key) {
     case 'insightsSleepBucketUnder6':
