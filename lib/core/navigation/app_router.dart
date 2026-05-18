@@ -5,7 +5,11 @@ import 'package:go_router/go_router.dart';
 import '../../features/history/presentation/screens/entry_detail_screen.dart';
 import '../../features/history/presentation/screens/history_screen.dart';
 import '../../features/mood_entry/presentation/screens/log_entry_sheet.dart';
+import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/settings/presentation/screens/about_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/today/presentation/screens/today_screen.dart';
+import '../di/infrastructure_providers.dart';
 import 'app_routes.dart';
 
 class _PlaceholderScreen extends StatelessWidget {
@@ -24,6 +28,13 @@ class _PlaceholderScreen extends StatelessWidget {
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.today,
+    redirect: (context, state) {
+      final completed = ref.read(appPrefsProvider).onboardingCompleted;
+      final atOnboarding = state.uri.path == AppRoutes.onboarding;
+      if (!completed && !atOnboarding) return AppRoutes.onboarding;
+      if (completed && atOnboarding) return AppRoutes.today;
+      return null;
+    },
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -65,19 +76,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(routes: [
             GoRoute(
               path: AppRoutes.settings,
-              builder: (context, _) => const _PlaceholderScreen('Settings'),
+              builder: (context, _) => const SettingsScreen(),
+              routes: [
+                GoRoute(
+                  path: 'about',
+                  builder: (context, _) => const AboutScreen(),
+                ),
+              ],
             ),
           ]),
         ],
       ),
       GoRoute(
+        path: AppRoutes.onboarding,
+        builder: (context, _) => const OnboardingScreen(),
+      ),
+      GoRoute(
         path: '${AppRoutes.entryDetail}/:id',
-        builder: (_, state) =>
+        builder: (context, state) =>
             EntryDetailScreen(entryId: state.pathParameters['id']!),
         routes: [
           GoRoute(
             path: 'edit',
-            pageBuilder: (_, state) => MaterialPage(
+            pageBuilder: (context, state) => MaterialPage(
               fullscreenDialog: true,
               child: LogEntrySheet(editEntryId: state.pathParameters['id']),
             ),
@@ -95,27 +116,26 @@ class _MainShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const destinations = [
-      _NavDest(icon: Icons.home_outlined, selectedIcon: Icons.home, labelKey: 'Today'),
-      _NavDest(icon: Icons.list_alt_outlined, selectedIcon: Icons.list_alt, labelKey: 'History'),
-      _NavDest(icon: Icons.calendar_today_outlined, selectedIcon: Icons.calendar_today, labelKey: 'Calendar'),
-      _NavDest(icon: Icons.show_chart_outlined, selectedIcon: Icons.show_chart, labelKey: 'Insights'),
-      _NavDest(icon: Icons.settings_outlined, selectedIcon: Icons.settings, labelKey: 'Settings'),
+    final destinations = const [
+      _NavDest(icon: Icons.home_outlined, selectedIcon: Icons.home, label: 'Today'),
+      _NavDest(icon: Icons.list_alt_outlined, selectedIcon: Icons.list_alt, label: 'History'),
+      _NavDest(icon: Icons.calendar_today_outlined, selectedIcon: Icons.calendar_today, label: 'Calendar'),
+      _NavDest(icon: Icons.show_chart_outlined, selectedIcon: Icons.show_chart, label: 'Insights'),
+      _NavDest(icon: Icons.settings_outlined, selectedIcon: Icons.settings, label: 'Settings'),
     ];
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: (i) => navigationShell.goBranch(
-          i,
-          initialLocation: i == navigationShell.currentIndex,
-        ),
+            i,
+            initialLocation: i == navigationShell.currentIndex),
         destinations: [
           for (final d in destinations)
             NavigationDestination(
               icon: Icon(d.icon),
               selectedIcon: Icon(d.selectedIcon),
-              label: d.labelKey,
+              label: d.label,
             ),
         ],
       ),
@@ -124,12 +144,9 @@ class _MainShell extends StatelessWidget {
 }
 
 class _NavDest {
-  const _NavDest({
-    required this.icon,
-    required this.selectedIcon,
-    required this.labelKey,
-  });
+  const _NavDest(
+      {required this.icon, required this.selectedIcon, required this.label});
   final IconData icon;
   final IconData selectedIcon;
-  final String labelKey;
+  final String label;
 }
