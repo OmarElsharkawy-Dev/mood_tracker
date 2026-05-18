@@ -6,6 +6,14 @@ Context bundle for human collaborators and AI assistants picking up this repo co
 
 ## Session log
 
+### 2026-05-18 — Phase 4 ship
+
+- Phase 4 (Insights tab) landed in 23 commits on `main`. New tests: +59. Test suite now at **181/181 passing**, `flutter analyze` clean.
+- Shipped: `features/statistics/` (InsightsRange enum, 5 pure aggregators, accessibility summaries, SelectedRangeController, insightsEntriesProvider, 5 derived chart providers, InsightsScreen + 5 chart widgets + RangeSelector + InsightSectionCard), `fl_chart ^1.2.0` dep, 29 EN+ES ARB key pairs, router swap to drop the Insights placeholder.
+- Cross-tab filter now reaches Insights: `entryFilterProvider ∩ selectedRangeProvider` feeds one StreamProvider that fans out to 5 per-chart `Provider<AsyncValue<T>>`. Filter banner reused as-is (Phase 3) with a `ValueKey('active_filter_banner')` added for testability.
+- Notable decisions: daily-mean trend with gap-aware line segments, grouped-bar correlations (5 sleep buckets + 5 energy levels), per-chart empty cards, in-memory range (no persistence), DST-safe `DateTime(y, m, d ± N)` calendar arithmetic throughout, `Mood.score` getter already on the enum (no separate `mood_score.dart` extension file created).
+- Next up: Phase 5 (Reminders + JSON export/import).
+
 ### 2026-05-18 — Phase 3 ship + memory-policy change
 
 - Phase 3 (Calendar + cross-tab filter) landed in 15 commits on `main` (top: `634e90b`). 47 new tests, full suite at **122/122 passing**, `flutter analyze` clean.
@@ -35,7 +43,7 @@ No accounts. No cloud. English + Spanish (both LTR).
 
 ## Current status
 
-Phases 1, 2, and 3 shipped (Phase 1 on 2026-05-17, Phases 2 and 3 on 2026-05-18). What works today:
+Phases 1–4 shipped (Phase 1 on 2026-05-17, Phases 2–4 on 2026-05-18). What works today:
 
 - `core/` infrastructure — theme tokens, l10n pipeline (EN + ES), GoRouter shell with first-run redirect, Drift schema, Failure/Result, prefs, GetIt+Riverpod DI.
 - `features/mood_entry/` — log + edit journal-style entries (mood, intensity, note, tags, sleep hours, energy).
@@ -43,13 +51,14 @@ Phases 1, 2, and 3 shipped (Phase 1 on 2026-05-17, Phases 2 and 3 on 2026-05-18)
 - `features/today/` — greeting + quick-log row + recent entries + FAB.
 - `features/settings/` — Appearance (theme picker), Language (en/es picker), Reminders (disabled stub), About (version + `showLicensePage`).
 - `features/onboarding/` — 3-page first-run flow with `CustomPainter` illustrations and GoRouter `redirect:` gated on `AppPrefs.onboardingCompleted`.
-- `features/search/` — shared `EntryFilterController` (Notifier&lt;EntryFilter&gt;), `allTagsProvider` derived from entries, modal `FilterSheet` with draft-state-then-Apply UX, subcomponents (`MoodRangeSlider`, `DateRangeField`, `TagFilterChips`).
+- `features/search/` — shared `EntryFilterController` (Notifier<EntryFilter>), `allTagsProvider` derived from entries, modal `FilterSheet` with draft-state-then-Apply UX, subcomponents (`MoodRangeSlider`, `DateRangeField`, `TagFilterChips`).
 - `features/calendar/` — `YearMonth` + `DayMoodSummary` value objects, `SelectedMonthController`, derived `calendarEntriesProvider` + `daySummariesProvider`, 6×7 `CalendarMonth` grid + `CalendarDayCell` (with ×N badge + today highlight) + `CalendarDaySheet`, `CalendarScreen` with prev/next/jump-to-today nav. Filter from `features/search/` shapes the dots too — cross-tab.
-- Full Spanish translations across all phases (~90 keys mirrored).
+- `features/statistics/` — `InsightsRange` enum (7d/30d/90d/all) with `toDateRange()`, 5 pure aggregators (`computeMoodTrend`, `computeDistribution`, `computeTopTags`, `computeSleepCorrelation`, `computeEnergyCorrelation`), accessibility summary helpers, `SelectedRangeController`, `insightsEntriesProvider` merging filter ∩ range, 5 derived chart providers, `InsightsScreen` composing `RangeSelector` + `InsightSectionCard` + 5 chart widgets (`MoodTrendChart`, `MoodDistributionChart`, `TopTagsChart`, plus sleep + energy correlation charts). Cross-tab filter banner reused from Phase 3.
+- Full Spanish translations across all phases (~102 keys mirrored).
 
-`flutter analyze` reports 0 issues; `flutter test` passes 122/122 (including 5 `MoodFace` goldens).
+`flutter analyze` reports 0 issues; `flutter test` passes 181/181 (including 5 `MoodFace` goldens).
 
-Phases 4-5 are designed in the master spec but not yet planned in detail. Phase 4 = Statistics & charts (`fl_chart`); Phase 5 = Reminders (`flutter_local_notifications`) + JSON export/import.
+Phase 5 (Reminders + JSON export/import) is designed in the master spec but not yet planned in detail.
 
 ## Hard rules to honor
 
@@ -100,10 +109,10 @@ Each phase ships against the master spec and gets its own plan in `docs/superpow
 1. **Phase 1 — Foundation + first vertical slice** *(complete 2026-05-17)* — `core/`, `mood_entry`, `history`, `today`, app wiring.
 2. **Phase 2 — Settings, onboarding, Spanish translations** *(complete 2026-05-18)* — settings tab + onboarding flow + first-run redirect + `app_es.arb`.
 3. **Phase 3 — Calendar view + cross-tab filter** *(complete 2026-05-18)* — `features/search/` (EntryFilter + FilterSheet + allTagsProvider), `features/calendar/` (month grid + day-detail sheet + nav), repository `EntryQuery` filtering, History search icon + active-filter banner + no-matches state.
-4. **Phase 4 — Statistics & charts (`fl_chart`).**
+4. **Phase 4 — Statistics & charts (`fl_chart`)** *(complete 2026-05-18)* — `features/statistics/` (InsightsRange, 5 aggregators, 5 chart providers, InsightsScreen + 5 chart widgets + RangeSelector + InsightSectionCard), `fl_chart` dep, 29 EN+ES ARB key pairs.
 5. **Phase 5 — Local reminders, JSON export/import.**
 
-## File map (Phases 1 + 2 + 3)
+## File map (Phases 1 + 2 + 3 + 4)
 
 ```
 lib/
@@ -147,8 +156,12 @@ lib/
       domain/{year_month, day_mood_summary}
       providers/{selected_month_controller, calendar_entries_provider, day_summaries_provider}
       presentation/{screens/calendar_screen, widgets/{calendar_month, calendar_day_cell, calendar_day_sheet}}
+    statistics/                                   # Insights tab (Phase 4)
+      domain/{insights_range, aggregators/{mood_trend, distribution, top_tags, sleep_correlation, energy_correlation}, accessibility_summaries}
+      providers/{selected_range_controller, insights_entries_provider, chart_providers}
+      presentation/{screens/insights_screen, widgets/{range_selector, insight_section_card, mood_trend_chart, mood_distribution_chart, top_tags_chart, sleep_correlation_chart, energy_correlation_chart}}
   l10n/
-    app_en.arb                                    # EN ARB source (73 keys)
+    app_en.arb                                    # EN ARB source (102 keys)
     app_es.arb                                    # ES ARB source (mirrors EN key-for-key)
     app_localizations*.dart                       # generated, gitignored
 test/
