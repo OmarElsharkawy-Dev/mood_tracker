@@ -6,6 +6,19 @@ Context bundle for human collaborators and AI assistants picking up this repo co
 
 ## Session log
 
+### 2026-05-18 — Firebase Hosting (web) shipped
+
+- Live at **https://mood-tracker-task.web.app** — Firebase project `mood-tracker-task` (Spark plan), hosting only.
+- Made the project web-compatible behind conditional imports so native (Android/iOS/desktop) is untouched:
+  - `core/db/connection/` — selector + `connection_native.dart` (FFI/path_provider/NativeDatabase) + `connection_web.dart` (`WasmDatabase.open` against `sqlite3.wasm` + `drift_worker.js`) + `connection_unsupported.dart` stub.
+  - `features/reminders/data/` — extracted abstract `NotificationService`, moved native impl to `flutter_local_notifications_service.dart`, added `web_notification_service.dart` no-op + `notification_service_factory*.dart` selector.
+  - `features/backup/data/` — extracted abstract `BackupService`, moved impl to `backup_service_native.dart`, added `backup_service_web.dart` (returns `ValidationFailure backupErrorPlatformUnsupported`) + `backup_service_factory*.dart` selector. New ARB key `backupErrorPlatformUnsupported`.
+  - `core/di/service_locator.dart` + `backup/data/backup_service_provider.dart` now call the platform factory.
+- WASM assets dropped in `web/sqlite3.wasm` (713K, sqlite3-2.9.4) + `web/drift_worker.js` (347K, drift-2.29.0). Build outputs them to `build/web/` with correct MIME types (`application/wasm`, `text/javascript`).
+- `firebase.json` configures SPA rewrite + long-cache headers on hashed assets, `no-cache` on `index.html`. `.firebaserc` pins `default → mood-tracker-task`.
+- Verified: `flutter analyze` 0 issues, `flutter test` 230 pass, `flutter build web --release` succeeds, live URL returns HTTP 200 for `/`, `/sqlite3.wasm`, `/drift_worker.js`.
+- Limitations on web: reminders + backup are intentionally no-ops; DB persists in browser IndexedDB/OPFS (per device, per origin).
+
 ### 2026-05-18 — Phase 5 ship
 
 - Phase 5 (Reminders + JSON export/import) landed in 20 commits on `main`. New tests: +47. Test suite at **228/228 passing**, `flutter analyze` clean.
