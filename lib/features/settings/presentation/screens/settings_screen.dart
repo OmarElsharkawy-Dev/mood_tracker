@@ -9,6 +9,7 @@ import '../../../../core/l10n/context_l10n_extension.dart';
 import '../../../../core/l10n/native_name.dart';
 import '../../../../core/navigation/app_routes.dart';
 import '../../../../core/widgets/error_view.dart';
+import '../../../reminders/providers/reminder_controller.dart';
 import '../../providers/settings_controller.dart';
 import '../widgets/language_picker_sheet.dart';
 import '../widgets/settings_section.dart';
@@ -76,12 +77,22 @@ class SettingsScreen extends ConsumerWidget {
             SettingsSection(
               title: l10n.settingsRemindersSection,
               children: [
-                SettingsTile(
-                  leading: const Icon(Icons.notifications_outlined),
-                  title: l10n.settingsRemindersLabel,
-                  subtitle: l10n.settingsRemindersComingSoon,
-                  enabled: false,
-                ),
+                Consumer(builder: (context, ref, _) {
+                  final reminderAsync = ref.watch(reminderControllerProvider);
+                  return SettingsTile(
+                    leading: const Icon(Icons.notifications_outlined),
+                    title: l10n.settingsRemindersLabel,
+                    subtitle: reminderAsync.maybeWhen(
+                      data: (s) => s.enabled
+                          ? l10n.settingsRemindersDailyAt(
+                              '${s.time.hour.toString().padLeft(2, '0')}:${s.time.minute.toString().padLeft(2, '0')}')
+                          : l10n.settingsRemindersOff,
+                      orElse: () => '',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push(AppRoutes.settingsReminders),
+                  );
+                }),
               ],
             ),
             SettingsSection(

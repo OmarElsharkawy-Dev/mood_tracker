@@ -4,6 +4,7 @@ abstract final class AppRoutes {
   static const String calendar = '/calendar';
   static const String insights = '/insights';
   static const String settings = '/settings';
+  static const String settingsReminders = '/settings/reminders';
 
   static const String log = '/today/log';
   static const String entryDetail = '/entry';

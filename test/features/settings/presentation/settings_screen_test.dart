@@ -5,10 +5,36 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_tracker/core/di/infrastructure_providers.dart';
 import 'package:mood_tracker/core/prefs/app_prefs.dart';
 import 'package:mood_tracker/core/theme/app_colors.dart';
+import 'package:mood_tracker/features/reminders/data/notification_service.dart';
+import 'package:mood_tracker/features/reminders/data/notification_service_provider.dart';
 import 'package:mood_tracker/features/settings/presentation/screens/settings_screen.dart';
 import 'package:mood_tracker/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+class _FakeNotificationService implements NotificationService {
+  @override
+  Future<void> init() async {}
+
+  @override
+  Future<NotificationPermissionStatus> currentStatus() async =>
+      NotificationPermissionStatus.denied;
+
+  @override
+  Future<NotificationPermissionStatus> requestPermission() async =>
+      NotificationPermissionStatus.denied;
+
+  @override
+  Future<void> scheduleDailyReminder({
+    required int hour,
+    required int minute,
+    required String title,
+    required String body,
+  }) async {}
+
+  @override
+  Future<void> cancelAll() async {}
+}
 
 void main() {
   setUpAll(() {
@@ -34,6 +60,8 @@ void main() {
     await tester.pumpWidget(ProviderScope(
       overrides: [
         appPrefsProvider.overrideWithValue(AppPrefs(sp)),
+        notificationServiceProvider
+            .overrideWithValue(_FakeNotificationService()),
       ],
       child: MaterialApp(
         theme: ThemeData(extensions: const [AppColors.light]),
@@ -50,6 +78,6 @@ void main() {
     expect(find.text('ABOUT'), findsOneWidget);
     expect(find.text('Theme'), findsOneWidget);
     expect(find.text('Daily reminder'), findsOneWidget);
-    expect(find.text('Coming in a future update'), findsOneWidget);
+    expect(find.text('Off'), findsOneWidget);
   });
 }
