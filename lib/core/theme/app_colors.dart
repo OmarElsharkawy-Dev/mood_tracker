@@ -9,17 +9,15 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.onPrimary,
     required this.secondary,
     required this.onSecondary,
-    required this.accent,
-    required this.onAccent,
     required this.background,
     required this.onBackground,
     required this.surface,
     required this.onSurface,
-    required this.muted,
-    required this.onMuted,
-    required this.border,
-    required this.destructive,
-    required this.onDestructive,
+    required this.surfaceVariant,
+    required this.onSurfaceVariant,
+    required this.outline,
+    required this.error,
+    required this.onError,
     required this.moodAwful,
     required this.moodBad,
     required this.moodOkay,
@@ -27,29 +25,30 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.moodGreat,
   });
 
+  // Canonical palette (Daylio-inspired).
   final Color primary;
   final Color onPrimary;
   final Color secondary;
   final Color onSecondary;
-  final Color accent;
-  final Color onAccent;
   final Color background;
   final Color onBackground;
   final Color surface;
   final Color onSurface;
-  final Color muted;
-  final Color onMuted;
-  final Color border;
-  final Color destructive;
-  final Color onDestructive;
+  final Color surfaceVariant;
+  final Color onSurfaceVariant;
+  final Color outline;
+  final Color error;
+  final Color onError;
 
+  // Mood scale (identical light + dark).
   final Color moodAwful;
   final Color moodBad;
   final Color moodOkay;
   final Color moodGood;
   final Color moodGreat;
 
-  Color forMood(Mood mood) => switch (mood) {
+  /// Resolves a [Mood] to its themed color.
+  Color moodColor(Mood mood) => switch (mood) {
         Mood.awful => moodAwful,
         Mood.bad => moodBad,
         Mood.okay => moodOkay,
@@ -57,50 +56,67 @@ class AppColors extends ThemeExtension<AppColors> {
         Mood.great => moodGreat,
       };
 
+  // Backward-compat shims — kept so widgets still compile until they migrate.
+  // Why: this redesign renamed `muted/onMuted/border/destructive/onDestructive`
+  // and dropped `accent`. Removing them outright would break ~28 widget files.
+  // How to apply: prefer the canonical fields in new code; these getters will
+  // be removed once the widget layer is migrated to the new names.
+  Color get muted => surfaceVariant;
+  Color get onMuted => onSurfaceVariant;
+  Color get border => outline;
+  Color get accent => secondary;
+  Color get destructive => error;
+  Color get onDestructive => onError;
+
+  /// Deprecated: use [moodColor]. Kept so existing widgets compile.
+  Color forMood(Mood mood) => moodColor(mood);
+
+  static const _moodAwful = Color(0xFFFF6B6B);
+  static const _moodBad = Color(0xFFFFA26B);
+  static const _moodOkay = Color(0xFFFFD93D);
+  static const _moodGood = Color(0xFF6BCB77);
+  static const _moodGreat = Color(0xFF4D96FF);
+
   static const light = AppColors(
-    primary: Color(0xFF8B5CF6),
+    primary: Color(0xFF7C6FCD),
     onPrimary: Color(0xFFFFFFFF),
-    secondary: Color(0xFFC4B5FD),
-    onSecondary: Color(0xFF0F172A),
-    accent: Color(0xFF059669),
-    onAccent: Color(0xFFFFFFFF),
-    background: Color(0xFFFAF5FF),
-    onBackground: Color(0xFF4C1D95),
+    secondary: Color(0xFF4ECDC4),
+    onSecondary: Color(0xFF0F1021),
+    background: Color(0xFFF5F5FA),
+    onBackground: Color(0xFF1A1B2E),
     surface: Color(0xFFFFFFFF),
-    onSurface: Color(0xFF4C1D95),
-    muted: Color(0xFFEDEFF9),
-    onMuted: Color(0xFF64748B),
-    border: Color(0xFFEDE9FE),
-    destructive: Color(0xFFDC2626),
-    onDestructive: Color(0xFFFFFFFF),
-    moodAwful: Color(0xFF8B5CF6),
-    moodBad: Color(0xFF7C7BD8),
-    moodOkay: Color(0xFF6E9CB9),
-    moodGood: Color(0xFF35B097),
-    moodGreat: Color(0xFF059669),
+    onSurface: Color(0xFF2D2D44),
+    surfaceVariant: Color(0xFFEEEEF5),
+    onSurfaceVariant: Color(0xFF6E6E8C),
+    outline: Color(0xFFDDDDE8),
+    error: Color(0xFFDC2626),
+    onError: Color(0xFFFFFFFF),
+    moodAwful: _moodAwful,
+    moodBad: _moodBad,
+    moodOkay: _moodOkay,
+    moodGood: _moodGood,
+    moodGreat: _moodGreat,
   );
 
   static const dark = AppColors(
-    primary: Color(0xFFB5A0FA),
-    onPrimary: Color(0xFF1B1230),
-    secondary: Color(0xFF9C8CE6),
-    onSecondary: Color(0xFFF1EFFB),
-    accent: Color(0xFF34D399),
-    onAccent: Color(0xFF062C20),
-    background: Color(0xFF1B1230),
-    onBackground: Color(0xFFF1EFFB),
-    surface: Color(0xFF261A40),
-    onSurface: Color(0xFFF1EFFB),
-    muted: Color(0xFF2F2347),
-    onMuted: Color(0xFFB8B0CC),
-    border: Color(0xFF3A2D55),
-    destructive: Color(0xFFF87171),
-    onDestructive: Color(0xFF2A0A0A),
-    moodAwful: Color(0xFFB5A0FA),
-    moodBad: Color(0xFFA199EA),
-    moodOkay: Color(0xFF9CB6D2),
-    moodGood: Color(0xFF7DD3B6),
-    moodGreat: Color(0xFF34D399),
+    primary: Color(0xFF7C6FCD),
+    onPrimary: Color(0xFFFFFFFF),
+    secondary: Color(0xFF4ECDC4),
+    onSecondary: Color(0xFF0F1021),
+    background: Color(0xFF0F1021),
+    onBackground: Color(0xFFE8E8F0),
+    surface: Color(0xFF1A1B2E),
+    onSurface: Color(0xFFC8C8DC),
+    surfaceVariant: Color(0xFF242540),
+    onSurfaceVariant: Color(0xFF8888A8),
+    outline: Color(0xFF3A3B5C),
+    error: Color(0xFFFF6B6B),
+    onError: Color(0xFFFFFFFF),
+    moodAwful: _moodAwful,
+    moodBad: _moodBad,
+    moodOkay: _moodOkay,
+    moodGood: _moodGood,
+    moodGreat: _moodGreat,
   );
 
   @override
@@ -109,17 +125,15 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? onPrimary,
     Color? secondary,
     Color? onSecondary,
-    Color? accent,
-    Color? onAccent,
     Color? background,
     Color? onBackground,
     Color? surface,
     Color? onSurface,
-    Color? muted,
-    Color? onMuted,
-    Color? border,
-    Color? destructive,
-    Color? onDestructive,
+    Color? surfaceVariant,
+    Color? onSurfaceVariant,
+    Color? outline,
+    Color? error,
+    Color? onError,
     Color? moodAwful,
     Color? moodBad,
     Color? moodOkay,
@@ -131,17 +145,15 @@ class AppColors extends ThemeExtension<AppColors> {
       onPrimary: onPrimary ?? this.onPrimary,
       secondary: secondary ?? this.secondary,
       onSecondary: onSecondary ?? this.onSecondary,
-      accent: accent ?? this.accent,
-      onAccent: onAccent ?? this.onAccent,
       background: background ?? this.background,
       onBackground: onBackground ?? this.onBackground,
       surface: surface ?? this.surface,
       onSurface: onSurface ?? this.onSurface,
-      muted: muted ?? this.muted,
-      onMuted: onMuted ?? this.onMuted,
-      border: border ?? this.border,
-      destructive: destructive ?? this.destructive,
-      onDestructive: onDestructive ?? this.onDestructive,
+      surfaceVariant: surfaceVariant ?? this.surfaceVariant,
+      onSurfaceVariant: onSurfaceVariant ?? this.onSurfaceVariant,
+      outline: outline ?? this.outline,
+      error: error ?? this.error,
+      onError: onError ?? this.onError,
       moodAwful: moodAwful ?? this.moodAwful,
       moodBad: moodBad ?? this.moodBad,
       moodOkay: moodOkay ?? this.moodOkay,
@@ -158,17 +170,16 @@ class AppColors extends ThemeExtension<AppColors> {
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t)!,
       secondary: Color.lerp(secondary, other.secondary, t)!,
       onSecondary: Color.lerp(onSecondary, other.onSecondary, t)!,
-      accent: Color.lerp(accent, other.accent, t)!,
-      onAccent: Color.lerp(onAccent, other.onAccent, t)!,
       background: Color.lerp(background, other.background, t)!,
       onBackground: Color.lerp(onBackground, other.onBackground, t)!,
       surface: Color.lerp(surface, other.surface, t)!,
       onSurface: Color.lerp(onSurface, other.onSurface, t)!,
-      muted: Color.lerp(muted, other.muted, t)!,
-      onMuted: Color.lerp(onMuted, other.onMuted, t)!,
-      border: Color.lerp(border, other.border, t)!,
-      destructive: Color.lerp(destructive, other.destructive, t)!,
-      onDestructive: Color.lerp(onDestructive, other.onDestructive, t)!,
+      surfaceVariant: Color.lerp(surfaceVariant, other.surfaceVariant, t)!,
+      onSurfaceVariant:
+          Color.lerp(onSurfaceVariant, other.onSurfaceVariant, t)!,
+      outline: Color.lerp(outline, other.outline, t)!,
+      error: Color.lerp(error, other.error, t)!,
+      onError: Color.lerp(onError, other.onError, t)!,
       moodAwful: Color.lerp(moodAwful, other.moodAwful, t)!,
       moodBad: Color.lerp(moodBad, other.moodBad, t)!,
       moodOkay: Color.lerp(moodOkay, other.moodOkay, t)!,
