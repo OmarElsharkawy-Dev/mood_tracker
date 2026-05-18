@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mood_tracker/core/error/failure.dart';
 import 'package:mood_tracker/core/error/result.dart';
-import 'package:mood_tracker/features/backup/data/backup_service.dart';
+import 'package:mood_tracker/features/backup/data/backup_service_native.dart';
 import 'package:mood_tracker/features/backup/domain/import_mode.dart';
 import 'package:mood_tracker/features/mood_entry/domain/entities/mood_entry.dart';
 import 'package:mood_tracker/features/mood_entry/domain/enums/energy_level.dart';

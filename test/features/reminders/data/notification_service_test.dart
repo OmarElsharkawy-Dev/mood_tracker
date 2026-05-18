@@ -1,6 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mood_tracker/features/reminders/data/notification_service.dart';
+import 'package:mood_tracker/features/reminders/data/flutter_local_notifications_service.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
 void main() {

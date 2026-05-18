@@ -1,13 +1,9 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../mood_entry/data/mood_entry_repository_provider.dart';
 import 'backup_service.dart';
+import 'backup_service_factory.dart';
 
 String? _appVersionCache;
 
@@ -22,20 +18,8 @@ Future<void> primeAppVersion() async {
 
 final backupServiceProvider = Provider<BackupService>((ref) {
   final repo = ref.watch(moodEntryRepositoryProvider);
-  return BackupServiceImpl(
+  return createBackupService(
     repo: repo,
     appVersion: _appVersionCache ?? 'unknown',
-    tempDir: () async => getTemporaryDirectory(),
-    share: (path) async {
-      await SharePlus.instance.share(ShareParams(files: [XFile(path)]));
-    },
-    pickFile: () async {
-      final result = await FilePicker.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['json'],
-      );
-      final path = result?.files.first.path;
-      return path == null ? null : File(path);
-    },
   );
 });
