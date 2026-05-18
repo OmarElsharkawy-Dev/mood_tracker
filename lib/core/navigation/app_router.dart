@@ -7,25 +7,13 @@ import '../../features/history/presentation/screens/entry_detail_screen.dart';
 import '../../features/history/presentation/screens/history_screen.dart';
 import '../../features/mood_entry/presentation/screens/log_entry_sheet.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/statistics/presentation/screens/insights_screen.dart';
 import '../../features/settings/presentation/screens/about_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/today/presentation/screens/today_screen.dart';
 import '../di/infrastructure_providers.dart';
 import '../l10n/context_l10n_extension.dart';
 import 'app_routes.dart';
-
-class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen(this.title);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(child: Text(title)),
-    );
-  }
-}
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -72,7 +60,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(routes: [
             GoRoute(
               path: AppRoutes.insights,
-              builder: (context, _) => const _PlaceholderScreen('Insights'),
+              builder: (context, _) => const InsightsScreen(),
             ),
           ]),
           StatefulShellBranch(routes: [
